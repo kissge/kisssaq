@@ -29,6 +29,7 @@ table {
   td {
     text-align: left;
     padding-right: 6px;
+    word-break: break-word;
 
     & + td {
       border-left: 1px solid #aaa;
