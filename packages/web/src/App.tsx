@@ -70,6 +70,26 @@ function App() {
           </button>
           <button
             onClick={() => {
+              const data = new Blob(
+                [
+                  (checked.length > 0 ? checked.map((i) => questions[i]) : questions)
+                    .map((qa) => qa.join(","))
+                    .join("\n"),
+                ],
+                { type: "text/csv" },
+              );
+              const url = URL.createObjectURL(data);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = "kisssaq.csv";
+              a.click();
+              URL.revokeObjectURL(url);
+            }}
+          >
+            書出
+          </button>
+          <button
+            onClick={() => {
               const dialog = document.getElementById("importDialog") as HTMLDialogElement;
               dialog.showModal();
             }}
