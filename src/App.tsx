@@ -8,6 +8,7 @@ function App() {
   const [questions, setQuestions] = useLocalStorage<string[][]>("q", []);
   const [checked, setChecked] = useState<number[]>([]);
   const [currentEditTarget, setCurrentEditTarget] = useState<EditTarget | null>(null);
+  const [order, setOrder] = useState<"default" | number[]>("default");
 
   function startEdit(id: number) {
     const q = questions[id]?.[0] ?? "";
@@ -23,7 +24,10 @@ function App() {
       <section id="center">
         <table>
           <tbody>
-            {questions.map(([q, a], i) => (
+            {(Array.isArray(order)
+              ? order.map((i) => ({ i, qa: questions[i] }))
+              : questions.map((qa, i) => ({ i, qa }))
+            ).map(({ i, qa: [q, a] }) => (
               <tr key={i + q}>
                 <th>
                   <input
@@ -55,6 +59,17 @@ function App() {
           <div className="spacer" />
           <button
             onClick={() => {
+              setOrder(
+                order === "default"
+                  ? questions.map((_, i) => i).toSorted(() => Math.random() - 0.5)
+                  : "default",
+              );
+            }}
+          >
+            {order === "default" ? "登録順" : "ランダム"}
+          </button>
+          <button
+            onClick={() => {
               const dialog = document.getElementById("importDialog") as HTMLDialogElement;
               dialog.showModal();
             }}
@@ -64,6 +79,11 @@ function App() {
           <button
             onClick={() => {
               setQuestions([...questions, ["", ""]]);
+
+              if (order !== "default") {
+                setOrder([...order, questions.length]);
+              }
+
               startEdit(questions.length);
             }}
           >
@@ -73,6 +93,11 @@ function App() {
             disabled={checked.length === 0}
             onClick={() => {
               setQuestions(questions.filter((_, j) => !checked.includes(j)));
+
+              if (order !== "default") {
+                setOrder(order.filter((i) => !checked.includes(i)));
+              }
+
               setChecked([]);
             }}
           >
