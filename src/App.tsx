@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import EditDialog, { type EditTarget } from "./components/editDialog";
+import ImportDialog from "./components/importDialog";
 
 function App() {
   const [questions, setQuestions] = useLocalStorage<string[][]>("q", []);
@@ -54,6 +55,14 @@ function App() {
           <div className="spacer" />
           <button
             onClick={() => {
+              const dialog = document.getElementById("importDialog") as HTMLDialogElement;
+              dialog.showModal();
+            }}
+          >
+            取込
+          </button>
+          <button
+            onClick={() => {
               setQuestions([...questions, ["", ""]]);
               startEdit(questions.length);
             }}
@@ -79,6 +88,13 @@ function App() {
           const newQuestions = [...questions];
           newQuestions[value.id] = [value.q, value.a];
           setQuestions(newQuestions);
+        }}
+      />
+
+      <ImportDialog
+        onImport={(parsed) => {
+          setOrder("default");
+          setQuestions([...questions, ...parsed]);
         }}
       />
     </>
