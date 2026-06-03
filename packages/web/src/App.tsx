@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
 
 function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T) => void] {
   const [storedValue, setStoredValue] = useState<T>(() => {
@@ -25,17 +25,21 @@ function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T) => voi
 }
 
 function App() {
-  const [questions, setQuestions] = useLocalStorage<string[][]>('q', []);
+  const [questions, setQuestions] = useLocalStorage<string[][]>("q", []);
   const [checked, setChecked] = useState<number[]>([]);
-  const [currentEditTarget, setCurrentEditTarget] = useState<{ q: string; a: string; id: number } | null>(null);
+  const [currentEditTarget, setCurrentEditTarget] = useState<{
+    q: string;
+    a: string;
+    id: number;
+  } | null>(null);
 
   function startEdit(id: number) {
-    const q = questions[id]?.[0] ?? '';
-    const a = questions[id]?.[1] ?? '';
+    const q = questions[id]?.[0] ?? "";
+    const a = questions[id]?.[1] ?? "";
     setCurrentEditTarget({ q, a, id });
-    const dialog = document.getElementById('editDialog') as HTMLDialogElement;
+    const dialog = document.getElementById("editDialog") as HTMLDialogElement;
     dialog.showModal();
-    setTimeout(() => dialog.querySelector('textarea')!.focus(), 10);
+    setTimeout(() => dialog.querySelector("textarea")!.focus(), 10);
   }
 
   return (
@@ -57,7 +61,7 @@ function App() {
                     }}
                   />
                 </th>
-                <td onClick={() => startEdit(i)}>{q || 'ここをクリックして編集'}</td>
+                <td onClick={() => startEdit(i)}>{q || "ここをクリックして編集"}</td>
                 <td>{a}</td>
               </tr>
             ))}
@@ -69,7 +73,7 @@ function App() {
           <div className="spacer" />
           <button
             onClick={() => {
-              setQuestions([...questions, ['', '']]);
+              setQuestions([...questions, ["", ""]]);
               startEdit(questions.length);
             }}
           >
@@ -92,9 +96,14 @@ function App() {
           <>
             <div className="toolbar">
               <div>
-                {currentEditTarget.q.length} ({currentEditTarget.q.replace(/\s*\(.+?\)\s*|（.+）/g, '').length})
+                {currentEditTarget.q.length} (
+                {currentEditTarget.q.replace(/\s*\(.+?\)\s*|（.+）/g, "").length})
               </div>
-              <button onClick={() => (document.getElementById('editDialog') as HTMLDialogElement).close()}>✕</button>
+              <button
+                onClick={() => (document.getElementById("editDialog") as HTMLDialogElement).close()}
+              >
+                ✕
+              </button>
             </div>
             <textarea
               value={currentEditTarget.q}
@@ -111,7 +120,7 @@ function App() {
                 const newQuestions = [...questions];
                 newQuestions[currentEditTarget.id] = [currentEditTarget.q, currentEditTarget.a];
                 setQuestions(newQuestions);
-                (document.getElementById('editDialog') as HTMLDialogElement).close();
+                (document.getElementById("editDialog") as HTMLDialogElement).close();
               }}
             >
               保存
