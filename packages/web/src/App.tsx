@@ -62,7 +62,7 @@ function App() {
                   />
                 </th>
                 <td onClick={() => startEdit(i)}>{q || "ここをクリックして編集"}</td>
-                <td>{a}</td>
+                <td onClick={() => startEdit(i)}>{a}</td>
               </tr>
             ))}
           </tbody>

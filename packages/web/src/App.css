@@ -57,6 +57,7 @@ table {
 
 dialog {
   width: calc(100% - 3em);
+  translate: 0 -5em;
 
   .toolbar {
     display: flex;
