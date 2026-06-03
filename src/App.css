@@ -7,7 +7,6 @@
   flex-grow: 1;
 
   @media (max-width: 1024px) {
-    padding: 32px 20px 24px;
     gap: 18px;
   }
 }
@@ -35,6 +34,11 @@ table {
       border-left: 1px solid #aaa;
       padding-left: 6px;
     }
+
+    em {
+      color: #aaa;
+      font-style: normal;
+    }
   }
 }
 
@@ -44,7 +48,7 @@ table {
   padding: 0.5em 1em;
   width: calc(100% - 1em * 2);
   background-color: white;
-  box-shadow: 0px -5px 10px #0006;
+  box-shadow: 0px -5px 10px #0002;
   display: flex;
   justify-content: space-between;
   align-items: center;

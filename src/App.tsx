@@ -1,28 +1,6 @@
 import { useState } from "react";
 import "./App.css";
-
-function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T) => void] {
-  const [storedValue, setStoredValue] = useState<T>(() => {
-    try {
-      const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValue;
-    } catch (error) {
-      console.error(error);
-      return initialValue;
-    }
-  });
-
-  const setValue = (value: T) => {
-    try {
-      setStoredValue(value);
-      window.localStorage.setItem(key, JSON.stringify(value));
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  return [storedValue, setValue];
-}
+import { useLocalStorage } from "./hooks/useLocalStorage";
 
 function App() {
   const [questions, setQuestions] = useLocalStorage<string[][]>("q", []);
@@ -61,7 +39,13 @@ function App() {
                     }}
                   />
                 </th>
-                <td onClick={() => startEdit(i)}>{q || "ここをクリックして編集"}</td>
+                <td onClick={() => startEdit(i)}>
+                  {q
+                    ? q
+                        .split(/(（.+?）|\(.+?\)|【.+?】|［.+?］)/)
+                        .map((p, j) => (j % 2 ? <em key={j}>{p}</em> : p))
+                    : "ここをクリックして編集"}
+                </td>
                 <td onClick={() => startEdit(i)}>{a}</td>
               </tr>
             ))}
@@ -109,11 +93,13 @@ function App() {
               value={currentEditTarget.q}
               onChange={(e) => setCurrentEditTarget({ ...currentEditTarget, q: e.target.value })}
               rows={4}
+              placeholder="日本の首都は？"
             />
             <textarea
               value={currentEditTarget.a}
               onChange={(e) => setCurrentEditTarget({ ...currentEditTarget, a: e.target.value })}
               rows={2}
+              placeholder="東京（とうきょう）"
             />
             <button
               onClick={() => {
