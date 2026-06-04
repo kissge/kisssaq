@@ -3,6 +3,7 @@ import "./App.css";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import EditDialog, { type EditTarget } from "./components/editDialog";
 import ImportDialog from "./components/importDialog";
+import { json2csv } from "json-2-csv";
 
 function App() {
   const [questions, setQuestions] = useLocalStorage<string[][]>("q", []);
@@ -91,14 +92,9 @@ function App() {
           </button>
           <button
             onClick={() => {
-              const data = new Blob(
-                [
-                  (checked.length > 0 ? checked.map((i) => questions[i]) : questions)
-                    .map((qa) => qa.join(","))
-                    .join("\n"),
-                ],
-                { type: "text/csv" },
-              );
+              const data = new Blob([json2csv(questions).replace(/.+\n/, "")], {
+                type: "text/csv",
+              });
               const url = URL.createObjectURL(data);
               const a = document.createElement("a");
               a.href = url;
