@@ -16,7 +16,6 @@ table {
   border-spacing: 0.25em;
   width: 100%;
   vertical-align: top;
-  margin-bottom: 3em;
 
   tr:nth-child(even) {
     background-color: #eee;
@@ -43,8 +42,22 @@ table {
   }
 }
 
+.search-toolbar {
+  position: fixed;
+  bottom: 3em;
+  padding: 0.5em 1em;
+  width: calc(100% - 1em * 2);
+  background-color: white;
+  box-shadow: 0px -5px 10px #0002;
+
+  input {
+    width: 100%;
+  }
+}
+
 .global-toolbar {
   position: fixed;
+  height: 2em;
   bottom: 0;
   padding: 0.5em 1em;
   width: calc(100% - 1em * 2);

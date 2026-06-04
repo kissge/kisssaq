@@ -9,6 +9,8 @@ function App() {
   const [checked, setChecked] = useState<number[]>([]);
   const [currentEditTarget, setCurrentEditTarget] = useState<EditTarget | null>(null);
   const [order, setOrder] = useState<"default" | number[]>("default");
+  const [showSearchBox, setShowSearchBox] = useState(false);
+  const [searchKeyword, setSearchKeyword] = useState("");
 
   function startEdit(id: number) {
     const q = questions[id]?.[0] ?? "";
@@ -22,37 +24,56 @@ function App() {
   return (
     <>
       <section id="center">
-        <table>
+        <table
+          style={{
+            marginBottom: showSearchBox ? "6em" : "3em",
+          }}
+        >
           <tbody>
             {(Array.isArray(order)
               ? order.map((i) => ({ i, qa: questions[i] }))
               : questions.map((qa, i) => ({ i, qa }))
-            ).map(({ i, qa: [q, a] }) => (
-              <tr key={i + q}>
-                <th>
-                  <input
-                    type="checkbox"
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setChecked([...checked, i]);
-                      } else {
-                        setChecked(checked.filter((n) => n !== i));
-                      }
-                    }}
-                  />
-                </th>
-                <td onClick={() => startEdit(i)}>
-                  {q
-                    ? q
-                        .split(/(（.+?）|\(.+?\)|【.+?】|［.+?］)/)
-                        .map((p, j) => (j % 2 ? <em key={j}>{p}</em> : p))
-                    : "ここをクリックして編集"}
-                </td>
-                <td onClick={() => startEdit(i)}>{a}</td>
-              </tr>
-            ))}
+            )
+              .filter(
+                ({ qa: [q, a] }) =>
+                  !searchKeyword || q.includes(searchKeyword) || a.includes(searchKeyword),
+              )
+              .map(({ i, qa: [q, a] }) => (
+                <tr key={i + q}>
+                  <th>
+                    <input
+                      type="checkbox"
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setChecked([...checked, i]);
+                        } else {
+                          setChecked(checked.filter((n) => n !== i));
+                        }
+                      }}
+                    />
+                  </th>
+                  <td onClick={() => startEdit(i)}>
+                    {q
+                      ? q
+                          .split(/(（.+?）|\(.+?\)|【.+?】|［.+?］)/)
+                          .map((p, j) => (j % 2 ? <em key={j}>{p}</em> : p))
+                      : "ここをクリックして編集"}
+                  </td>
+                  <td onClick={() => startEdit(i)}>{a}</td>
+                </tr>
+              ))}
           </tbody>
         </table>
+
+        {showSearchBox && (
+          <div className="search-toolbar">
+            <input
+              placeholder="検索キーワードを入力"
+              value={searchKeyword}
+              onChange={(e) => setSearchKeyword(e.target.value)}
+            />
+          </div>
+        )}
 
         <div className="global-toolbar">
           kissSaq
@@ -95,6 +116,23 @@ function App() {
             }}
           >
             取込
+          </button>
+          <button
+            onClick={() => {
+              if (showSearchBox) {
+                setSearchKeyword("");
+              } else {
+                setTimeout(
+                  () =>
+                    (document.querySelector(".search-toolbar input") as HTMLInputElement).focus(),
+                  10,
+                );
+              }
+
+              setShowSearchBox(!showSearchBox);
+            }}
+          >
+            検索
           </button>
           <button
             onClick={() => {
