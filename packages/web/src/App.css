@@ -28,6 +28,7 @@ table {
     text-align: left;
     padding-right: 6px;
     word-break: break-word;
+    width: 70%;
 
     & + td {
       border-left: 1px solid #aaa;
@@ -52,6 +53,16 @@ table {
 
   input {
     width: 100%;
+  }
+}
+
+.bulk-toolbar {
+  display: flex;
+  justify-content: space-between;
+
+  & > div {
+    display: flex;
+    gap: 0.25em;
   }
 }
 

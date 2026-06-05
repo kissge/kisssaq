@@ -4,11 +4,15 @@ import { useLocalStorage } from "./hooks/useLocalStorage";
 import EditDialog, { type EditTarget } from "./components/editDialog";
 import ImportDialog from "./components/importDialog";
 import { json2csv } from "json-2-csv";
+import SwitchFolderDialog from "./components/switchFolderDialog";
 
 function App() {
-  const [questions, setQuestions] = useLocalStorage<string[][]>("q", []);
+  const [questions, setQuestions] = useLocalStorage<[string, string, number][]>("q", []);
+  const [folders, setFolders] = useLocalStorage("f", ["未分類"]);
   const [checked, setChecked] = useState<number[]>([]);
+  const [activeFolder, setActiveFolder] = useState<number | null>(null);
   const [currentEditTarget, setCurrentEditTarget] = useState<EditTarget | null>(null);
+  const [moveFolderTarget, setMoveFolderTarget] = useState(0);
   const [order, setOrder] = useState<"default" | number[]>("default");
   const [showSearchBox, setShowSearchBox] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -16,7 +20,8 @@ function App() {
   function startEdit(id: number) {
     const q = questions[id]?.[0] ?? "";
     const a = questions[id]?.[1] ?? "";
-    setCurrentEditTarget({ q, a, id });
+    const f = questions[id]?.[2] ?? activeFolder ?? 0;
+    setCurrentEditTarget({ q, a, f, id });
     const dialog = document.getElementById("editDialog") as HTMLDialogElement;
     dialog.showModal();
     setTimeout(() => dialog.querySelector("textarea")!.focus(), 10);
@@ -36,8 +41,9 @@ function App() {
               : questions.map((qa, i) => ({ i, qa }))
             )
               .filter(
-                ({ qa: [q, a] }) =>
-                  !searchKeyword || q.includes(searchKeyword) || a.includes(searchKeyword),
+                ({ qa: [q, a, f] }) =>
+                  (!searchKeyword || q.includes(searchKeyword) || a.includes(searchKeyword)) &&
+                  (activeFolder === null || (f ?? 0) === activeFolder),
               )
               .map(({ i, qa: [q, a] }) => (
                 <tr key={i + q}>
@@ -91,6 +97,34 @@ function App() {
             >
               削除
             </button>
+
+            <div>
+              <select
+                value={moveFolderTarget}
+                onChange={(e) => setMoveFolderTarget(Number.parseInt(e.target.value))}
+              >
+                {folders.map((folder, index) => (
+                  <option key={folder} value={index}>
+                    {folder}
+                  </option>
+                ))}
+              </select>
+              <button
+                onClick={() => {
+                  const newQuestions = questions.map((qa, i) => {
+                    if (checked.includes(i)) {
+                      qa[2] = moveFolderTarget;
+                    }
+
+                    return qa;
+                  });
+                  setQuestions(newQuestions);
+                  setChecked([]);
+                }}
+              >
+                に移動
+              </button>
+            </div>
           </div>
         )}
 
@@ -133,6 +167,14 @@ function App() {
           </button>
           <button
             onClick={() => {
+              const dialog = document.getElementById("switchFolderDialog") as HTMLDialogElement;
+              dialog.showModal();
+            }}
+          >
+            ﾌｫﾙﾀﾞ
+          </button>
+          <button
+            onClick={() => {
               if (showSearchBox) {
                 setSearchKeyword("");
               } else {
@@ -150,7 +192,7 @@ function App() {
           </button>
           <button
             onClick={() => {
-              setQuestions([...questions, ["", ""]]);
+              setQuestions([...questions, ["", "", activeFolder ?? 0]]);
 
               if (order !== "default") {
                 setOrder([...order, questions.length]);
@@ -166,19 +208,28 @@ function App() {
 
       <EditDialog
         currentEditTarget={currentEditTarget}
+        folders={folders}
         onChange={setCurrentEditTarget}
         onSave={(value) => {
           const newQuestions = [...questions];
-          newQuestions[value.id] = [value.q, value.a];
+          newQuestions[value.id] = [value.q, value.a, value.f];
           setQuestions(newQuestions);
         }}
       />
 
       <ImportDialog
+        activeFolder={activeFolder}
         onImport={(parsed) => {
           setOrder("default");
           setQuestions([...questions, ...parsed]);
         }}
+      />
+
+      <SwitchFolderDialog
+        folders={folders}
+        activeFolder={activeFolder}
+        onChange={setActiveFolder}
+        onFolderCreate={(name) => setFolders([...folders, name])}
       />
     </>
   );

@@ -1,19 +1,23 @@
 import { csv2json } from "json-2-csv";
 import { useState } from "react";
 
-export default function ImportDialog({ onImport }: { onImport: (parsed: string[][]) => void }) {
+export default function ImportDialog({
+  activeFolder,
+  onImport,
+}: {
+  activeFolder: number | null;
+  onImport: (parsed: [string, string, number][]) => void;
+}) {
   const [raw, setRaw] = useState("");
 
   function parseCSV(raw: string) {
     const tabCount = raw.match(/\t/g)?.length ?? 0;
     const commaCount = raw.match(/,/g)?.length ?? 0;
     const delimiter = tabCount > commaCount ? "\t" : ",";
-    return (
-      csv2json(raw, { delimiter: { field: delimiter }, headerFields: ["q", "a"] }) as {
-        q: string;
-        a: string;
-      }[]
-    ).map(({ q, a }) => [q, a]);
+    return csv2json(raw, { delimiter: { field: delimiter }, headerFields: ["q", "a"] }) as {
+      q: unknown;
+      a: unknown;
+    }[];
   }
 
   return (
@@ -27,8 +31,11 @@ export default function ImportDialog({ onImport }: { onImport: (parsed: string[]
       />
       <button
         onClick={() => {
-          const parsed = parseCSV(raw);
+          const parsed = parseCSV(raw).map(({ q, a }) => {
+            return [String(q), String(a), activeFolder ?? 0] as [string, string, number];
+          });
           onImport(parsed);
+          setRaw("");
           (document.getElementById("importDialog") as HTMLDialogElement).close();
         }}
       >
