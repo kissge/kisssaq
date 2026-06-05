@@ -41,7 +41,8 @@ table {
   }
 }
 
-.search-toolbar {
+.search-toolbar,
+.bulk-toolbar {
   position: fixed;
   bottom: 3em;
   padding: 0.5em 1em;

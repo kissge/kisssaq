@@ -27,7 +27,7 @@ function App() {
       <section id="center">
         <table
           style={{
-            marginBottom: showSearchBox ? "6em" : "3em",
+            marginBottom: showSearchBox || checked.length > 0 ? "6em" : "3em",
           }}
         >
           <tbody>
@@ -73,6 +73,24 @@ function App() {
               value={searchKeyword}
               onChange={(e) => setSearchKeyword(e.target.value)}
             />
+          </div>
+        )}
+
+        {checked.length > 0 && (
+          <div className="bulk-toolbar">
+            <button
+              onClick={() => {
+                setQuestions(questions.filter((_, j) => !checked.includes(j)));
+
+                if (order !== "default") {
+                  setOrder(order.filter((i) => !checked.includes(i)));
+                }
+
+                setChecked([]);
+              }}
+            >
+              削除
+            </button>
           </div>
         )}
 
@@ -142,20 +160,6 @@ function App() {
             }}
           >
             追加
-          </button>
-          <button
-            disabled={checked.length === 0}
-            onClick={() => {
-              setQuestions(questions.filter((_, j) => !checked.includes(j)));
-
-              if (order !== "default") {
-                setOrder(order.filter((i) => !checked.includes(i)));
-              }
-
-              setChecked([]);
-            }}
-          >
-            削除
           </button>
         </div>
       </section>
