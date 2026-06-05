@@ -38,7 +38,7 @@ function App() {
           <tbody>
             {(Array.isArray(order)
               ? order.map((i) => ({ i, qa: questions[i] }))
-              : questions.map((qa, i) => ({ i, qa }))
+              : questions.map((qa, i) => ({ i, qa })).toReversed()
             )
               .filter(
                 ({ qa: [q, a, f] }) =>
