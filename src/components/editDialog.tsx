@@ -1,15 +1,20 @@
+import "./editDialog.css";
+
 export interface EditTarget {
   id: number;
   q: string;
   a: string;
+  f: number;
 }
 
 export default function EditDialog({
   currentEditTarget,
+  folders,
   onChange,
   onSave,
 }: {
   currentEditTarget: EditTarget | null;
+  folders: string[];
   onChange: (value: EditTarget) => void;
   onSave: (value: EditTarget) => void;
 }) {
@@ -40,14 +45,28 @@ export default function EditDialog({
             rows={2}
             placeholder="東京（とうきょう）"
           />
-          <button
-            onClick={() => {
-              onSave(currentEditTarget);
-              (document.getElementById("editDialog") as HTMLDialogElement).close();
-            }}
-          >
-            保存
-          </button>
+          <div className="flex">
+            <select
+              value={currentEditTarget.f}
+              onChange={(e) =>
+                onChange({ ...currentEditTarget, f: Number.parseInt(e.target.value) })
+              }
+            >
+              {folders.map((folder, index) => (
+                <option key={folder} value={index}>
+                  {folder}
+                </option>
+              ))}
+            </select>
+            <button
+              onClick={() => {
+                onSave(currentEditTarget);
+                (document.getElementById("editDialog") as HTMLDialogElement).close();
+              }}
+            >
+              保存
+            </button>
+          </div>
         </>
       )}
     </dialog>
