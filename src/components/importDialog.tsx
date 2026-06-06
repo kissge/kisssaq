@@ -32,9 +32,11 @@ export default function ImportDialog({
       />
       <button
         onClick={() => {
-          const parsed = parseCSV(raw).map(({ q, a }) => {
-            return [String(q), String(a), activeFolder ?? 0] as [string, string, number];
-          });
+          const parsed = parseCSV(raw)
+            .map(({ q, a }) => {
+              return [String(q), String(a), activeFolder ?? 0] as [string, string, number];
+            })
+            .toReversed();
           onImport(parsed);
           setRaw("");
           (document.getElementById("importDialog") as HTMLDialogElement).close();
