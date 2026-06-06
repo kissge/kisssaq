@@ -150,6 +150,7 @@ function App() {
           kissSaq
           <div className="spacer" />
           <button
+            disabled={questions.length === 0}
             onClick={() => {
               setOrder(
                 order === "default"
@@ -161,6 +162,7 @@ function App() {
             {order === "default" ? "登録順" : "ランダム"}
           </button>
           <button
+            disabled={questions.length === 0}
             onClick={() => {
               const data = new Blob([json2csv(questions).replace(/.+\n/, "")], {
                 type: "text/csv",
@@ -192,6 +194,7 @@ function App() {
             ﾌｫﾙﾀﾞ
           </button>
           <button
+            disabled={questions.length === 0}
             onClick={() => {
               if (showSearchBox) {
                 setSearchKeyword("");
