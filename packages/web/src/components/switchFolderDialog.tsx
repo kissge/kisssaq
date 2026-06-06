@@ -14,7 +14,7 @@ export default function SwitchFolderDialog({
   onFolderRename: (index: number, newName: string) => void;
 }) {
   return (
-    <dialog id="switchFolderDialog" closedby="any">
+    <dialog id="switchFolderDialog" closedby="closerequest">
       <div className="toolbar">
         <div>表示するフォルダを選択</div>
         <button

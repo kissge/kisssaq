@@ -21,7 +21,7 @@ export default function ImportDialog({
   }
 
   return (
-    <dialog id="importDialog" closedby="any">
+    <dialog id="importDialog" closedby="closerequest">
       ここにCSVかTSVを貼ってください。
       <textarea
         rows={4}
