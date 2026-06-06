@@ -10,6 +10,15 @@
   }
 }
 
+.welcome-message {
+  font-size: 1.25em;
+  margin: auto;
+
+  ul {
+    line-height: 1.5;
+  }
+}
+
 table {
   border-collapse: collapse;
   border-spacing: 0.25em;

@@ -30,6 +30,24 @@ function App() {
   return (
     <>
       <section id="center">
+        {activeFolder === null && questions.length === 0 && (
+          <div className="welcome-message">
+            <h1>
+              ✅ 自作問題管理アプリ
+              <ruby>
+                kissSaq
+                <rt>きすさく</rt>
+              </ruby>
+            </h1>
+
+            <ul>
+              <li>まずは右下の「追加」ボタンをクリックして問題を登録してください。</li>
+              <li>問題はフォルダ分けすることができます。</li>
+              <li>CSV/TSV形式での書き出し・取り込みに対応しています。</li>
+            </ul>
+          </div>
+        )}
+
         <table
           style={{
             marginBottom: showSearchBox || checked.length > 0 ? "6em" : "3em",
