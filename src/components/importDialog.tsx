@@ -27,6 +27,7 @@ export default function ImportDialog({
         rows={4}
         placeholder="日本の首都は？,東京（とうきょう）
 中国の首都は？,北京（ペキン）"
+        value={raw}
         onChange={(e) => setRaw(e.target.value)}
       />
       <button
