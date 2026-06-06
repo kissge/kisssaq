@@ -102,6 +102,7 @@ function App() {
 
         {checked.length > 0 && (
           <div className="bulk-toolbar">
+            選択中の{checked.length}件を
             <button
               onClick={() => {
                 setQuestions(questions.filter((_, j) => !checked.includes(j)));
@@ -115,7 +116,6 @@ function App() {
             >
               削除
             </button>
-
             <div>
               <select
                 value={moveFolderTarget}
