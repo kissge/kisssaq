@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
+    "dev": "vite-react-ssg dev",
+    "build": "tsc -b && vite-react-ssg build",
     "lint": "eslint .",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
@@ -30,6 +30,7 @@
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.59.2",
     "vite": "^8.0.12",
-    "vite-plugin-pwa": "^1.3.0"
+    "vite-plugin-pwa": "^1.3.0",
+    "vite-react-ssg": "0.9.1-beta.1"
   }
 }
