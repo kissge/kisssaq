@@ -36,13 +36,13 @@ export default function EditDialog({
           <textarea
             value={currentEditTarget.q}
             onChange={(e) => onChange({ ...currentEditTarget, q: e.target.value })}
-            rows={4}
+            rows={5}
             placeholder="日本の首都は？"
           />
           <textarea
             value={currentEditTarget.a}
             onChange={(e) => onChange({ ...currentEditTarget, a: e.target.value })}
-            rows={2}
+            rows={3}
             placeholder="東京（とうきょう）"
           />
           <div className="flex">
