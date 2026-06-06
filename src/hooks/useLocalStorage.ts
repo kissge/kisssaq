@@ -1,10 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function readStoredValue<T>(key: string, initialValue: T): T {
-  if (typeof window === "undefined") {
-    return initialValue;
-  }
-
   try {
     const item = window.localStorage.getItem(key);
 
@@ -16,7 +12,13 @@ function readStoredValue<T>(key: string, initialValue: T): T {
 }
 
 export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T) => void] {
-  const [storedValue, setStoredValue] = useState<T>(() => readStoredValue(key, initialValue));
+  const [storedValue, setStoredValue] = useState<T>(() => initialValue);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setStoredValue(readStoredValue(key, initialValue));
+    }, 0);
+  }, [key, initialValue]);
 
   const setValue = (value: T) => {
     try {
