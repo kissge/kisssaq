@@ -22,7 +22,14 @@ export default function ImportDialog({
 
   return (
     <dialog id="importDialog" closedby="closerequest">
-      ここにCSVかTSVを貼ってください。
+      <div className="toolbar">
+        <div>ここにCSVかTSVを貼ってください。</div>
+        <button
+          onClick={() => (document.getElementById("importDialog") as HTMLDialogElement).close()}
+        >
+          ✕
+        </button>
+      </div>
       <textarea
         rows={4}
         placeholder="日本の首都は？,東京（とうきょう）
@@ -31,6 +38,7 @@ export default function ImportDialog({
         onChange={(e) => setRaw(e.target.value)}
       />
       <button
+        disabled={!raw.trim()}
         onClick={() => {
           const parsed = parseCSV(raw)
             .map(({ q, a }) => {
