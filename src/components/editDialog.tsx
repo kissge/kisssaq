@@ -19,7 +19,7 @@ export default function EditDialog({
   onSave: (value: EditTarget) => void;
 }) {
   return (
-    <dialog id="editDialog" closedby="any">
+    <dialog id="editDialog" closedby="closerequest">
       {currentEditTarget && (
         <>
           <div className="toolbar">
