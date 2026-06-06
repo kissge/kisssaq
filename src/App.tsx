@@ -33,7 +33,7 @@ function App() {
         {activeFolder === null && questions.length === 0 && (
           <div className="welcome-message">
             <h1>
-              ✅ 自作問題管理アプリ
+              自作問題管理アプリ
               <ruby>
                 kissSaq
                 <rt>きすさく</rt>
