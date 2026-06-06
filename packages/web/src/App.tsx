@@ -230,6 +230,11 @@ function App() {
         activeFolder={activeFolder}
         onChange={setActiveFolder}
         onFolderCreate={(name) => setFolders([...folders, name])}
+        onFolderRename={(index, newName) => {
+          const newFolders = [...folders];
+          newFolders[index] = newName;
+          setFolders(newFolders);
+        }}
       />
     </>
   );
