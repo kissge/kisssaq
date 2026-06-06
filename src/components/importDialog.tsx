@@ -42,7 +42,11 @@ export default function ImportDialog({
         onClick={() => {
           const parsed = parseCSV(raw)
             .map(({ q, a }) => {
-              return [String(q), String(a), activeFolder ?? 0] as [string, string, number];
+              return [String(q ?? ""), String(a ?? ""), activeFolder ?? 0] as [
+                string,
+                string,
+                number,
+              ];
             })
             .toReversed();
           onImport(parsed);
