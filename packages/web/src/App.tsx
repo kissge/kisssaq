@@ -10,7 +10,7 @@ function App() {
   const [questions, setQuestions] = useLocalStorage<[string, string, number][]>("q", []);
   const [folders, setFolders] = useLocalStorage("f", ["未分類"]);
   const [checked, setChecked] = useState<number[]>([]);
-  const [activeFolder, setActiveFolder] = useState<number | null>(null);
+  const [activeFolder, setActiveFolder] = useLocalStorage<number | null>("activeFolder", null);
   const [currentEditTarget, setCurrentEditTarget] = useState<EditTarget | null>(null);
   const [moveFolderTarget, setMoveFolderTarget] = useState(0);
   const [order, setOrder] = useState<"default" | number[]>("default");
