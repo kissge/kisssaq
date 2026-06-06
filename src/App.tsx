@@ -147,6 +147,7 @@ function App() {
         )}
 
         <div className="global-toolbar">
+          <img src="https://kissge.github.io/shared/me-mini-512.png" alt="logo" className="logo" />
           kissSaq
           <div className="spacer" />
           <button
