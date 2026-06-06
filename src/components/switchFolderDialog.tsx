@@ -5,11 +5,13 @@ export default function SwitchFolderDialog({
   activeFolder,
   onChange,
   onFolderCreate,
+  onFolderRename,
 }: {
   folders: string[];
   activeFolder: number | null;
   onChange: (folder: number | null) => void;
   onFolderCreate: (folder: string) => void;
+  onFolderRename: (index: number, newName: string) => void;
 }) {
   return (
     <dialog id="switchFolderDialog" closedby="any">
@@ -47,6 +49,14 @@ export default function SwitchFolderDialog({
         }}
       >
         新しいフォルダを追加
+      </button>
+      <button disabled={activeFolder === null} onClick={() => {
+        const newName = prompt("新しいフォルダ名を入力", folders[activeFolder!]);
+        if (newName) {
+          onFolderRename(activeFolder!, newName);
+        }
+      }}>
+        フォルダ名を変更
       </button>
     </dialog>
   );
