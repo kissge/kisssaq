@@ -165,9 +165,10 @@ function App() {
           <button
             disabled={questions.length === 0}
             onClick={() => {
-              const data = new Blob([json2csv(questions).replace(/.+\n/, "")], {
-                type: "text/csv",
-              });
+              const data = new Blob(
+                [json2csv(questions.map(([q, a, f]) => [q, a, f ?? 0])).replace(/.+\n/, "")],
+                { type: "text/csv" },
+              );
               const url = URL.createObjectURL(data);
               const a = document.createElement("a");
               a.href = url;
