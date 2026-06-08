@@ -13,6 +13,7 @@
 .welcome-message {
   font-size: 1.25em;
   margin: auto;
+  padding: 0.25em;
   animation: fade-in 1s ease-in;
 
   h1 {
