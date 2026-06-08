@@ -4,7 +4,7 @@ import { useLocalStorage } from "./hooks/useLocalStorage";
 import EditDialog, { type EditTarget } from "./components/editDialog";
 import ImportDialog from "./components/importDialog";
 import { json2csv } from "json-2-csv";
-import SwitchFolderDialog from "./components/switchFolderDialog";
+import SwitchViewDialog from "./components/switchViewDialog";
 
 function App() {
   const [questions, setQuestions] = useLocalStorage<[string, string, number][]>("q", []);
@@ -248,12 +248,14 @@ function App() {
         }}
       />
 
-      <SwitchFolderDialog
-        folders={folders}
-        activeFolder={activeFolder}
+      <SwitchViewDialog
+        id="switchFolderDialog"
+        itemKind="フォルダ"
+        items={folders}
+        activeItem={activeFolder}
         onChange={setActiveFolder}
-        onFolderCreate={(name) => setFolders([...folders, name])}
-        onFolderRename={(index, newName) => {
+        onItemCreate={(name) => setFolders([...folders, name])}
+        onItemRename={(index, newName) => {
           const newFolders = [...folders];
           newFolders[index] = newName;
           setFolders(newFolders);
