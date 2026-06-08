@@ -48,7 +48,10 @@ function App() {
       ? order.map((i) => ({ i, qa: questions[i] }))
       : order === "default"
         ? questions.map((qa, i) => ({ i, qa })).toReversed()
-        : questions.map((qa, i) => ({ i, qa })).toSorted((a, b) => (a.qa[3] ?? 0) - (b.qa[3] ?? 0))
+        : questions
+            .map((qa, i) => ({ i, qa }))
+            .toReversed()
+            .toSorted((a, b) => (a.qa[3] ?? 0) - (b.qa[3] ?? 0))
   ).filter(
     ({ qa: [q, a, f, g] }) =>
       (!searchKeyword || q.includes(searchKeyword) || a.includes(searchKeyword)) &&
