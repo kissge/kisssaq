@@ -26,7 +26,7 @@ function App() {
   const [currentEditTarget, setCurrentEditTarget] = useState<EditTarget | null>(null);
   const [moveFolderTarget, setMoveFolderTarget] = useState(0);
   const [moveGenreTarget, setMoveGenreTarget] = useState(0);
-  const [order, setOrder] = useState<"default" | number[]>("default");
+  const [order, setOrder] = useState<"default" | "genre" | number[]>("default");
   const [showSearchBox, setShowSearchBox] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
 
@@ -44,7 +44,13 @@ function App() {
   const filteredQuestions = (
     Array.isArray(order)
       ? order.map((i) => ({ i, qa: questions[i] }))
-      : questions.map((qa, i) => ({ i, qa })).toReversed()
+      : order === "default"
+        ? questions.map((qa, i) => ({ i, qa })).toReversed()
+        : order === "genre"
+          ? questions
+              .map((qa, i) => ({ i, qa }))
+              .toSorted((a, b) => (a.qa[3] ?? 0) - (b.qa[3] ?? 0))
+          : []
   ).filter(
     ({ qa: [q, a, f, g] }) =>
       (!searchKeyword || q.includes(searchKeyword) || a.includes(searchKeyword)) &&
@@ -132,7 +138,7 @@ function App() {
               onClick={() => {
                 setQuestions(questions.filter((_, j) => !checked.includes(j)));
 
-                if (order !== "default") {
+                if (Array.isArray(order)) {
                   setOrder(order.filter((i) => !checked.includes(i)));
                 }
 
@@ -208,11 +214,13 @@ function App() {
               setOrder(
                 order === "default"
                   ? questions.map((_, i) => i).toSorted(() => Math.random() - 0.5)
-                  : "default",
+                  : order === "genre"
+                    ? "default"
+                    : "genre",
               );
             }}
           >
-            {order === "default" ? "登録順" : "ランダム"}
+            {order === "default" ? "登録順" : order === "genre" ? "ジャンル順" : "ランダム"}
           </button>
           <button
             disabled={questions.length === 0}
@@ -282,7 +290,7 @@ function App() {
             onClick={() => {
               setQuestions([...questions, ["", "", activeFolder ?? 0, activeGenre ?? 0]]);
 
-              if (order !== "default") {
+              if (Array.isArray(order)) {
                 setOrder([...order, questions.length]);
               }
 
