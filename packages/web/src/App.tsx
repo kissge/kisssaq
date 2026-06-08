@@ -7,7 +7,9 @@ import { json2csv } from "json-2-csv";
 import SwitchViewDialog from "./components/switchViewDialog";
 
 function App() {
-  const [questions, setQuestions] = useLocalStorage<[string, string, number, number][]>("q", []);
+  const [questions, setQuestions] = useLocalStorage<
+    [string, string, number | undefined, number | undefined][]
+  >("q", []);
   const [folders, setFolders] = useLocalStorage("f", ["未分類"]);
   const [genres, setGenres] = useLocalStorage("g", [
     "未分類",
@@ -46,11 +48,7 @@ function App() {
       ? order.map((i) => ({ i, qa: questions[i] }))
       : order === "default"
         ? questions.map((qa, i) => ({ i, qa })).toReversed()
-        : order === "genre"
-          ? questions
-              .map((qa, i) => ({ i, qa }))
-              .toSorted((a, b) => (a.qa[3] ?? 0) - (b.qa[3] ?? 0))
-          : []
+        : questions.map((qa, i) => ({ i, qa })).toSorted((a, b) => (a.qa[3] ?? 0) - (b.qa[3] ?? 0))
   ).filter(
     ({ qa: [q, a, f, g] }) =>
       (!searchKeyword || q.includes(searchKeyword) || a.includes(searchKeyword)) &&

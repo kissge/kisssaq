@@ -12,7 +12,7 @@ function readStoredValue<T>(key: string, initialValue: T): T {
 }
 
 export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T) => void] {
-  const [storedValue, setStoredValue] = useState<T>(() => initialValue);
+  const [storedValue, setStoredValue] = useState<T>(initialValue);
 
   useEffect(() => {
     setTimeout(() => {
