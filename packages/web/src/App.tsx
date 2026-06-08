@@ -59,7 +59,7 @@ function App() {
   return (
     <>
       <section id="center">
-        {activeFolder === null && questions.length === 0 ? (
+        {activeFolder === null && activeGenre === null && questions.length === 0 ? (
           <div className="welcome-message">
             <h1>
               自作問題管理アプリ
