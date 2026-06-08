@@ -230,10 +230,9 @@ function App() {
             onClick={() => {
               const data = new Blob(
                 [
-                  json2csv(questions.map(([q, a, f, g]) => [q, a, f ?? 0, g ?? 0])).replace(
-                    /.+\n/,
-                    "",
-                  ),
+                  json2csv(
+                    filteredQuestions.map(({ qa: [q, a, f, g] }) => [q, a, f ?? 0, g ?? 0]),
+                  ).replace(/.+\n/, ""),
                 ],
                 { type: "text/csv" },
               );
