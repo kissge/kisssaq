@@ -41,10 +41,21 @@ function App() {
     setTimeout(() => dialog.querySelector("textarea")!.focus(), 10);
   }
 
+  const filteredQuestions = (
+    Array.isArray(order)
+      ? order.map((i) => ({ i, qa: questions[i] }))
+      : questions.map((qa, i) => ({ i, qa })).toReversed()
+  ).filter(
+    ({ qa: [q, a, f, g] }) =>
+      (!searchKeyword || q.includes(searchKeyword) || a.includes(searchKeyword)) &&
+      (activeFolder === null || (f ?? 0) === activeFolder) &&
+      (activeGenre === null || (g ?? 0) === activeGenre),
+  );
+
   return (
     <>
       <section id="center">
-        {activeFolder === null && questions.length === 0 && (
+        {activeFolder === null && questions.length === 0 ? (
           <div className="welcome-message">
             <h1>
               自作問題管理アプリ
@@ -60,7 +71,16 @@ function App() {
               <li>CSV/TSV形式での書き出し・取り込みに対応しています。</li>
             </ul>
           </div>
-        )}
+        ) : filteredQuestions.length === 0 ? (
+          <div className="empty-message">
+            <h2>問題が1件もありません</h2>
+            <p>
+              {activeFolder !== null && `フォルダ「${folders[activeFolder]}」`}
+              {activeGenre !== null && `ジャンル「${genres[activeGenre]}」`}
+              {searchKeyword && `検索キーワード「${searchKeyword}」`}に該当する問題が存在しません。
+            </p>
+          </div>
+        ) : null}
 
         <table
           style={{
@@ -68,40 +88,30 @@ function App() {
           }}
         >
           <tbody>
-            {(Array.isArray(order)
-              ? order.map((i) => ({ i, qa: questions[i] }))
-              : questions.map((qa, i) => ({ i, qa })).toReversed()
-            )
-              .filter(
-                ({ qa: [q, a, f, g] }) =>
-                  (!searchKeyword || q.includes(searchKeyword) || a.includes(searchKeyword)) &&
-                  (activeFolder === null || (f ?? 0) === activeFolder) &&
-                  (activeGenre === null || (g ?? 0) === activeGenre),
-              )
-              .map(({ i, qa: [q, a] }) => (
-                <tr key={i + q}>
-                  <th>
-                    <input
-                      type="checkbox"
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setChecked([...checked, i]);
-                        } else {
-                          setChecked(checked.filter((n) => n !== i));
-                        }
-                      }}
-                    />
-                  </th>
-                  <td onClick={() => startEdit(i)}>
-                    {q
-                      ? q
-                          .split(/(（.+?）|\(.+?\)|【.+?】|［.+?］)/)
-                          .map((p, j) => (j % 2 ? <em key={j}>{p}</em> : p))
-                      : "ここをクリックして編集"}
-                  </td>
-                  <td onClick={() => startEdit(i)}>{a}</td>
-                </tr>
-              ))}
+            {filteredQuestions.map(({ i, qa: [q, a] }) => (
+              <tr key={i + q}>
+                <th>
+                  <input
+                    type="checkbox"
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setChecked([...checked, i]);
+                      } else {
+                        setChecked(checked.filter((n) => n !== i));
+                      }
+                    }}
+                  />
+                </th>
+                <td onClick={() => startEdit(i)}>
+                  {q
+                    ? q
+                        .split(/(（.+?）|\(.+?\)|【.+?】|［.+?］)/)
+                        .map((p, j) => (j % 2 ? <em key={j}>{p}</em> : p))
+                    : "ここをクリックして編集"}
+                </td>
+                <td onClick={() => startEdit(i)}>{a}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
 
