@@ -109,6 +109,9 @@ function App() {
                   />
                 </th>
                 <td onClick={() => startEdit(i)}>
+                  {order === "genre" && (
+                    <span className="genre-label">{genres[questions[i][3] ?? 0]}</span>
+                  )}
                   {q
                     ? q
                         .split(/(（.+?）|\(.+?\)|【.+?】|［.+?］)/)
