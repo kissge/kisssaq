@@ -7,12 +7,25 @@ import { json2csv } from "json-2-csv";
 import SwitchViewDialog from "./components/switchViewDialog";
 
 function App() {
-  const [questions, setQuestions] = useLocalStorage<[string, string, number][]>("q", []);
+  const [questions, setQuestions] = useLocalStorage<[string, string, number, number][]>("q", []);
   const [folders, setFolders] = useLocalStorage("f", ["未分類"]);
+  const [genres, setGenres] = useLocalStorage("g", [
+    "未分類",
+    "アニメ・ゲーム",
+    "スポーツ",
+    "ライフスタイル・グルメ",
+    "文化・芸術",
+    "歴史・地理・社会",
+    "理系学問",
+    "芸能",
+    "語学・文学",
+  ]);
   const [checked, setChecked] = useState<number[]>([]);
   const [activeFolder, setActiveFolder] = useLocalStorage<number | null>("activeFolder", null);
+  const [activeGenre, setActiveGenre] = useLocalStorage<number | null>("activeGenre", null);
   const [currentEditTarget, setCurrentEditTarget] = useState<EditTarget | null>(null);
   const [moveFolderTarget, setMoveFolderTarget] = useState(0);
+  const [moveGenreTarget, setMoveGenreTarget] = useState(0);
   const [order, setOrder] = useState<"default" | number[]>("default");
   const [showSearchBox, setShowSearchBox] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -21,7 +34,8 @@ function App() {
     const q = questions[id]?.[0] ?? "";
     const a = questions[id]?.[1] ?? "";
     const f = questions[id]?.[2] ?? activeFolder ?? 0;
-    setCurrentEditTarget({ q, a, f, id });
+    const g = questions[id]?.[3] ?? activeGenre ?? 0;
+    setCurrentEditTarget({ q, a, f, g, id });
     const dialog = document.getElementById("editDialog") as HTMLDialogElement;
     dialog.showModal();
     setTimeout(() => dialog.querySelector("textarea")!.focus(), 10);
@@ -59,9 +73,10 @@ function App() {
               : questions.map((qa, i) => ({ i, qa })).toReversed()
             )
               .filter(
-                ({ qa: [q, a, f] }) =>
+                ({ qa: [q, a, f, g] }) =>
                   (!searchKeyword || q.includes(searchKeyword) || a.includes(searchKeyword)) &&
-                  (activeFolder === null || (f ?? 0) === activeFolder),
+                  (activeFolder === null || (f ?? 0) === activeFolder) &&
+                  (activeGenre === null || (g ?? 0) === activeGenre),
               )
               .map(({ i, qa: [q, a] }) => (
                 <tr key={i + q}>
@@ -102,7 +117,7 @@ function App() {
 
         {checked.length > 0 && (
           <div className="bulk-toolbar">
-            選択中の{checked.length}件を
+            {checked.length}件を
             <button
               onClick={() => {
                 setQuestions(questions.filter((_, j) => !checked.includes(j)));
@@ -143,6 +158,33 @@ function App() {
                 に移動
               </button>
             </div>
+            <div>
+              <select
+                value={moveGenreTarget}
+                onChange={(e) => setMoveGenreTarget(Number.parseInt(e.target.value))}
+              >
+                {genres.map((genre, index) => (
+                  <option key={genre} value={index}>
+                    {genre}
+                  </option>
+                ))}
+              </select>
+              <button
+                onClick={() => {
+                  const newQuestions = questions.map((qa, i) => {
+                    if (checked.includes(i)) {
+                      qa[3] = moveGenreTarget;
+                    }
+
+                    return qa;
+                  });
+                  setQuestions(newQuestions);
+                  setChecked([]);
+                }}
+              >
+                に変更
+              </button>
+            </div>
           </div>
         )}
 
@@ -166,7 +208,12 @@ function App() {
             disabled={questions.length === 0}
             onClick={() => {
               const data = new Blob(
-                [json2csv(questions.map(([q, a, f]) => [q, a, f ?? 0])).replace(/.+\n/, "")],
+                [
+                  json2csv(questions.map(([q, a, f, g]) => [q, a, f ?? 0, g ?? 0])).replace(
+                    /.+\n/,
+                    "",
+                  ),
+                ],
                 { type: "text/csv" },
               );
               const url = URL.createObjectURL(data);
@@ -196,6 +243,14 @@ function App() {
             ﾌｫﾙﾀﾞ
           </button>
           <button
+            onClick={() => {
+              const dialog = document.getElementById("switchGenreDialog") as HTMLDialogElement;
+              dialog.showModal();
+            }}
+          >
+            ｼﾞｬﾝﾙ
+          </button>
+          <button
             disabled={questions.length === 0}
             onClick={() => {
               if (showSearchBox) {
@@ -215,7 +270,7 @@ function App() {
           </button>
           <button
             onClick={() => {
-              setQuestions([...questions, ["", "", activeFolder ?? 0]]);
+              setQuestions([...questions, ["", "", activeFolder ?? 0, activeGenre ?? 0]]);
 
               if (order !== "default") {
                 setOrder([...order, questions.length]);
@@ -232,16 +287,18 @@ function App() {
       <EditDialog
         currentEditTarget={currentEditTarget}
         folders={folders}
+        genres={genres}
         onChange={setCurrentEditTarget}
         onSave={(value) => {
           const newQuestions = [...questions];
-          newQuestions[value.id] = [value.q, value.a, value.f];
+          newQuestions[value.id] = [value.q, value.a, value.f, value.g];
           setQuestions(newQuestions);
         }}
       />
 
       <ImportDialog
         activeFolder={activeFolder}
+        activeGenre={activeGenre}
         onImport={(parsed) => {
           setOrder("default");
           setQuestions([...questions, ...parsed]);
@@ -259,6 +316,20 @@ function App() {
           const newFolders = [...folders];
           newFolders[index] = newName;
           setFolders(newFolders);
+        }}
+      />
+
+      <SwitchViewDialog
+        id="switchGenreDialog"
+        itemKind="ジャンル"
+        items={genres}
+        activeItem={activeGenre}
+        onChange={setActiveGenre}
+        onItemCreate={(name) => setGenres([...genres, name])}
+        onItemRename={(index, newName) => {
+          const newGenres = [...genres];
+          newGenres[index] = newName;
+          setGenres(newGenres);
         }}
       />
     </>

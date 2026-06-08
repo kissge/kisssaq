@@ -5,16 +5,19 @@ export interface EditTarget {
   q: string;
   a: string;
   f: number;
+  g: number;
 }
 
 export default function EditDialog({
   currentEditTarget,
   folders,
+  genres,
   onChange,
   onSave,
 }: {
   currentEditTarget: EditTarget | null;
   folders: string[];
+  genres: string[];
   onChange: (value: EditTarget) => void;
   onSave: (value: EditTarget) => void;
 }) {
@@ -55,6 +58,18 @@ export default function EditDialog({
               {folders.map((folder, index) => (
                 <option key={folder} value={index}>
                   {folder}
+                </option>
+              ))}
+            </select>
+            <select
+              value={currentEditTarget.g}
+              onChange={(e) =>
+                onChange({ ...currentEditTarget, g: Number.parseInt(e.target.value) })
+              }
+            >
+              {genres.map((genre, index) => (
+                <option key={genre} value={index}>
+                  {genre}
                 </option>
               ))}
             </select>
