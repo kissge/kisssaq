@@ -3,10 +3,12 @@ import { useState } from "react";
 
 export default function ImportDialog({
   activeFolder,
+  activeGenre,
   onImport,
 }: {
   activeFolder: number | null;
-  onImport: (parsed: [string, string, number][]) => void;
+  activeGenre: number | null;
+  onImport: (parsed: [string, string, number, number][]) => void;
 }) {
   const [raw, setRaw] = useState("");
 
@@ -42,9 +44,10 @@ export default function ImportDialog({
         onClick={() => {
           const parsed = parseCSV(raw)
             .map(({ q, a }) => {
-              return [String(q ?? ""), String(a ?? ""), activeFolder ?? 0] as [
+              return [String(q ?? ""), String(a ?? ""), activeFolder ?? 0, activeGenre ?? 0] as [
                 string,
                 string,
+                number,
                 number,
               ];
             })

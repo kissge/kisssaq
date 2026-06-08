@@ -90,6 +90,12 @@ table {
     display: flex;
     gap: 0.25em;
   }
+
+  select,
+  button {
+    font-size: 0.6em;
+    padding: 0.5em 0.25em;
+  }
 }
 
 .global-toolbar {
@@ -104,6 +110,11 @@ table {
   justify-content: space-between;
   align-items: center;
   gap: 0.25em;
+
+  button {
+    font-size: 0.6em;
+    padding: 0.5em 0.25em;
+  }
 
   .logo {
     height: 1em;
