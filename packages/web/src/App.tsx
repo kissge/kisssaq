@@ -100,6 +100,7 @@ function App() {
                 <th>
                   <input
                     type="checkbox"
+                    checked={checked.includes(i)}
                     onChange={(e) => {
                       if (e.target.checked) {
                         setChecked([...checked, i]);
