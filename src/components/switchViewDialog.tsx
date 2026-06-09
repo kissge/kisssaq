@@ -5,6 +5,7 @@ export default function SwitchFolderDialog({
   itemKind,
   items,
   activeItem,
+  filteredQuestions,
   onChange,
   onItemCreate,
   onItemRename,
@@ -13,10 +14,15 @@ export default function SwitchFolderDialog({
   itemKind: string;
   items: string[];
   activeItem: number | null;
+  filteredQuestions: number[];
   onChange: (item: number | null) => void;
   onItemCreate: (item: string) => void;
   onItemRename: (index: number, newName: string) => void;
 }) {
+  const itemCount = items.map(
+    (_, index) => filteredQuestions.filter((item) => item === index).length,
+  );
+
   return (
     <dialog id={id} closedby="closerequest">
       <div className="toolbar">
@@ -28,12 +34,16 @@ export default function SwitchFolderDialog({
 
       <div className="select">
         <div onClick={() => onChange(null)}>
-          <span>全ての{itemKind}</span>
+          <span>
+            全ての{itemKind} ({filteredQuestions.length})
+          </span>
           {activeItem === null && <span>✅</span>}
         </div>
         {items.map((item, index) => (
           <div key={item} onClick={() => onChange(index)}>
-            <span>{item}</span>
+            <span>
+              {item} ({itemCount[index]})
+            </span>
             {activeItem === index && <span>✅</span>}
           </div>
         ))}

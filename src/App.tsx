@@ -337,6 +337,9 @@ function App() {
         itemKind="フォルダ"
         items={folders}
         activeItem={activeFolder}
+        filteredQuestions={questions
+          .filter((qa) => activeGenre === null || (qa[3] ?? 0) === activeGenre)
+          .map((qa) => qa[2] ?? 0)}
         onChange={setActiveFolder}
         onItemCreate={(name) => setFolders([...folders, name])}
         onItemRename={(index, newName) => {
@@ -351,6 +354,9 @@ function App() {
         itemKind="ジャンル"
         items={genres}
         activeItem={activeGenre}
+        filteredQuestions={questions
+          .filter((qa) => activeFolder === null || (qa[2] ?? 0) === activeFolder)
+          .map((qa) => qa[3] ?? 0)}
         onChange={setActiveGenre}
         onItemCreate={(name) => setGenres([...genres, name])}
         onItemRename={(index, newName) => {
