@@ -232,7 +232,12 @@ function App() {
               const data = new Blob(
                 [
                   json2csv(
-                    filteredQuestions.map(({ qa: [q, a, f, g] }) => [q, a, f ?? 0, g ?? 0]),
+                    filteredQuestions.map(({ qa: [q, a, f, g] }) => [
+                      q,
+                      a,
+                      folders[f ?? 0],
+                      genres[g ?? 0],
+                    ]),
                   ).replace(/.+\n/, ""),
                 ],
                 { type: "text/csv" },
