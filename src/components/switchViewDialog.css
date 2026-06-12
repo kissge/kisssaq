@@ -5,7 +5,7 @@
 
   & > div {
     display: flex;
-    background-color: #eee;
+    background-color: light-dark(#eee, #333);
     margin-bottom: 0.25em;
     padding: 0.25em;
     cursor: pointer;
