@@ -79,7 +79,7 @@ table {
     }
 
     em {
-      color: #aaa;
+      color: light-dark(#aaa, #666);
       font-style: normal;
     }
   }
