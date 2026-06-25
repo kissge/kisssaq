@@ -39,14 +39,19 @@ export default function SwitchFolderDialog({
           </span>
           {activeItem === null && <span>✅</span>}
         </div>
-        {items.map((item, index) => (
-          <div key={item} onClick={() => onChange(index)}>
-            <span>
-              {item} ({itemCount[index]})
-            </span>
-            {activeItem === index && <span>✅</span>}
-          </div>
-        ))}
+        {items
+          .map((item, index) => ({ item, index }))
+          .toSorted((a, b) =>
+            a.index === 0 ? -1 : b.index === 0 ? 1 : b.item.localeCompare(a.item),
+          )
+          .map(({ item, index }) => (
+            <div key={item} onClick={() => onChange(index)}>
+              <span>
+                {item} ({itemCount[index]})
+              </span>
+              {activeItem === index && <span>✅</span>}
+            </div>
+          ))}
       </div>
 
       <button
