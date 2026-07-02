@@ -28,7 +28,7 @@ export default function EditDialog({
           <div className="toolbar">
             <div>
               {currentEditTarget.q.length} (
-              {currentEditTarget.q.replace(/\s*\(.+?\)\s*|（.+）/g, "").length})
+              {currentEditTarget.q.replace(/(（.+?）|\(.+?\)|【.+?】|［.+?］)/g, "").length})
             </div>
             <button
               onClick={() => (document.getElementById("editDialog") as HTMLDialogElement).close()}
