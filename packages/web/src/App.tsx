@@ -158,11 +158,16 @@ function App() {
                 value={moveFolderTarget}
                 onChange={(e) => setMoveFolderTarget(Number.parseInt(e.target.value))}
               >
-                {folders.map((folder, index) => (
-                  <option key={folder} value={index}>
-                    {folder}
-                  </option>
-                ))}
+                {folders
+                  .map((folder, index) => ({ folder, index }))
+                  .toSorted((a, b) =>
+                    a.index === 0 ? -1 : b.index === 0 ? 1 : b.folder.localeCompare(a.folder),
+                  )
+                  .map(({ folder, index }) => (
+                    <option key={folder} value={index}>
+                      {folder}
+                    </option>
+                  ))}
               </select>
               <button
                 onClick={() => {
@@ -175,6 +180,7 @@ function App() {
                   });
                   setQuestions(newQuestions);
                   setChecked([]);
+                  setMoveFolderTarget(0);
                 }}
               >
                 に移動
@@ -185,11 +191,16 @@ function App() {
                 value={moveGenreTarget}
                 onChange={(e) => setMoveGenreTarget(Number.parseInt(e.target.value))}
               >
-                {genres.map((genre, index) => (
-                  <option key={genre} value={index}>
-                    {genre}
-                  </option>
-                ))}
+                {genres
+                  .map((genre, index) => ({ genre, index }))
+                  .toSorted((a, b) =>
+                    a.index === 0 ? -1 : b.index === 0 ? 1 : b.genre.localeCompare(a.genre),
+                  )
+                  .map(({ genre, index }) => (
+                    <option key={genre} value={index}>
+                      {genre}
+                    </option>
+                  ))}
               </select>
               <button
                 onClick={() => {
@@ -202,6 +213,7 @@ function App() {
                   });
                   setQuestions(newQuestions);
                   setChecked([]);
+                  setMoveGenreTarget(0);
                 }}
               >
                 に変更
