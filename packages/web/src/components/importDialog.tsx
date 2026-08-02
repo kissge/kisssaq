@@ -8,7 +8,7 @@ export default function ImportDialog({
 }: {
   activeFolder: number | null;
   activeGenre: number | null;
-  onImport: (parsed: [string, string, number, number][]) => void;
+  onImport: (parsed: [string, string, number, number, string][]) => void;
 }) {
   const [raw, setRaw] = useState("");
 
@@ -16,9 +16,10 @@ export default function ImportDialog({
     const tabCount = raw.match(/\t/g)?.length ?? 0;
     const commaCount = raw.match(/,/g)?.length ?? 0;
     const delimiter = tabCount > commaCount ? "\t" : ",";
-    return csv2json(raw, { delimiter: { field: delimiter }, headerFields: ["q", "a"] }) as {
+    return csv2json(raw, { delimiter: { field: delimiter }, headerFields: ["q", "a", "c"] }) as {
       q: unknown;
       a: unknown;
+      c: unknown;
     }[];
   }
 
@@ -34,8 +35,8 @@ export default function ImportDialog({
       </div>
       <textarea
         rows={4}
-        placeholder="日本の首都は？,東京（とうきょう）
-中国の首都は？,北京（ペキン）"
+        placeholder="日本の首都は？,東京（とうきょう）,かんたん
+中国の首都は？,北京（ペキン）,意外と忘れがち"
         value={raw}
         onChange={(e) => setRaw(e.target.value)}
       />
@@ -43,12 +44,13 @@ export default function ImportDialog({
         disabled={!raw.trim()}
         onClick={() => {
           const parsed = parseCSV(raw)
-            .map(({ q, a }) => {
-              return [String(q ?? ""), String(a ?? ""), activeFolder ?? 0, activeGenre ?? 0] as [
-                string,
-                string,
-                number,
-                number,
+            .map<[string, string, number, number, string]>(({ q, a, c }) => {
+              return [
+                String(q ?? ""),
+                String(a ?? ""),
+                activeFolder ?? 0,
+                activeGenre ?? 0,
+                String(c ?? ""),
               ];
             })
             .toReversed();

@@ -6,6 +6,7 @@ export interface EditTarget {
   a: string;
   f: number;
   g: number;
+  c: string;
 }
 
 export default function EditDialog({
@@ -47,6 +48,12 @@ export default function EditDialog({
             onChange={(e) => onChange({ ...currentEditTarget, a: e.target.value })}
             rows={3}
             placeholder="東京（とうきょう）"
+          />
+          <textarea
+            value={currentEditTarget.c}
+            onChange={(e) => onChange({ ...currentEditTarget, c: e.target.value })}
+            rows={3}
+            placeholder="自由記入欄"
           />
           <div className="flex">
             <select

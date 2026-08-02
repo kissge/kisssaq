@@ -8,7 +8,7 @@ import SwitchViewDialog from "./components/switchViewDialog";
 
 function App() {
   const [questions, setQuestions] = useLocalStorage<
-    [string, string, number | undefined, number | undefined][]
+    [string, string, number | undefined, number | undefined, string | undefined][]
   >("q", []);
   const [folders, setFolders] = useLocalStorage("f", ["未分類"]);
   const [genres, setGenres] = useLocalStorage("g", [
@@ -37,7 +37,8 @@ function App() {
     const a = questions[id]?.[1] ?? "";
     const f = questions[id]?.[2] ?? activeFolder ?? 0;
     const g = questions[id]?.[3] ?? activeGenre ?? 0;
-    setCurrentEditTarget({ q, a, f, g, id });
+    const c = questions[id]?.[4] ?? "";
+    setCurrentEditTarget({ q, a, f, g, c, id });
     const dialog = document.getElementById("editDialog") as HTMLDialogElement;
     dialog.showModal();
     setTimeout(() => dialog.querySelector("textarea")!.focus(), 10);
@@ -233,11 +234,12 @@ function App() {
               const data = new Blob(
                 [
                   json2csv(
-                    filteredQuestions.map(({ qa: [q, a, f, g] }) => [
+                    filteredQuestions.map(({ qa: [q, a, f, g, c] }) => [
                       q,
                       a,
                       folders[f ?? 0],
                       genres[g ?? 0],
+                      c ?? "",
                     ]),
                   ).replace(/.+\n/, ""),
                 ],
@@ -297,7 +299,7 @@ function App() {
           </button>
           <button
             onClick={() => {
-              setQuestions([...questions, ["", "", activeFolder ?? 0, activeGenre ?? 0]]);
+              setQuestions([...questions, ["", "", activeFolder ?? 0, activeGenre ?? 0, ""]]);
 
               if (Array.isArray(order)) {
                 setOrder([...order, questions.length]);
@@ -318,7 +320,7 @@ function App() {
         onChange={setCurrentEditTarget}
         onSave={(value) => {
           const newQuestions = [...questions];
-          newQuestions[value.id] = [value.q, value.a, value.f, value.g];
+          newQuestions[value.id] = [value.q, value.a, value.f, value.g, value.c];
           setQuestions(newQuestions);
         }}
       />
