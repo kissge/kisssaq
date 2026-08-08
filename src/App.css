@@ -94,7 +94,7 @@ table {
   background-color: var(--bg);
   box-shadow: var(--shadow);
 
-  input {
+  input[type="text"] {
     width: 100%;
   }
 }

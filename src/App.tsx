@@ -139,6 +139,13 @@ function App() {
 
         {checked.length > 0 && (
           <div className="bulk-toolbar">
+            <input type="checkbox" checked={checked.length === filteredQuestions.length} onChange={(e) => {
+              if (e.target.checked) {
+                setChecked(filteredQuestions.map(({ i }) => i));
+              } else {
+                setChecked([]);
+              }
+            }} />
             {checked.length}件を
             <button
               onClick={() => {
