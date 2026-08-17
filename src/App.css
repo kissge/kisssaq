@@ -78,9 +78,12 @@ table {
       line-height: 1;
     }
 
-    em {
+    .dimmed {
       color: light-dark(#aaa, #666);
-      font-style: normal;
+    }
+
+    .over {
+      background-color: light-dark(#ccc, #555);
     }
   }
 }
@@ -94,7 +97,7 @@ table {
   background-color: var(--bg);
   box-shadow: var(--shadow);
 
-  input[type="text"] {
+  input[type='text'] {
     width: 100%;
   }
 }
