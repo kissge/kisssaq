@@ -60,6 +60,33 @@ function App() {
       (activeGenre === null || (g ?? 0) === activeGenre),
   );
 
+  function splitQuestion(
+    q: string,
+    limit: number = 60,
+  ): { type: "normal" | "dimmed" | "over"; text: string }[] {
+    const split = q.split(/(（.+?）|\(.+?\)|【.+?】|［.+?］)/);
+    const result = [];
+    let count = 0;
+    for (const [i, part] of split.entries()) {
+      if (i % 2) {
+        result.push({ type: "dimmed" as const, text: part });
+      } else {
+        if (!Number.isFinite(count)) {
+          result.push({ type: "over" as const, text: part });
+        } else if (count + part.length > limit) {
+          result.push({ type: "normal" as const, text: part.slice(0, limit - count) });
+          result.push({ type: "over" as const, text: part.slice(limit - count) });
+          count = Infinity;
+        } else {
+          result.push({ type: "normal" as const, text: part });
+          count += part.length;
+        }
+      }
+    }
+
+    return result;
+  }
+
   return (
     <>
       <section id="center">
@@ -116,9 +143,11 @@ function App() {
                     <span className="genre-label">{genres[questions[i][3] ?? 0]}</span>
                   )}
                   {q
-                    ? q
-                        .split(/(（.+?）|\(.+?\)|【.+?】|［.+?］)/)
-                        .map((p, j) => (j % 2 ? <em key={j}>{p}</em> : p))
+                    ? splitQuestion(q).map(({ type, text }) => (
+                        <span key={text} className={type}>
+                          {text}
+                        </span>
+                      ))
                     : "ここをクリックして編集"}
                 </td>
                 <td onClick={() => startEdit(i)}>{a}</td>
@@ -139,13 +168,17 @@ function App() {
 
         {checked.length > 0 && (
           <div className="bulk-toolbar">
-            <input type="checkbox" checked={checked.length === filteredQuestions.length} onChange={(e) => {
-              if (e.target.checked) {
-                setChecked(filteredQuestions.map(({ i }) => i));
-              } else {
-                setChecked([]);
-              }
-            }} />
+            <input
+              type="checkbox"
+              checked={checked.length === filteredQuestions.length}
+              onChange={(e) => {
+                if (e.target.checked) {
+                  setChecked(filteredQuestions.map(({ i }) => i));
+                } else {
+                  setChecked([]);
+                }
+              }}
+            />
             {checked.length}件を
             <button
               onClick={() => {
