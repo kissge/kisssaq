@@ -61,6 +61,7 @@ table {
     padding-right: 6px;
     word-break: break-word;
     width: 70%;
+    user-select: none;
 
     & + td {
       border-left: 1px solid #aaa;
