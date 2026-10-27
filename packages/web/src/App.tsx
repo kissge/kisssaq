@@ -6,22 +6,14 @@ import ImportDialog from "./components/importDialog";
 import { json2csv } from "json-2-csv";
 import SwitchViewDialog from "./components/switchViewDialog";
 import UnlockDialog from "./components/unlockDialog";
+import { useDatabase } from "./hooks/useDatabase";
+import { useUnlocked } from "./hooks/useUnlocked";
 import type { CommentText, FolderID, GenreID, Row } from "./lib/types";
 
 function App() {
-  const [questions, setQuestions] = useLocalStorage<Row[]>("q", []);
-  const [folders, setFolders] = useLocalStorage("f", ["未分類"]);
-  const [genres, setGenres] = useLocalStorage("g", [
-    "未分類",
-    "アニメ・ゲーム",
-    "スポーツ",
-    "ライフスタイル・グルメ",
-    "文化・芸術",
-    "歴史・地理・社会",
-    "理系学問",
-    "芸能",
-    "語学・文学",
-  ]);
+  const { unlocked } = useUnlocked();
+  const { questions, folders, genres, loading, setQuestions, setFolders, setGenres } =
+    useDatabase(unlocked);
   const [checked, setChecked] = useState<number[]>([]);
   const [activeFolder, setActiveFolder] = useLocalStorage<FolderID | null>("activeFolder", null);
   const [activeGenre, setActiveGenre] = useLocalStorage<GenreID | null>("activeGenre", null);
@@ -31,6 +23,10 @@ function App() {
   const [order, setOrder] = useState<"default" | "genre" | number[]>("default");
   const [showSearchBox, setShowSearchBox] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
+
+  if (loading) {
+    return null;
+  }
 
   function startEdit(id: number) {
     const q = questions[id]?.[0] ?? "";

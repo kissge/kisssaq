@@ -9,8 +9,8 @@
     "api:deploy": "pnpm --filter @kisssaq/api deploy",
     "api:typecheck": "pnpm --filter @kisssaq/api typecheck",
     "lint": "oxlint",
-    "format": "oxfmt",
-    "format:check": "oxfmt --check",
+    "format": "oxfmt --ignore-path .oxfmtignore",
+    "format:check": "oxfmt --check --ignore-path .oxfmtignore",
     "preview": "pnpm --filter @kisssaq/web preview"
   },
   "devDependencies": {
