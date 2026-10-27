@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function readStoredValue<T>(key: string, initialValue: T): T {
   try {
@@ -13,12 +13,11 @@ function readStoredValue<T>(key: string, initialValue: T): T {
 
 export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T) => void] {
   const [storedValue, setStoredValue] = useState<T>(initialValue);
+  const initialValueRef = useRef(initialValue);
 
   useEffect(() => {
-    setTimeout(() => {
-      setStoredValue(readStoredValue(key, initialValue));
-    }, 0);
-  }, [key, initialValue]);
+    setStoredValue(readStoredValue(key, initialValueRef.current));
+  }, [key]);
 
   const setValue = (value: T) => {
     try {
