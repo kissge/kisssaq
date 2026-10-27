@@ -3,11 +3,15 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "pnpm --filter ./packages/web dev",
-    "build": "pnpm --filter ./packages/web build",
-    "lint": "pnpm --filter ./packages/web lint",
-    "fmt": "pnpm --filter ./packages/web fmt",
-    "fmt:check": "pnpm --filter ./packages/web fmt:check",
-    "preview": "pnpm --filter ./packages/web preview"
+    "dev": "pnpm --filter @kisssaq/web dev",
+    "build": "pnpm --filter @kisssaq/web build",
+    "lint": "oxlint",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
+    "preview": "pnpm --filter @kisssaq/web preview"
+  },
+  "devDependencies": {
+    "oxfmt": "^0.74.0",
+    "oxlint": "^1.89.0"
   }
 }

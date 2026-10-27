@@ -27,7 +27,7 @@ jobs:
         run: pnpm i
 
       - name: build
-        run: pnpm --filter ./packages/web run build
+        run: pnpm --filter @kisssaq/web run build
 
       - name: Upload Artifacts
         uses: actions/upload-pages-artifact@v3
