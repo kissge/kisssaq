@@ -1,15 +1,10 @@
 import { isUnlocked, setPassword, wishlistURL, authorURL } from "kissunlocklib";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useUnlocked } from "../hooks/useUnlocked";
 
 export default function UnlockDialog() {
   const [passwordInput, setPasswordInput] = useState("");
-  const [unlocked, setUnlocked] = useState(false);
-
-  useEffect(() => {
-    isUnlocked().then((result) => {
-      setUnlocked(result);
-    });
-  }, []);
+  const { unlocked, loading, refresh } = useUnlocked();
 
   return (
     <dialog id="unlockDialog" closedby="closerequest">
@@ -50,20 +45,21 @@ export default function UnlockDialog() {
         <input
           type="password"
           placeholder="パスワード"
-          disabled={unlocked}
+          disabled={unlocked || loading}
           onChange={(e) => setPasswordInput(e.target.value)}
         />
         <button
           onClick={async () => {
             await setPassword(passwordInput);
             if (await isUnlocked()) {
+              await refresh();
               alert("アンロックされました。");
               (document.getElementById("unlockDialog") as HTMLDialogElement).close();
             } else {
               alert("パスワードが違います。");
             }
           }}
-          disabled={unlocked}
+          disabled={unlocked || loading}
         >
           アンロック
         </button>
