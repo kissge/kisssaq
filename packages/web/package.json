@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "json-2-csv": "^5.5.11",
+    "kissunlocklib": "github:kissge/kissunlocklib",
     "react": "^19.2.6",
     "react-dom": "^19.2.6"
   },

@@ -1,0 +1,75 @@
+import { isUnlocked, setPassword, wishlistURL, authorURL } from "kissunlocklib";
+import { useEffect, useState } from "react";
+
+export default function UnlockDialog() {
+  const [passwordInput, setPasswordInput] = useState("");
+  const [unlocked, setUnlocked] = useState(false);
+
+  useEffect(() => {
+    isUnlocked().then((result) => {
+      console.log("isUnlocked", result);
+      setUnlocked(result);
+    });
+  }, []);
+
+  return (
+    <dialog id="unlockDialog" closedby="closerequest">
+      <div className="toolbar">
+        <div>パスワードを入力するといくつかの追加機能がアンロックされます。</div>
+        <button
+          onClick={() => (document.getElementById("unlockDialog") as HTMLDialogElement).close()}
+        >
+          ✕
+        </button>
+      </div>
+
+      <details>
+        <summary>利用できる機能（今日現在。今後増減する可能性があります）</summary>
+        <ul>
+          <li>データベースのクラウド同期</li>
+        </ul>
+      </details>
+
+      <p style={{ fontWeight: "bold" }}>
+        一度アンロックすると、kissqとkissSaqの両方で追加機能が利用できるようになります。 👈
+        とてもすごい
+      </p>
+
+      <p>
+        パスワードを入手するには、
+        <a href={wishlistURL} target="_blank">
+          こちら
+        </a>
+        から何らかのアイテムを作者に送り付けたのち、
+        <a href={authorURL} target="_blank">
+          作者
+        </a>
+        にXのDMで問い合わせてください。
+      </p>
+
+      <div className="password-wrapper">
+        <input
+          type="password"
+          placeholder="パスワード"
+          disabled={unlocked}
+          onChange={(e) => setPasswordInput(e.target.value)}
+        />
+        <button
+          onClick={async () => {
+            await setPassword(passwordInput);
+            if (await isUnlocked()) {
+              alert("アンロックされました。");
+              (document.getElementById("unlockDialog") as HTMLDialogElement).close();
+            } else {
+              alert("パスワードが違います。");
+            }
+          }}
+          disabled={unlocked}
+        >
+          アンロック
+        </button>
+        {unlocked && <p>アンロック済みです。</p>}
+      </div>
+    </dialog>
+  );
+}
