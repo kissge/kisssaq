@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@kisssaq/api": "workspace:*",
+    "hono": "^4.13.14",
     "json-2-csv": "^5.5.11",
     "kissunlocklib": "github:kissge/kissunlocklib",
     "react": "^19.2.6",

@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { HTTPException } from "hono/http-exception";
 import "../worker-configuration.d.ts";
 
 const app = new Hono<{ Bindings: CloudflareBindings }>().get("/question/:id", async (c) => {
@@ -11,20 +12,14 @@ const app = new Hono<{ Bindings: CloudflareBindings }>().get("/question/:id", as
     .first<{ db_json: string; updated_at: string }>();
 
   if (!row) {
-    return c.json({ error: "Not found" }, 404);
+    throw new HTTPException(404, { message: "Not found" });
   }
 
   try {
     return c.json({
       db: JSON.parse(row.db_json) as {
         /** [question, answer, folderID, genreID, comment] */
-        q: [
-          string,
-          string,
-          number | undefined | null,
-          number | undefined | null,
-          string | undefined | null,
-        ][];
+        q: [string, string, number | null, number | null, string | null][];
 
         /** folder names */
         f: string[];
@@ -37,7 +32,7 @@ const app = new Hono<{ Bindings: CloudflareBindings }>().get("/question/:id", as
       updatedAt: row.updated_at,
     });
   } catch {
-    return c.json({ error: "Corrupted data" }, 500);
+    throw new HTTPException(500, { message: "Corrupted data" });
   }
 });
 

@@ -30,6 +30,12 @@ importers:
 
   packages/web:
     dependencies:
+      '@kisssaq/api':
+        specifier: workspace:*
+        version: link:../api
+      hono:
+        specifier: ^4.13.14
+        version: 4.13.14
       json-2-csv:
         specifier: ^5.5.11
         version: 5.5.11
