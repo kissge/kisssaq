@@ -2,7 +2,6 @@
   "name": "kisssaq",
   "version": "0.0.0",
   "private": true,
-  "packageManager": "pnpm@10",
   "scripts": {
     "dev": "pnpm --filter ./packages/web dev",
     "build": "pnpm --filter ./packages/web build",

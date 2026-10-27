@@ -6,7 +6,9 @@ settings:
 
 importers:
 
-  .:
+  .: {}
+
+  packages/web:
     dependencies:
       json-2-csv:
         specifier: ^5.5.11
