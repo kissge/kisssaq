@@ -1,12 +1,13 @@
+import type { Answer, FolderID, GenreID, Question, CommentText } from "../lib/types";
 import "./editDialog.css";
 
 export interface EditTarget {
   id: number;
-  q: string;
-  a: string;
-  f: number;
-  g: number;
-  c: string;
+  q: Question;
+  a: Answer;
+  f: FolderID;
+  g: GenreID;
+  c: CommentText;
 }
 
 export default function EditDialog({
@@ -39,19 +40,19 @@ export default function EditDialog({
           </div>
           <textarea
             value={currentEditTarget.q}
-            onChange={(e) => onChange({ ...currentEditTarget, q: e.target.value })}
+            onChange={(e) => onChange({ ...currentEditTarget, q: e.target.value as Question })}
             rows={5}
             placeholder="日本の首都は？"
           />
           <textarea
             value={currentEditTarget.a}
-            onChange={(e) => onChange({ ...currentEditTarget, a: e.target.value })}
+            onChange={(e) => onChange({ ...currentEditTarget, a: e.target.value as Answer })}
             rows={3}
             placeholder="東京（とうきょう）"
           />
           <textarea
             value={currentEditTarget.c}
-            onChange={(e) => onChange({ ...currentEditTarget, c: e.target.value })}
+            onChange={(e) => onChange({ ...currentEditTarget, c: e.target.value as CommentText })}
             rows={3}
             placeholder="自由記入欄"
           />
@@ -59,7 +60,7 @@ export default function EditDialog({
             <select
               value={currentEditTarget.f}
               onChange={(e) =>
-                onChange({ ...currentEditTarget, f: Number.parseInt(e.target.value) })
+                onChange({ ...currentEditTarget, f: Number.parseInt(e.target.value) as FolderID })
               }
             >
               {folders
@@ -76,7 +77,7 @@ export default function EditDialog({
             <select
               value={currentEditTarget.g}
               onChange={(e) =>
-                onChange({ ...currentEditTarget, g: Number.parseInt(e.target.value) })
+                onChange({ ...currentEditTarget, g: Number.parseInt(e.target.value) as GenreID })
               }
             >
               {genres

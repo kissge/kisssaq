@@ -6,11 +6,10 @@ import ImportDialog from "./components/importDialog";
 import { json2csv } from "json-2-csv";
 import SwitchViewDialog from "./components/switchViewDialog";
 import UnlockDialog from "./components/unlockDialog";
+import type { CommentText, FolderID, GenreID, Row } from "./lib/types";
 
 function App() {
-  const [questions, setQuestions] = useLocalStorage<
-    [string, string, number | undefined, number | undefined, string | undefined][]
-  >("q", []);
+  const [questions, setQuestions] = useLocalStorage<Row[]>("q", []);
   const [folders, setFolders] = useLocalStorage("f", ["未分類"]);
   const [genres, setGenres] = useLocalStorage("g", [
     "未分類",
@@ -24,8 +23,8 @@ function App() {
     "語学・文学",
   ]);
   const [checked, setChecked] = useState<number[]>([]);
-  const [activeFolder, setActiveFolder] = useLocalStorage<number | null>("activeFolder", null);
-  const [activeGenre, setActiveGenre] = useLocalStorage<number | null>("activeGenre", null);
+  const [activeFolder, setActiveFolder] = useLocalStorage<FolderID | null>("activeFolder", null);
+  const [activeGenre, setActiveGenre] = useLocalStorage<GenreID | null>("activeGenre", null);
   const [currentEditTarget, setCurrentEditTarget] = useState<EditTarget | null>(null);
   const [moveFolderTarget, setMoveFolderTarget] = useState(0);
   const [moveGenreTarget, setMoveGenreTarget] = useState(0);
@@ -36,9 +35,9 @@ function App() {
   function startEdit(id: number) {
     const q = questions[id]?.[0] ?? "";
     const a = questions[id]?.[1] ?? "";
-    const f = questions[id]?.[2] ?? activeFolder ?? 0;
-    const g = questions[id]?.[3] ?? activeGenre ?? 0;
-    const c = questions[id]?.[4] ?? "";
+    const f = questions[id]?.[2] ?? activeFolder ?? (0 as FolderID);
+    const g = questions[id]?.[3] ?? activeGenre ?? (0 as GenreID);
+    const c = questions[id]?.[4] ?? ("" as CommentText);
     setCurrentEditTarget({ q, a, f, g, c, id });
     const dialog = document.getElementById("editDialog") as HTMLDialogElement;
     dialog.showModal();
@@ -215,7 +214,7 @@ function App() {
                 onClick={() => {
                   const newQuestions = questions.map((qa, i) => {
                     if (checked.includes(i)) {
-                      qa[2] = moveFolderTarget;
+                      qa[2] = moveFolderTarget as FolderID;
                     }
 
                     return qa;
@@ -248,7 +247,7 @@ function App() {
                 onClick={() => {
                   const newQuestions = questions.map((qa, i) => {
                     if (checked.includes(i)) {
-                      qa[3] = moveGenreTarget;
+                      qa[3] = moveGenreTarget as GenreID;
                     }
 
                     return qa;
@@ -315,7 +314,10 @@ function App() {
           </button>
           <button
             onClick={() => {
-              setQuestions([...questions, ["", "", activeFolder ?? 0, activeGenre ?? 0, ""]]);
+              setQuestions([
+                ...questions,
+                ["", "", activeFolder ?? 0, activeGenre ?? 0, ""] as Row,
+              ]);
 
               if (Array.isArray(order)) {
                 setOrder([...order, questions.length]);
@@ -395,7 +397,7 @@ function App() {
         activeGenre={activeGenre}
         onImport={(parsed) => {
           setOrder("default");
-          setQuestions([...questions, ...parsed]);
+          setQuestions([...questions, ...parsed] as Row[]);
         }}
       />
 

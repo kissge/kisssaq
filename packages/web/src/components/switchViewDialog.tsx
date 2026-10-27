@@ -1,6 +1,7 @@
+import type { FolderID, GenreID } from "../lib/types";
 import "./switchViewDialog.css";
 
-export default function SwitchFolderDialog({
+export default function SwitchFolderDialog<T extends FolderID | GenreID>({
   id,
   itemKind,
   items,
@@ -15,7 +16,7 @@ export default function SwitchFolderDialog({
   items: string[];
   activeItem: number | null;
   filteredQuestions: number[];
-  onChange: (item: number | null) => void;
+  onChange: (item: T | null) => void;
   onItemCreate: (item: string) => void;
   onItemRename: (index: number, newName: string) => void;
 }) {
@@ -45,7 +46,7 @@ export default function SwitchFolderDialog({
             a.index === 0 ? -1 : b.index === 0 ? 1 : b.item.localeCompare(a.item),
           )
           .map(({ item, index }) => (
-            <div key={item} onClick={() => onChange(index)}>
+            <div key={item} onClick={() => onChange(index as T)}>
               <span>
                 {item} ({itemCount[index]})
               </span>
@@ -59,7 +60,7 @@ export default function SwitchFolderDialog({
           const newFolder = prompt(`新しい${itemKind}名を入力`);
           if (newFolder) {
             onItemCreate(newFolder);
-            onChange(items.length);
+            onChange(items.length as T);
           }
         }}
       >
