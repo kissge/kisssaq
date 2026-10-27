@@ -160,6 +160,7 @@ function App() {
           <div className="search-toolbar">
             <input
               placeholder="検索キーワードを入力"
+              type="text"
               value={searchKeyword}
               onChange={(e) => setSearchKeyword(e.target.value)}
             />
@@ -263,9 +264,6 @@ function App() {
         )}
 
         <div className="global-toolbar">
-          <img src="https://kissge.github.io/shared/me-mini-512.png" alt="logo" className="logo" />
-          kissSaq
-          <div className="spacer" />
           <button
             disabled={questions.length === 0}
             onClick={() => {
@@ -281,47 +279,12 @@ function App() {
             {order === "default" ? "登録順" : order === "genre" ? "ジャンル順" : "ランダム"}
           </button>
           <button
-            disabled={questions.length === 0}
-            onClick={() => {
-              const data = new Blob(
-                [
-                  json2csv(
-                    filteredQuestions.map(({ qa: [q, a, f, g, c] }) => [
-                      q,
-                      a,
-                      folders[f ?? 0],
-                      genres[g ?? 0],
-                      c ?? "",
-                    ]),
-                  ).replace(/.+\n/, ""),
-                ],
-                { type: "text/csv" },
-              );
-              const url = URL.createObjectURL(data);
-              const a = document.createElement("a");
-              a.href = url;
-              a.download = "kisssaq.csv";
-              a.click();
-              URL.revokeObjectURL(url);
-            }}
-          >
-            書出
-          </button>
-          <button
-            onClick={() => {
-              const dialog = document.getElementById("importDialog") as HTMLDialogElement;
-              dialog.showModal();
-            }}
-          >
-            取込
-          </button>
-          <button
             onClick={() => {
               const dialog = document.getElementById("switchFolderDialog") as HTMLDialogElement;
               dialog.showModal();
             }}
           >
-            ﾌｫﾙﾀﾞ
+            フォルダ
           </button>
           <button
             onClick={() => {
@@ -329,7 +292,7 @@ function App() {
               dialog.showModal();
             }}
           >
-            ｼﾞｬﾝﾙ
+            ジャンル
           </button>
           <button
             disabled={questions.length === 0}
@@ -362,8 +325,49 @@ function App() {
           >
             追加
           </button>
+          <button className="more-btn" popoverTarget="moreMenu">
+            ︙
+          </button>
         </div>
       </section>
+
+      <div id="moreMenu" popover="auto">
+        <button
+          disabled={questions.length === 0}
+          onClick={() => {
+            const data = new Blob(
+              [
+                json2csv(
+                  filteredQuestions.map(({ qa: [q, a, f, g, c] }) => [
+                    q,
+                    a,
+                    folders[f ?? 0],
+                    genres[g ?? 0],
+                    c ?? "",
+                  ]),
+                ).replace(/.+\n/, ""),
+              ],
+              { type: "text/csv" },
+            );
+            const url = URL.createObjectURL(data);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "kissSaq.csv";
+            a.click();
+            URL.revokeObjectURL(url);
+          }}
+        >
+          CSV出力
+        </button>
+        <button
+          onClick={() => {
+            const dialog = document.getElementById("importDialog") as HTMLDialogElement;
+            dialog.showModal();
+          }}
+        >
+          CSV取り込み
+        </button>
+      </div>
 
       <EditDialog
         currentEditTarget={currentEditTarget}

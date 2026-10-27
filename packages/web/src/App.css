@@ -98,8 +98,9 @@ table {
   background-color: var(--bg);
   box-shadow: var(--shadow);
 
-  input[type='text'] {
+  input[type="text"] {
     width: 100%;
+    box-sizing: border-box;
   }
 }
 
@@ -133,16 +134,46 @@ table {
   gap: 0.25em;
 
   button {
-    font-size: 0.6em;
-    padding: 0.5em 0.25em;
-  }
-
-  .logo {
-    height: 1em;
-  }
-
-  .spacer {
     flex: 1 1 auto;
+    cursor: pointer;
+  }
+
+  .more-btn {
+    margin-left: 1em;
+    font-weight: bold;
+    flex-grow: 0;
+    border: 0;
+    background: none;
+    anchor-name: --more-btn;
+  }
+}
+
+#moreMenu:popover-open {
+  position: fixed;
+  position-anchor: --more-btn;
+  inset: auto;
+  margin: 0;
+  bottom: calc(anchor(top) + 0.5em);
+  right: anchor(right);
+  border: 0;
+  box-shadow: 0 0 0.5em #0004;
+  display: flex;
+  flex-direction: column;
+  width: 10em;
+  gap: 0.5em;
+  padding: 0.5em;
+  font-size: 1.1em;
+
+  button {
+    border: 0;
+    text-align: left;
+    background: none;
+    cursor: pointer;
+    font-size: 1em;
+
+    &:hover {
+      background-color: light-dark(#eee, #333);
+    }
   }
 }
 
