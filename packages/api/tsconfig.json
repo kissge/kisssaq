@@ -5,7 +5,6 @@
     "moduleResolution": "bundler",
     "strict": true,
     "skipLibCheck": true,
-    "types": ["@cloudflare/workers-types"],
     "noEmit": true,
     "verbatimModuleSyntax": true
   },

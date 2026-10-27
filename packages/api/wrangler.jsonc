@@ -2,5 +2,13 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "kisssaq",
   "main": "src/index.ts",
-  "compatibility_date": "2026-10-26"
+  "compatibility_date": "2026-10-26",
+  "d1_databases": [
+    {
+      "binding": "Database",
+      "database_name": "kisssaq",
+      "database_id": "e2551188-85f9-4a6b-85ca-3f79c07a8aac",
+      "migrations_dir": "migrations",
+    },
+  ],
 }
