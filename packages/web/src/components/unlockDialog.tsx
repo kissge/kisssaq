@@ -7,7 +7,6 @@ export default function UnlockDialog() {
 
   useEffect(() => {
     isUnlocked().then((result) => {
-      console.log("isUnlocked", result);
       setUnlocked(result);
     });
   }, []);
