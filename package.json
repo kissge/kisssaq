@@ -3,8 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "pnpm --filter @kisssaq/web dev",
-    "build": "pnpm --filter @kisssaq/web build",
+    "web:dev": "pnpm --filter @kisssaq/web dev",
+    "web:build": "pnpm --filter @kisssaq/web build",
+    "api:dev": "pnpm --filter @kisssaq/api dev",
+    "api:deploy": "pnpm --filter @kisssaq/api deploy",
+    "api:typecheck": "pnpm --filter @kisssaq/api typecheck",
     "lint": "oxlint",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
