@@ -11,6 +11,9 @@ importers:
       json-2-csv:
         specifier: ^5.5.11
         version: 5.5.11
+      kissunlocklib:
+        specifier: github:kissge/kissunlocklib
+        version: https://codeload.github.com/kissge/kissunlocklib/tar.gz/fef87d485e14481d27aa9482033d170e61e9ae20
       react:
         specifier: ^19.2.6
         version: 19.2.7
@@ -1919,6 +1922,10 @@ packages:
 
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
+
+  kissunlocklib@https://codeload.github.com/kissge/kissunlocklib/tar.gz/fef87d485e14481d27aa9482033d170e61e9ae20:
+    resolution: {gitHosted: true, integrity: sha512-+iogNiiX3bF56LzrrWZKV5Tq6Z8qxTCHsutvSCgfKs/QtG7P3oR2lJg6nuHnVL+XAtXOLmAZyruZYsUlfINdRQ==, tarball: https://codeload.github.com/kissge/kissunlocklib/tar.gz/fef87d485e14481d27aa9482033d170e61e9ae20}
+    version: 0.1.0
 
   kolorist@1.8.0:
     resolution: {integrity: sha512-Y+60/zizpJ3HRH8DCss+q95yr6145JXZo46OTpFvDZWLfRCE4qChOyk1b26nMaNpfHHgxagk9dXT5OP0Tfe+dQ==}
@@ -4722,6 +4729,8 @@ snapshots:
   keyv@4.5.4:
     dependencies:
       json-buffer: 3.0.1
+
+  kissunlocklib@https://codeload.github.com/kissge/kissunlocklib/tar.gz/fef87d485e14481d27aa9482033d170e61e9ae20: {}
 
   kolorist@1.8.0: {}
 

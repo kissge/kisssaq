@@ -5,6 +5,7 @@ import EditDialog, { type EditTarget } from "./components/editDialog";
 import ImportDialog from "./components/importDialog";
 import { json2csv } from "json-2-csv";
 import SwitchViewDialog from "./components/switchViewDialog";
+import UnlockDialog from "./components/unlockDialog";
 
 function App() {
   const [questions, setQuestions] = useLocalStorage<
@@ -333,6 +334,14 @@ function App() {
 
       <div id="moreMenu" popover="auto">
         <button
+          onClick={() => {
+            const dialog = document.getElementById("unlockDialog") as HTMLDialogElement;
+            dialog.showModal();
+          }}
+        >
+          機能アンロック
+        </button>
+        <button
           disabled={questions.length === 0}
           onClick={() => {
             const data = new Blob(
@@ -389,6 +398,8 @@ function App() {
           setQuestions([...questions, ...parsed]);
         }}
       />
+
+      <UnlockDialog />
 
       <SwitchViewDialog
         id="switchFolderDialog"
