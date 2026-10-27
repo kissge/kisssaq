@@ -26,8 +26,8 @@ function App() {
   const [activeFolder, setActiveFolder] = useLocalStorage<FolderID | null>("activeFolder", null);
   const [activeGenre, setActiveGenre] = useLocalStorage<GenreID | null>("activeGenre", null);
   const [currentEditTarget, setCurrentEditTarget] = useState<EditTarget | null>(null);
-  const [moveFolderTarget, setMoveFolderTarget] = useState(0);
-  const [moveGenreTarget, setMoveGenreTarget] = useState(0);
+  const [moveFolderTarget, setMoveFolderTarget] = useState(0 as FolderID);
+  const [moveGenreTarget, setMoveGenreTarget] = useState(0 as GenreID);
   const [order, setOrder] = useState<"default" | "genre" | number[]>("default");
   const [showSearchBox, setShowSearchBox] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -197,7 +197,7 @@ function App() {
             <div>
               <select
                 value={moveFolderTarget}
-                onChange={(e) => setMoveFolderTarget(Number.parseInt(e.target.value))}
+                onChange={(e) => setMoveFolderTarget(Number.parseInt(e.target.value) as FolderID)}
               >
                 {folders
                   .map((folder, index) => ({ folder, index }))
@@ -221,7 +221,7 @@ function App() {
                   });
                   setQuestions(newQuestions);
                   setChecked([]);
-                  setMoveFolderTarget(0);
+                  setMoveFolderTarget(0 as FolderID);
                 }}
               >
                 に移動
@@ -230,7 +230,7 @@ function App() {
             <div>
               <select
                 value={moveGenreTarget}
-                onChange={(e) => setMoveGenreTarget(Number.parseInt(e.target.value))}
+                onChange={(e) => setMoveGenreTarget(Number.parseInt(e.target.value) as GenreID)}
               >
                 {genres
                   .map((genre, index) => ({ genre, index }))
@@ -254,7 +254,7 @@ function App() {
                   });
                   setQuestions(newQuestions);
                   setChecked([]);
-                  setMoveGenreTarget(0);
+                  setMoveGenreTarget(0 as GenreID);
                 }}
               >
                 に変更
