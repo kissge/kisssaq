@@ -20,6 +20,7 @@ function App() {
     genres,
     userID,
     loading,
+    syncStatus,
     setQuestions,
     setFolders,
     setGenres,
@@ -461,6 +462,16 @@ function App() {
       />
 
       <SyncDialog userID={userID} onUserIDChange={changeUserID} />
+
+      {unlocked && syncStatus !== "idle" && (
+        <div
+          className={`sync-status ${syncStatus}`}
+          role="status"
+          aria-label={syncStatus === "syncing" ? "クラウドに保存中" : "クラウドに保存済み"}
+        >
+          {syncStatus === "syncing" ? <span className="sync-spinner" /> : "✓"}
+        </div>
+      )}
     </>
   );
 }

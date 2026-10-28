@@ -160,6 +160,49 @@ table {
   }
 }
 
+.sync-status {
+  position: fixed;
+  right: 1em;
+  bottom: 4.5em;
+  z-index: 1;
+  display: grid;
+  width: 2em;
+  height: 2em;
+  place-items: center;
+  border-radius: 50%;
+  background-color: light-dark(#fff, #333);
+  box-shadow: var(--shadow);
+  color: light-dark(#555, #ccc);
+  font-size: 0.9em;
+  pointer-events: none;
+
+  &.synced {
+    color: light-dark(#287a3d, #8cda9d);
+    animation: sync-fade-out 0.3s ease-in 2s forwards;
+  }
+}
+
+.sync-spinner {
+  width: 0.9em;
+  height: 0.9em;
+  border: 0.15em solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: sync-spin 0.8s linear infinite;
+}
+
+@keyframes sync-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@keyframes sync-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
 #moreMenu:popover-open {
   position: fixed;
   position-anchor: --more-btn;

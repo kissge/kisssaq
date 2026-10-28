@@ -27,6 +27,8 @@ type StoredDatabase = Database & {
   updatedAt: string | null;
 };
 
+export type SyncStatus = "idle" | "syncing" | "synced";
+
 function readStoredValue<T>(key: string, fallback: T): T {
   try {
     const value = window.localStorage.getItem(key);
@@ -88,7 +90,7 @@ function writeLocalDatabase(database: StoredDatabase): void {
   }
 }
 
-async function writeRemoteDatabase(database: StoredDatabase): Promise<void> {
+async function writeRemoteDatabase(database: StoredDatabase): Promise<boolean> {
   try {
     const response = await apiClient.question[":id"].$put({
       param: { id: database.userID },
@@ -113,9 +115,11 @@ async function writeRemoteDatabase(database: StoredDatabase): Promise<void> {
 
     const result = await response.json();
     writeLocalDatabase({ ...database, updatedAt: result.updatedAt });
+    return true;
   } catch (error) {
     console.error("Failed to save remote database.", error);
     toast.error("サーバーへのデータ保存に失敗しました。");
+    return false;
   }
 }
 
@@ -127,7 +131,16 @@ export function useDatabase(unlocked: boolean) {
     genres: defaultGenres,
   });
   const [loading, setLoading] = useState(true);
+  const [syncStatus, setSyncStatus] = useState<SyncStatus>("idle");
   const forceRemoteSync = useRef(false);
+  const syncRequest = useRef(0);
+  const syncTimers = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  useEffect(() => {
+    return () => {
+      syncTimers.current.forEach(clearTimeout);
+    };
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -198,11 +211,33 @@ export function useDatabase(unlocked: boolean) {
     writeLocalDatabase(updated);
 
     if (unlocked) {
-      void writeRemoteDatabase(updated);
+      const request = ++syncRequest.current;
+      syncTimers.current.forEach(clearTimeout);
+      syncTimers.current = [];
+      setSyncStatus("syncing");
+      void writeRemoteDatabase(updated).then((success) => {
+        if (request === syncRequest.current) {
+          if (!success) {
+            setSyncStatus("idle");
+            return;
+          }
+
+          const showSuccessTimer = setTimeout(() => {
+            if (request === syncRequest.current) {
+              setSyncStatus("synced");
+            }
+          }, 500);
+          syncTimers.current.push(showSuccessTimer);
+        }
+      });
     }
   }
 
   function changeUserID(nextUserID: string) {
+    syncRequest.current++;
+    syncTimers.current.forEach(clearTimeout);
+    syncTimers.current = [];
+    setSyncStatus("idle");
     forceRemoteSync.current = true;
     window.localStorage.removeItem("q");
     window.localStorage.removeItem("f");
@@ -222,6 +257,7 @@ export function useDatabase(unlocked: boolean) {
     ...database,
     userID,
     loading,
+    syncStatus,
     changeUserID,
     setQuestions: (value: Row[]) => updateDatabase("questions", value),
     setFolders: (value: string[]) => updateDatabase("folders", value),
