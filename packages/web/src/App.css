@@ -133,6 +133,10 @@ table {
   align-items: center;
   gap: 0.25em;
 
+  &.unlocked {
+    background-color: light-dark(#cce, #228);
+  }
+
   button {
     flex: 1 1 auto;
     cursor: pointer;

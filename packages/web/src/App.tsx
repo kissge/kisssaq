@@ -259,7 +259,7 @@ function App() {
           </div>
         )}
 
-        <div className="global-toolbar">
+        <div className={"global-toolbar " + (unlocked ? "unlocked" : "")}>
           <button
             disabled={questions.length === 0}
             onClick={() => {
