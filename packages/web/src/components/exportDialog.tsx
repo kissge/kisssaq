@@ -1,23 +1,20 @@
 import { json2csv } from "json-2-csv";
-import { useState } from "react";
+import { forwardRef, useState } from "react";
 import type { Row } from "../lib/types";
 
 type ExportRange = "all" | "visible" | "checked";
 type ExportColumn = "folder" | "genre" | "comment";
 
-export default function ExportDialog({
-  questions,
-  visibleQuestions,
-  checkedQuestions,
-  folders,
-  genres,
-}: {
-  questions: Row[];
-  visibleQuestions: Row[];
-  checkedQuestions: Row[];
-  folders: string[];
-  genres: string[];
-}) {
+const ExportDialog = forwardRef<
+  HTMLDialogElement,
+  {
+    questions: Row[];
+    visibleQuestions: Row[];
+    checkedQuestions: Row[];
+    folders: string[];
+    genres: string[];
+  }
+>(({ questions, visibleQuestions, checkedQuestions, folders, genres }, ref) => {
   const [range, setRange] = useState<ExportRange>("visible");
   const [includeHeader, setIncludeHeader] = useState(false);
   const [columns, setColumns] = useState<Record<ExportColumn, boolean>>({
@@ -48,18 +45,14 @@ export default function ExportDialog({
     link.download = "kissSaq.csv";
     link.click();
     URL.revokeObjectURL(url);
-    (document.getElementById("exportDialog") as HTMLDialogElement).close();
+    if (typeof ref !== "function") ref?.current?.close();
   }
 
   return (
-    <dialog id="exportDialog" closedby="closerequest">
+    <dialog ref={ref} closedby="closerequest">
       <div className="toolbar">
         <div>CSV出力</div>
-        <button
-          onClick={() => (document.getElementById("exportDialog") as HTMLDialogElement).close()}
-        >
-          ✕
-        </button>
+        <button onClick={() => typeof ref !== "function" && ref?.current?.close()}>✕</button>
       </div>
 
       <fieldset>
@@ -151,4 +144,6 @@ export default function ExportDialog({
       </div>
     </dialog>
   );
-}
+});
+
+export default ExportDialog;

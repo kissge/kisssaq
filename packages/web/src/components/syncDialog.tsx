@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { forwardRef, useState } from "react";
 import { toast } from "sonner";
 import { apiClient } from "../lib/apiClient";
 
-export default function SyncDialog({
-  userID,
-  onUserIDChange,
-}: {
-  userID: string;
-  onUserIDChange: (userID: string) => void;
-}) {
+const SyncDialog = forwardRef<
+  HTMLDialogElement,
+  {
+    userID: string;
+    onUserIDChange: (userID: string) => void;
+  }
+>(({ userID, onUserIDChange }, ref) => {
   const [newUserID, setNewUserID] = useState("");
   const [checking, setChecking] = useState(false);
 
@@ -65,7 +65,7 @@ export default function SyncDialog({
 
       onUserIDChange(nextUserID);
       setNewUserID("");
-      (document.getElementById("syncDialog") as HTMLDialogElement).close();
+      if (typeof ref !== "function") ref?.current?.close();
       toast.success("クラウドデータを取得しています。");
     } catch (error) {
       console.error("Failed to check remote database.", error);
@@ -76,14 +76,10 @@ export default function SyncDialog({
   }
 
   return (
-    <dialog id="syncDialog" closedby="closerequest">
+    <dialog ref={ref} closedby="closerequest">
       <div className="toolbar">
         <p>クラウド同期 🔒</p>
-        <button
-          onClick={() => (document.getElementById("syncDialog") as HTMLDialogElement).close()}
-        >
-          ✕
-        </button>
+        <button onClick={() => typeof ref !== "function" && ref?.current?.close()}>✕</button>
       </div>
 
       <h3>現在のユーザーID</h3>
@@ -115,4 +111,6 @@ export default function SyncDialog({
       </div>
     </dialog>
   );
-}
+});
+
+export default SyncDialog;

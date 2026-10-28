@@ -1,21 +1,17 @@
 import { isUnlocked, setPassword, wishlistURL, authorURL } from "kissunlocklib";
-import { useState } from "react";
+import { forwardRef, useState } from "react";
 import { toast } from "sonner";
 import { useUnlocked } from "../hooks/useUnlocked";
 
-export default function UnlockDialog() {
+const UnlockDialog = forwardRef<HTMLDialogElement>(function UnlockDialog(_, ref) {
   const [passwordInput, setPasswordInput] = useState("");
   const { unlocked, loading, refresh } = useUnlocked();
 
   return (
-    <dialog id="unlockDialog" closedby="closerequest">
+    <dialog ref={ref} closedby="closerequest">
       <div className="toolbar">
         <div>パスワードを入力するといくつかの追加機能がアンロックされます。</div>
-        <button
-          onClick={() => (document.getElementById("unlockDialog") as HTMLDialogElement).close()}
-        >
-          ✕
-        </button>
+        <button onClick={() => typeof ref !== "function" && ref?.current?.close()}>✕</button>
       </div>
 
       <details>
@@ -56,7 +52,7 @@ export default function UnlockDialog() {
               if (await isUnlocked()) {
                 await refresh();
                 toast.success("アンロックされました。");
-                (document.getElementById("unlockDialog") as HTMLDialogElement).close();
+                if (typeof ref !== "function") ref?.current?.close();
               } else {
                 toast.error("パスワードが違います。");
               }
@@ -73,4 +69,6 @@ export default function UnlockDialog() {
       </div>
     </dialog>
   );
-}
+});
+
+export default UnlockDialog;

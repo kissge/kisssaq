@@ -1,15 +1,14 @@
 import { csv2json } from "json-2-csv";
-import { useState } from "react";
+import { forwardRef, useState } from "react";
 
-export default function ImportDialog({
-  activeFolder,
-  activeGenre,
-  onImport,
-}: {
-  activeFolder: number | null;
-  activeGenre: number | null;
-  onImport: (parsed: [string, string, number, number, string][]) => void;
-}) {
+const ImportDialog = forwardRef<
+  HTMLDialogElement,
+  {
+    activeFolder: number | null;
+    activeGenre: number | null;
+    onImport: (parsed: [string, string, number, number, string][]) => void;
+  }
+>(({ activeFolder, activeGenre, onImport }, ref) => {
   const [raw, setRaw] = useState("");
 
   function parseCSV(raw: string) {
@@ -24,14 +23,10 @@ export default function ImportDialog({
   }
 
   return (
-    <dialog id="importDialog" closedby="closerequest">
+    <dialog ref={ref} closedby="closerequest">
       <div className="toolbar">
         <div>ここにCSVかTSVを貼ってください。</div>
-        <button
-          onClick={() => (document.getElementById("importDialog") as HTMLDialogElement).close()}
-        >
-          ✕
-        </button>
+        <button onClick={() => typeof ref !== "function" && ref?.current?.close()}>✕</button>
       </div>
       <textarea
         rows={4}
@@ -56,11 +51,13 @@ export default function ImportDialog({
             .toReversed();
           onImport(parsed);
           setRaw("");
-          (document.getElementById("importDialog") as HTMLDialogElement).close();
+          if (typeof ref !== "function") ref?.current?.close();
         }}
       >
         取り込み
       </button>
     </dialog>
   );
-}
+});
+
+export default ImportDialog;

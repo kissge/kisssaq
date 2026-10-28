@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import type { Answer, FolderID, GenreID, Question, CommentText } from "../lib/types";
 import "./editDialog.css";
 
@@ -10,21 +11,18 @@ export interface EditTarget {
   c: CommentText;
 }
 
-export default function EditDialog({
-  currentEditTarget,
-  folders,
-  genres,
-  onChange,
-  onSave,
-}: {
-  currentEditTarget: EditTarget | null;
-  folders: string[];
-  genres: string[];
-  onChange: (value: EditTarget) => void;
-  onSave: (value: EditTarget) => void;
-}) {
+const EditDialog = forwardRef<
+  HTMLDialogElement,
+  {
+    currentEditTarget: EditTarget | null;
+    folders: string[];
+    genres: string[];
+    onChange: (value: EditTarget) => void;
+    onSave: (value: EditTarget) => void;
+  }
+>(({ currentEditTarget, folders, genres, onChange, onSave }, ref) => {
   return (
-    <dialog id="editDialog" closedby="closerequest">
+    <dialog ref={ref} closedby="closerequest">
       {currentEditTarget && (
         <>
           <div className="toolbar">
@@ -32,11 +30,7 @@ export default function EditDialog({
               {currentEditTarget.q.length} (
               {currentEditTarget.q.replace(/(（.+?）|\(.+?\)|【.+?】|［.+?］)/g, "").length})
             </div>
-            <button
-              onClick={() => (document.getElementById("editDialog") as HTMLDialogElement).close()}
-            >
-              ✕
-            </button>
+            <button onClick={() => typeof ref !== "function" && ref?.current?.close()}>✕</button>
           </div>
           <textarea
             value={currentEditTarget.q}
@@ -94,7 +88,7 @@ export default function EditDialog({
             <button
               onClick={() => {
                 onSave(currentEditTarget);
-                (document.getElementById("editDialog") as HTMLDialogElement).close();
+                if (typeof ref !== "function") ref?.current?.close();
               }}
             >
               保存
@@ -104,4 +98,6 @@ export default function EditDialog({
       )}
     </dialog>
   );
-}
+});
+
+export default EditDialog;

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
 import "./App.css";
 import { useLocalStorage } from "./hooks/useLocalStorage";
@@ -35,6 +35,13 @@ function App() {
   const [order, setOrder] = useState<"default" | "genre" | number[]>("default");
   const [showSearchBox, setShowSearchBox] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
+  const editDialogRef = useRef<HTMLDialogElement>(null);
+  const switchFolderDialogRef = useRef<HTMLDialogElement>(null);
+  const switchGenreDialogRef = useRef<HTMLDialogElement>(null);
+  const unlockDialogRef = useRef<HTMLDialogElement>(null);
+  const syncDialogRef = useRef<HTMLDialogElement>(null);
+  const exportDialogRef = useRef<HTMLDialogElement>(null);
+  const importDialogRef = useRef<HTMLDialogElement>(null);
 
   if (loading) {
     return null;
@@ -47,9 +54,8 @@ function App() {
     const g = questions[id]?.[3] ?? activeGenre ?? (0 as GenreID);
     const c = questions[id]?.[4] ?? ("" as CommentText);
     setCurrentEditTarget({ q, a, f, g, c, id });
-    const dialog = document.getElementById("editDialog") as HTMLDialogElement;
-    dialog.showModal();
-    setTimeout(() => dialog.querySelector("textarea")!.focus(), 10);
+    editDialogRef.current?.showModal();
+    setTimeout(() => editDialogRef.current?.querySelector("textarea")?.focus(), 10);
   }
 
   const filteredQuestions = (
@@ -287,22 +293,8 @@ function App() {
             >
               {order === "default" ? "登録順" : order === "genre" ? "ジャンル順" : "ランダム"}
             </button>
-            <button
-              onClick={() => {
-                const dialog = document.getElementById("switchFolderDialog") as HTMLDialogElement;
-                dialog.showModal();
-              }}
-            >
-              フォルダ
-            </button>
-            <button
-              onClick={() => {
-                const dialog = document.getElementById("switchGenreDialog") as HTMLDialogElement;
-                dialog.showModal();
-              }}
-            >
-              ジャンル
-            </button>
+            <button onClick={() => switchFolderDialogRef.current?.showModal()}>フォルダ</button>
+            <button onClick={() => switchGenreDialogRef.current?.showModal()}>ジャンル</button>
             <button
               disabled={questions.length === 0}
               onClick={() => {
@@ -345,19 +337,11 @@ function App() {
       </section>
 
       <div id="moreMenu" popover="auto">
-        <button
-          onClick={() => {
-            const dialog = document.getElementById("unlockDialog") as HTMLDialogElement;
-            dialog.showModal();
-          }}
-        >
-          機能アンロック
-        </button>
+        <button onClick={() => unlockDialogRef.current?.showModal()}>機能アンロック</button>
         <button
           onClick={() => {
             if (unlocked) {
-              const dialog = document.getElementById("syncDialog") as HTMLDialogElement;
-              dialog.showModal();
+              syncDialogRef.current?.showModal();
             } else {
               toast.error("クラウド同期を利用するためには、機能アンロックが必要です。", {
                 position: "top-center",
@@ -369,24 +353,15 @@ function App() {
         </button>
         <button
           disabled={questions.length === 0}
-          onClick={() => {
-            const dialog = document.getElementById("exportDialog") as HTMLDialogElement;
-            dialog.showModal();
-          }}
+          onClick={() => exportDialogRef.current?.showModal()}
         >
           CSV出力
         </button>
-        <button
-          onClick={() => {
-            const dialog = document.getElementById("importDialog") as HTMLDialogElement;
-            dialog.showModal();
-          }}
-        >
-          CSV取り込み
-        </button>
+        <button onClick={() => importDialogRef.current?.showModal()}>CSV取り込み</button>
       </div>
 
       <EditDialog
+        ref={editDialogRef}
         currentEditTarget={currentEditTarget}
         folders={folders}
         genres={genres}
@@ -399,6 +374,7 @@ function App() {
       />
 
       <ImportDialog
+        ref={importDialogRef}
         activeFolder={activeFolder}
         activeGenre={activeGenre}
         onImport={(parsed) => {
@@ -408,6 +384,7 @@ function App() {
       />
 
       <ExportDialog
+        ref={exportDialogRef}
         questions={questions}
         visibleQuestions={filteredQuestions.map(({ qa }) => qa)}
         checkedQuestions={checked.flatMap((index) => (questions[index] ? [questions[index]] : []))}
@@ -415,9 +392,10 @@ function App() {
         genres={genres}
       />
 
-      <UnlockDialog />
+      <UnlockDialog ref={unlockDialogRef} />
 
       <SwitchViewDialog
+        ref={switchFolderDialogRef}
         id="switchFolderDialog"
         itemKind="フォルダ"
         items={folders}
@@ -425,7 +403,7 @@ function App() {
         filteredQuestions={questions
           .filter((qa) => activeGenre === null || (qa[3] ?? 0) === activeGenre)
           .map((qa) => qa[2] ?? 0)}
-        onChange={setActiveFolder}
+        onChange={(value) => setActiveFolder(value as FolderID | null)}
         onItemCreate={(name) => setFolders([...folders, name])}
         onItemRename={(index, newName) => {
           const newFolders = [...folders];
@@ -435,6 +413,7 @@ function App() {
       />
 
       <SwitchViewDialog
+        ref={switchGenreDialogRef}
         id="switchGenreDialog"
         itemKind="ジャンル"
         items={genres}
@@ -442,7 +421,7 @@ function App() {
         filteredQuestions={questions
           .filter((qa) => activeFolder === null || (qa[2] ?? 0) === activeFolder)
           .map((qa) => qa[3] ?? 0)}
-        onChange={setActiveGenre}
+        onChange={(value) => setActiveGenre(value as GenreID | null)}
         onItemCreate={(name) => setGenres([...genres, name])}
         onItemRename={(index, newName) => {
           const newGenres = [...genres];
@@ -451,7 +430,7 @@ function App() {
         }}
       />
 
-      <SyncDialog userID={userID} onUserIDChange={changeUserID} />
+      <SyncDialog ref={syncDialogRef} userID={userID} onUserIDChange={changeUserID} />
 
       {unlocked && syncStatus !== "idle" && (
         <div
