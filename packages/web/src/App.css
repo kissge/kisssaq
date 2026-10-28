@@ -122,19 +122,26 @@ table {
 
 .global-toolbar {
   position: fixed;
-  height: 2em;
+  height: 3em;
   bottom: 0;
-  padding: 0.5em 1em;
-  width: calc(100% - 1em * 2);
+  width: 100%;
   background-color: var(--bg);
   box-shadow: var(--shadow);
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.25em;
+  justify-content: center;
 
   &.unlocked {
     background-color: light-dark(#cce, #228);
+  }
+
+  & > div {
+    padding: 0.5em 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.25em;
+    width: 100%;
+    max-width: 1126px;
   }
 
   button {

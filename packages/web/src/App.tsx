@@ -271,73 +271,75 @@ function App() {
         )}
 
         <div className={"global-toolbar " + (unlocked ? "unlocked" : "")}>
-          <button
-            disabled={questions.length === 0}
-            onClick={() => {
-              setOrder(
-                order === "default"
-                  ? questions.map((_, i) => i).toSorted(() => Math.random() - 0.5)
-                  : order === "genre"
-                    ? "default"
-                    : "genre",
-              );
-            }}
-          >
-            {order === "default" ? "登録順" : order === "genre" ? "ジャンル順" : "ランダム"}
-          </button>
-          <button
-            onClick={() => {
-              const dialog = document.getElementById("switchFolderDialog") as HTMLDialogElement;
-              dialog.showModal();
-            }}
-          >
-            フォルダ
-          </button>
-          <button
-            onClick={() => {
-              const dialog = document.getElementById("switchGenreDialog") as HTMLDialogElement;
-              dialog.showModal();
-            }}
-          >
-            ジャンル
-          </button>
-          <button
-            disabled={questions.length === 0}
-            onClick={() => {
-              if (showSearchBox) {
-                setSearchKeyword("");
-              } else {
-                setTimeout(
-                  () =>
-                    (document.querySelector(".search-toolbar input") as HTMLInputElement).focus(),
-                  10,
+          <div>
+            <button
+              disabled={questions.length === 0}
+              onClick={() => {
+                setOrder(
+                  order === "default"
+                    ? questions.map((_, i) => i).toSorted(() => Math.random() - 0.5)
+                    : order === "genre"
+                      ? "default"
+                      : "genre",
                 );
-              }
+              }}
+            >
+              {order === "default" ? "登録順" : order === "genre" ? "ジャンル順" : "ランダム"}
+            </button>
+            <button
+              onClick={() => {
+                const dialog = document.getElementById("switchFolderDialog") as HTMLDialogElement;
+                dialog.showModal();
+              }}
+            >
+              フォルダ
+            </button>
+            <button
+              onClick={() => {
+                const dialog = document.getElementById("switchGenreDialog") as HTMLDialogElement;
+                dialog.showModal();
+              }}
+            >
+              ジャンル
+            </button>
+            <button
+              disabled={questions.length === 0}
+              onClick={() => {
+                if (showSearchBox) {
+                  setSearchKeyword("");
+                } else {
+                  setTimeout(
+                    () =>
+                      (document.querySelector(".search-toolbar input") as HTMLInputElement).focus(),
+                    10,
+                  );
+                }
 
-              setShowSearchBox(!showSearchBox);
-            }}
-          >
-            検索
-          </button>
-          <button
-            onClick={() => {
-              setQuestions([
-                ...questions,
-                ["", "", activeFolder ?? 0, activeGenre ?? 0, ""] as Row,
-              ]);
+                setShowSearchBox(!showSearchBox);
+              }}
+            >
+              検索
+            </button>
+            <button
+              onClick={() => {
+                setQuestions([
+                  ...questions,
+                  ["", "", activeFolder ?? 0, activeGenre ?? 0, ""] as Row,
+                ]);
 
-              if (Array.isArray(order)) {
-                setOrder([...order, questions.length]);
-              }
+                if (Array.isArray(order)) {
+                  setOrder([...order, questions.length]);
+                }
 
-              startEdit(questions.length);
-            }}
-          >
-            追加
-          </button>
-          <button className="more-btn" popoverTarget="moreMenu">
-            ︙
-          </button>
+                startEdit(questions.length);
+              }}
+            >
+              追加
+            </button>
+            <button className="more-btn" popoverTarget="moreMenu">
+              ︙
+            </button>
+          </div>
         </div>
       </section>
 
