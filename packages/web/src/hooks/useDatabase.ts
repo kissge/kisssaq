@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { apiClient } from "../lib/apiClient";
 import type { Row } from "../lib/types";
@@ -127,11 +127,14 @@ export function useDatabase(unlocked: boolean) {
     genres: defaultGenres,
   });
   const [loading, setLoading] = useState(true);
+  const forceRemoteSync = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
 
     async function load() {
+      const shouldForceRemoteSync = forceRemoteSync.current;
+      forceRemoteSync.current = false;
       const storedUpdatedAt = window.localStorage.getItem("updatedAt");
       const local = readLocalDatabase();
       let selected = local;
@@ -146,7 +149,7 @@ export function useDatabase(unlocked: boolean) {
 
           if (response.ok) {
             const remote = await response.json();
-            if (parseJST(remote.updatedAt) > parseJST(local.updatedAt)) {
+            if (shouldForceRemoteSync || parseJST(remote.updatedAt) > parseJST(local.updatedAt)) {
               selected = {
                 ...local,
                 questions: remote.db.q as Row[],
@@ -155,6 +158,7 @@ export function useDatabase(unlocked: boolean) {
                 updatedAt: remote.updatedAt,
               };
               writeLocalDatabase(selected);
+              toast.success("クラウドから最新のデータを取得しました。");
             }
           } else if (response.status !== 404) {
             throw new Error(`Failed to fetch remote database: ${response.status}`);
@@ -199,6 +203,7 @@ export function useDatabase(unlocked: boolean) {
   }
 
   function changeUserID(nextUserID: string) {
+    forceRemoteSync.current = true;
     window.localStorage.removeItem("q");
     window.localStorage.removeItem("f");
     window.localStorage.removeItem("g");
