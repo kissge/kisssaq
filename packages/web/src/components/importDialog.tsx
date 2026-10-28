@@ -23,7 +23,7 @@ const ImportDialog = forwardRef<
   }
 
   return (
-    <dialog ref={ref} closedby="closerequest">
+    <dialog ref={ref} closedby="any" onClick={(event) => event.stopPropagation()}>
       <div className="toolbar">
         <div>ここにCSVかTSVを貼ってください。</div>
         <button onClick={() => typeof ref !== "function" && ref?.current?.close()}>✕</button>

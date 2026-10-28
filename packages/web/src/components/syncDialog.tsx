@@ -76,7 +76,7 @@ const SyncDialog = forwardRef<
   }
 
   return (
-    <dialog ref={ref} closedby="closerequest">
+    <dialog ref={ref} closedby="any" onClick={(event) => event.stopPropagation()}>
       <div className="toolbar">
         <p>クラウド同期 🔒</p>
         <button onClick={() => typeof ref !== "function" && ref?.current?.close()}>✕</button>

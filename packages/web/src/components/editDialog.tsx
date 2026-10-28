@@ -22,7 +22,7 @@ const EditDialog = forwardRef<
   }
 >(({ currentEditTarget, folders, genres, onChange, onSave }, ref) => {
   return (
-    <dialog ref={ref} closedby="closerequest">
+    <dialog ref={ref} closedby="any" onClick={(event) => event.stopPropagation()}>
       {currentEditTarget && (
         <>
           <div className="toolbar">

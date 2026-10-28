@@ -8,7 +8,7 @@ const UnlockDialog = forwardRef<HTMLDialogElement>(function UnlockDialog(_, ref)
   const { unlocked, loading, refresh } = useUnlocked();
 
   return (
-    <dialog ref={ref} closedby="closerequest">
+    <dialog ref={ref} closedby="any" onClick={(event) => event.stopPropagation()}>
       <div className="toolbar">
         <div>パスワードを入力するといくつかの追加機能がアンロックされます。</div>
         <button onClick={() => typeof ref !== "function" && ref?.current?.close()}>✕</button>

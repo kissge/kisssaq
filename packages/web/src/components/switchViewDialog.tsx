@@ -23,7 +23,7 @@ const SwitchFolderDialog = forwardRef<HTMLDialogElement, SwitchDialogProps>(
     );
 
     return (
-      <dialog ref={ref} id={id} closedby="closerequest">
+      <dialog ref={ref} id={id} closedby="any" onClick={(event) => event.stopPropagation()}>
         <div className="toolbar">
           <div>表示する{itemKind}を選択</div>
           <button onClick={() => typeof ref !== "function" && ref?.current?.close()}>✕</button>
