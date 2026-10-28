@@ -107,9 +107,7 @@ export function useDatabase(unlocked: boolean) {
 
       if (unlocked) {
         try {
-          const response = await apiClient.question[":id"].$get({
-            param: { id: local.userID },
-          });
+          const response = await apiClient.question[":id"].$get({ param: { id: local.userID } });
 
           if (response.ok) {
             const remote = await response.json();
