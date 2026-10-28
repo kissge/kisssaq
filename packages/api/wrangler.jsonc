@@ -14,4 +14,10 @@
   "vars": {
     "ALLOWED_ORIGINS": "http://localhost:5173",
   },
+  "observability": {
+    "logs": {
+      "enabled": true,
+      "invocation_logs": true,
+    },
+  },
 }
