@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 
 function readStoredValue<T>(key: string, initialValue: T): T {
   try {
@@ -7,6 +8,7 @@ function readStoredValue<T>(key: string, initialValue: T): T {
     return item ? JSON.parse(item) : initialValue;
   } catch (error) {
     console.error(error);
+    toast.error("ローカルデータの読み込みに失敗しました。");
     return initialValue;
   }
 }
@@ -28,7 +30,7 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T)
       }
     } catch (error) {
       console.error(error);
-      alert(error);
+      toast.error("ローカルデータの保存に失敗しました。");
     }
   };
 

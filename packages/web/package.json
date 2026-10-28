@@ -15,7 +15,8 @@
     "json-2-csv": "^5.5.11",
     "kissunlocklib": "github:kissge/kissunlocklib",
     "react": "^19.2.6",
-    "react-dom": "^19.2.6"
+    "react-dom": "^19.2.6",
+    "sonner": "^2.0.8"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

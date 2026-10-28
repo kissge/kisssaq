@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { apiClient } from "../lib/apiClient";
 import type { Row } from "../lib/types";
 
@@ -32,6 +33,7 @@ function readStoredValue<T>(key: string, fallback: T): T {
     return value ? (JSON.parse(value) as T) : fallback;
   } catch (error) {
     console.error(`Failed to read localStorage key "${key}".`, error);
+    toast.error("ローカルデータの読み込みに失敗しました。");
     return fallback;
   }
 }
@@ -82,7 +84,7 @@ function writeLocalDatabase(database: StoredDatabase): void {
     window.localStorage.setItem("updatedAt", JSON.stringify(database.updatedAt));
   } catch (error) {
     console.error("Failed to write database to localStorage.", error);
-    alert(error);
+    toast.error("データの保存に失敗しました。");
   }
 }
 
@@ -126,6 +128,7 @@ export function useDatabase(unlocked: boolean) {
           }
         } catch (error) {
           console.error("Failed to synchronize remote database.", error);
+          toast.error("サーバーからのデータ取得に失敗しました。ローカルデータを使用します。");
         }
       }
 

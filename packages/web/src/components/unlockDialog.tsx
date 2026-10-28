@@ -1,5 +1,6 @@
 import { isUnlocked, setPassword, wishlistURL, authorURL } from "kissunlocklib";
 import { useState } from "react";
+import { toast } from "sonner";
 import { useUnlocked } from "../hooks/useUnlocked";
 
 export default function UnlockDialog() {
@@ -50,13 +51,18 @@ export default function UnlockDialog() {
         />
         <button
           onClick={async () => {
-            await setPassword(passwordInput);
-            if (await isUnlocked()) {
-              await refresh();
-              alert("アンロックされました。");
-              (document.getElementById("unlockDialog") as HTMLDialogElement).close();
-            } else {
-              alert("パスワードが違います。");
+            try {
+              await setPassword(passwordInput);
+              if (await isUnlocked()) {
+                await refresh();
+                toast.success("アンロックされました。");
+                (document.getElementById("unlockDialog") as HTMLDialogElement).close();
+              } else {
+                toast.error("パスワードが違います。");
+              }
+            } catch (error) {
+              console.error("Failed to unlock.", error);
+              toast.error("アンロック処理に失敗しました。");
             }
           }}
           disabled={unlocked || loading}
