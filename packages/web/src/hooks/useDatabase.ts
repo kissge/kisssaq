@@ -88,6 +88,37 @@ function writeLocalDatabase(database: StoredDatabase): void {
   }
 }
 
+async function writeRemoteDatabase(database: StoredDatabase): Promise<void> {
+  try {
+    const response = await apiClient.question[":id"].$put({
+      param: { id: database.userID },
+      json: {
+        db: {
+          q: database.questions.map(([q, a, f, g, comment]) => [
+            q,
+            a,
+            f ?? null,
+            g ?? null,
+            comment ?? null,
+          ]),
+          f: database.folders,
+          g: database.genres,
+        },
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to save remote database: ${response.status}`);
+    }
+
+    const result = await response.json();
+    writeLocalDatabase({ ...database, updatedAt: result.updatedAt });
+  } catch (error) {
+    console.error("Failed to save remote database.", error);
+    toast.error("サーバーへのデータ保存に失敗しました。");
+  }
+}
+
 export function useDatabase(unlocked: boolean) {
   const [database, setDatabase] = useState<Database>({
     questions: [],
@@ -158,6 +189,10 @@ export function useDatabase(unlocked: boolean) {
     } as StoredDatabase;
     setDatabase((current) => ({ ...current, [key]: value }));
     writeLocalDatabase(updated);
+
+    if (unlocked) {
+      void writeRemoteDatabase(updated);
+    }
   }
 
   return {
