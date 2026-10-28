@@ -71,7 +71,7 @@ function readLocalDatabase(): StoredDatabase {
     folders: readStoredValue<string[]>("f", defaultFolders),
     genres: readStoredValue<string[]>("g", defaultGenres),
     userID: getUserID(),
-    updatedAt: readStoredValue<string | null>("updatedAt", null),
+    updatedAt: readStoredValue<string | null>("updatedAt", null) ?? getJSTNow(),
   };
 }
 
@@ -120,6 +120,7 @@ async function writeRemoteDatabase(database: StoredDatabase): Promise<void> {
 }
 
 export function useDatabase(unlocked: boolean) {
+  const [userID, setUserID] = useState("");
   const [database, setDatabase] = useState<Database>({
     questions: [],
     folders: defaultFolders,
@@ -131,10 +132,11 @@ export function useDatabase(unlocked: boolean) {
     let cancelled = false;
 
     async function load() {
+      const storedUpdatedAt = window.localStorage.getItem("updatedAt");
       const local = readLocalDatabase();
       let selected = local;
 
-      if (window.localStorage.getItem("updatedAt") === null) {
+      if (storedUpdatedAt === null || storedUpdatedAt === "null") {
         writeLocalDatabase(local);
       }
 
@@ -169,6 +171,7 @@ export function useDatabase(unlocked: boolean) {
           folders: selected.folders,
           genres: selected.genres,
         });
+        setUserID(local.userID);
         setLoading(false);
       }
     }
@@ -178,7 +181,7 @@ export function useDatabase(unlocked: boolean) {
     return () => {
       cancelled = true;
     };
-  }, [unlocked]);
+  }, [unlocked, userID]);
 
   function updateDatabase<K extends keyof Database>(key: K, value: Database[K]) {
     const local = readLocalDatabase();
@@ -195,9 +198,26 @@ export function useDatabase(unlocked: boolean) {
     }
   }
 
+  function changeUserID(nextUserID: string) {
+    window.localStorage.removeItem("q");
+    window.localStorage.removeItem("f");
+    window.localStorage.removeItem("g");
+    window.localStorage.removeItem("updatedAt");
+    window.localStorage.setItem("userID", nextUserID);
+    setDatabase({
+      questions: [],
+      folders: defaultFolders,
+      genres: defaultGenres,
+    });
+    setLoading(true);
+    setUserID(nextUserID);
+  }
+
   return {
     ...database,
+    userID,
     loading,
+    changeUserID,
     setQuestions: (value: Row[]) => updateDatabase("questions", value),
     setFolders: (value: string[]) => updateDatabase("folders", value),
     setGenres: (value: string[]) => updateDatabase("genres", value),

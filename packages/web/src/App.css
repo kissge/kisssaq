@@ -139,6 +139,7 @@ table {
 
   button {
     flex: 1 1 auto;
+    padding: 0.5em 0.25em;
     cursor: pointer;
   }
 
@@ -195,6 +196,45 @@ dialog {
 
   textarea {
     width: calc(100% - 6px);
+  }
+
+  p.description {
+    font-size: 0.9em;
+    color: light-dark(#666, #aaa);
+    line-height: 1.25;
+    margin: 0.5em 0;
+
+    &.warning {
+      color: light-dark(#c00, #f00);
+      font-weight: bold;
+    }
+  }
+
+  h3 {
+    font-weight: normal;
+    margin: 0;
+  }
+
+  hr {
+    margin: 1em 0;
+  }
+
+  .user-id {
+    display: flex;
+    justify-content: center;
+    gap: 0.5em;
+    margin-top: 1em;
+
+    input {
+      font-family: monospace;
+      flex: 1;
+      min-width: 0;
+    }
+
+    code {
+      overflow-wrap: anywhere;
+      user-select: all;
+    }
   }
 }
 

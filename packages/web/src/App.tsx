@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "sonner";
 import "./App.css";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import EditDialog, { type EditTarget } from "./components/editDialog";
@@ -6,14 +7,24 @@ import ImportDialog from "./components/importDialog";
 import { json2csv } from "json-2-csv";
 import SwitchViewDialog from "./components/switchViewDialog";
 import UnlockDialog from "./components/unlockDialog";
+import SyncDialog from "./components/syncDialog";
 import { useDatabase } from "./hooks/useDatabase";
 import { useUnlocked } from "./hooks/useUnlocked";
 import type { CommentText, FolderID, GenreID, Row } from "./lib/types";
 
 function App() {
   const { unlocked } = useUnlocked();
-  const { questions, folders, genres, loading, setQuestions, setFolders, setGenres } =
-    useDatabase(unlocked);
+  const {
+    questions,
+    folders,
+    genres,
+    userID,
+    loading,
+    setQuestions,
+    setFolders,
+    setGenres,
+    changeUserID,
+  } = useDatabase(unlocked);
   const [checked, setChecked] = useState<number[]>([]);
   const [activeFolder, setActiveFolder] = useLocalStorage<FolderID | null>("activeFolder", null);
   const [activeGenre, setActiveGenre] = useLocalStorage<GenreID | null>("activeGenre", null);
@@ -340,6 +351,20 @@ function App() {
           機能アンロック
         </button>
         <button
+          onClick={() => {
+            if (unlocked) {
+              const dialog = document.getElementById("syncDialog") as HTMLDialogElement;
+              dialog.showModal();
+            } else {
+              toast.error("クラウド同期を利用するためには、機能アンロックが必要です。", {
+                position: "top-center",
+              });
+            }
+          }}
+        >
+          クラウド同期 🔒
+        </button>
+        <button
           disabled={questions.length === 0}
           onClick={() => {
             const data = new Blob(
@@ -432,6 +457,8 @@ function App() {
           setGenres(newGenres);
         }}
       />
+
+      <SyncDialog userID={userID} onUserIDChange={changeUserID} />
     </>
   );
 }
