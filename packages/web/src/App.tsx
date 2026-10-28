@@ -4,7 +4,7 @@ import "./App.css";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import EditDialog, { type EditTarget } from "./components/editDialog";
 import ImportDialog from "./components/importDialog";
-import { json2csv } from "json-2-csv";
+import ExportDialog from "./components/exportDialog";
 import SwitchViewDialog from "./components/switchViewDialog";
 import UnlockDialog from "./components/unlockDialog";
 import SyncDialog from "./components/syncDialog";
@@ -370,26 +370,8 @@ function App() {
         <button
           disabled={questions.length === 0}
           onClick={() => {
-            const data = new Blob(
-              [
-                json2csv(
-                  filteredQuestions.map(({ qa: [q, a, f, g, c] }) => [
-                    q,
-                    a,
-                    folders[f ?? 0],
-                    genres[g ?? 0],
-                    c ?? "",
-                  ]),
-                ).replace(/.+\n/, ""),
-              ],
-              { type: "text/csv" },
-            );
-            const url = URL.createObjectURL(data);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "kissSaq.csv";
-            a.click();
-            URL.revokeObjectURL(url);
+            const dialog = document.getElementById("exportDialog") as HTMLDialogElement;
+            dialog.showModal();
           }}
         >
           CSV出力
@@ -423,6 +405,14 @@ function App() {
           setOrder("default");
           setQuestions([...questions, ...parsed] as Row[]);
         }}
+      />
+
+      <ExportDialog
+        questions={questions}
+        visibleQuestions={filteredQuestions.map(({ qa }) => qa)}
+        checkedQuestions={checked.flatMap((index) => (questions[index] ? [questions[index]] : []))}
+        folders={folders}
+        genres={genres}
       />
 
       <UnlockDialog />
