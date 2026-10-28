@@ -11,6 +11,7 @@ import SyncDialog from "./components/syncDialog";
 import { useDatabase } from "./hooks/useDatabase";
 import { useUnlocked } from "./hooks/useUnlocked";
 import type { CommentText, FolderID, GenreID, Row } from "./lib/types";
+import { authorURL, wishlistURL } from "kissunlocklib";
 
 function App() {
   const { unlocked } = useUnlocked();
@@ -358,6 +359,21 @@ function App() {
           CSV出力
         </button>
         <button onClick={() => importDialogRef.current?.showModal()}>CSV取り込み</button>
+        <div className="credit">
+          kissSaq<small>（きすさく）</small>
+          <br />© 2026 _kidochan
+          <div>
+            <a href="https://github.com/kissge/kisssaq" target="_blank">
+              GitHub
+            </a>
+            <a href={authorURL} target="_blank">
+              作者
+            </a>
+            <a href={wishlistURL} target="_blank">
+              応援してくれ
+            </a>
+          </div>
+        </div>
       </div>
 
       <EditDialog

@@ -214,7 +214,7 @@ table {
   box-shadow: 0 0 0.5em #0004;
   display: flex;
   flex-direction: column;
-  width: 10em;
+  width: 10.5em;
   gap: 0.5em;
   padding: 0.5em;
   font-size: 1.1em;
@@ -228,6 +228,17 @@ table {
 
     &:hover {
       background-color: light-dark(#eee, #333);
+    }
+  }
+
+  .credit {
+    margin: 0 0.5em;
+    font-size: 0.8em;
+    color: light-dark(#666, #aaa);
+
+    div {
+      display: flex;
+      justify-content: space-between;
     }
   }
 }
