@@ -54,7 +54,7 @@ function App() {
     const f = questions[id]?.[2] ?? activeFolder ?? (0 as FolderID);
     const g = questions[id]?.[3] ?? activeGenre ?? (0 as GenreID);
     const c = questions[id]?.[4] ?? ("" as CommentText);
-    setCurrentEditTarget({ q, a, f, g, c, id });
+    setCurrentEditTarget({ q, a, f, g, c, id, modified: false });
     editDialogRef.current?.showModal();
     setTimeout(() => editDialogRef.current?.querySelector("textarea")?.focus(), 10);
   }

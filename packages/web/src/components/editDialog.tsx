@@ -9,6 +9,7 @@ export interface EditTarget {
   f: FolderID;
   g: GenreID;
   c: CommentText;
+  modified: boolean;
 }
 
 const EditDialog = forwardRef<
@@ -22,7 +23,11 @@ const EditDialog = forwardRef<
   }
 >(({ currentEditTarget, folders, genres, onChange, onSave }, ref) => {
   return (
-    <dialog ref={ref} closedby="any" onClick={(event) => event.stopPropagation()}>
+    <dialog
+      ref={ref}
+      closedby={currentEditTarget?.modified ? "closerequest" : "any"}
+      onClick={(event) => event.stopPropagation()}
+    >
       {currentEditTarget && (
         <>
           <div className="toolbar">
@@ -34,19 +39,25 @@ const EditDialog = forwardRef<
           </div>
           <textarea
             value={currentEditTarget.q}
-            onChange={(e) => onChange({ ...currentEditTarget, q: e.target.value as Question })}
+            onChange={(e) =>
+              onChange({ ...currentEditTarget, modified: true, q: e.target.value as Question })
+            }
             rows={5}
             placeholder="日本の首都は？"
           />
           <textarea
             value={currentEditTarget.a}
-            onChange={(e) => onChange({ ...currentEditTarget, a: e.target.value as Answer })}
+            onChange={(e) =>
+              onChange({ ...currentEditTarget, modified: true, a: e.target.value as Answer })
+            }
             rows={3}
             placeholder="東京（とうきょう）"
           />
           <textarea
             value={currentEditTarget.c}
-            onChange={(e) => onChange({ ...currentEditTarget, c: e.target.value as CommentText })}
+            onChange={(e) =>
+              onChange({ ...currentEditTarget, modified: true, c: e.target.value as CommentText })
+            }
             rows={3}
             placeholder="自由記入欄"
           />
@@ -54,7 +65,11 @@ const EditDialog = forwardRef<
             <select
               value={currentEditTarget.f}
               onChange={(e) =>
-                onChange({ ...currentEditTarget, f: Number.parseInt(e.target.value) as FolderID })
+                onChange({
+                  ...currentEditTarget,
+                  modified: true,
+                  f: Number.parseInt(e.target.value) as FolderID,
+                })
               }
             >
               {folders
@@ -71,7 +86,11 @@ const EditDialog = forwardRef<
             <select
               value={currentEditTarget.g}
               onChange={(e) =>
-                onChange({ ...currentEditTarget, g: Number.parseInt(e.target.value) as GenreID })
+                onChange({
+                  ...currentEditTarget,
+                  modified: true,
+                  g: Number.parseInt(e.target.value) as GenreID,
+                })
               }
             >
               {genres
