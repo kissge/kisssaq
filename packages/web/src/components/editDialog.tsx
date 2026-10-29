@@ -25,7 +25,7 @@ const EditDialog = forwardRef<
   return (
     <dialog
       ref={ref}
-      closedby={currentEditTarget?.modified ? "closerequest" : "any"}
+      closedby={currentEditTarget?.modified ? "none" : "any"}
       onClick={(event) => event.stopPropagation()}
     >
       {currentEditTarget && (
