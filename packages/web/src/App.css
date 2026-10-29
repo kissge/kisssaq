@@ -156,6 +156,9 @@ table {
     flex: 1 1 auto;
     padding: 0.5em 0.25em;
     cursor: pointer;
+    white-space: nowrap;
+    max-height: 3em;
+    overflow: hidden;
   }
 
   .more-btn {
@@ -327,6 +330,16 @@ dialog {
   input[type="radio"],
   input[type="checkbox"] {
     margin-right: 0.5em;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  /* for PCs */
+  dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 }
 
