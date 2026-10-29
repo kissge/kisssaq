@@ -22,11 +22,22 @@ const EditDialog = forwardRef<
     onSave: (value: EditTarget) => void;
   }
 >(({ currentEditTarget, folders, genres, onChange, onSave }, ref) => {
+  function save() {
+    onSave(currentEditTarget!);
+    if (typeof ref !== "function") ref?.current?.close();
+  }
+
   return (
     <dialog
       ref={ref}
       closedby={currentEditTarget?.modified ? "none" : "any"}
       onClick={(event) => event.stopPropagation()}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
+          event.preventDefault();
+          save();
+        }
+      }}
     >
       {currentEditTarget && (
         <>
@@ -104,14 +115,7 @@ const EditDialog = forwardRef<
                   </option>
                 ))}
             </select>
-            <button
-              onClick={() => {
-                onSave(currentEditTarget);
-                if (typeof ref !== "function") ref?.current?.close();
-              }}
-            >
-              保存
-            </button>
+            <button onClick={save}>保存</button>
           </div>
         </>
       )}
