@@ -15,7 +15,7 @@ export default defineConfig({
         theme_color: "#ccccee",
         icons: [
           {
-            src: "kisssaq.png",
+            src: "kisssaq-pwa.png",
             sizes: "any",
             type: "image/png",
             purpose: "any maskable",
