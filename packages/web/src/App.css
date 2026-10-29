@@ -48,8 +48,16 @@ table {
   width: 100%;
   vertical-align: top;
 
-  tr:nth-child(even) {
-    background-color: light-dark(#eee, #333);
+  tr {
+    cursor: pointer;
+
+    &:nth-last-child(odd) {
+      background-color: light-dark(#eee, #333);
+    }
+
+    &:hover {
+      background-color: light-dark(#ddd, #444);
+    }
   }
 
   th {
@@ -246,7 +254,9 @@ table {
 dialog {
   width: calc(100% - 3em);
   max-width: 500px;
-  translate: 0 -5em;
+  max-height: calc(100dvh - 2em);
+  margin: 1em auto;
+  overflow-y: auto;
 
   .toolbar {
     display: flex;

@@ -28,7 +28,6 @@ const SwitchFolderDialog = forwardRef<HTMLDialogElement, SwitchDialogProps>(
           <div>表示する{itemKind}を選択</div>
           <button onClick={() => typeof ref !== "function" && ref?.current?.close()}>✕</button>
         </div>
-
         <div className="select">
           <div onClick={() => onChange(null)}>
             <span>
@@ -50,7 +49,6 @@ const SwitchFolderDialog = forwardRef<HTMLDialogElement, SwitchDialogProps>(
               </div>
             ))}
         </div>
-
         <button
           onClick={() => {
             const newFolder = prompt(`新しい${itemKind}名を入力`);
@@ -62,6 +60,7 @@ const SwitchFolderDialog = forwardRef<HTMLDialogElement, SwitchDialogProps>(
         >
           新しい{itemKind}を追加
         </button>
+        &nbsp;
         <button
           disabled={activeItem === null}
           onClick={() => {

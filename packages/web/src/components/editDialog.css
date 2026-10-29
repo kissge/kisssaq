@@ -1,4 +1,12 @@
 .flex {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5em;
+
+  select,
+  button {
+    height: 2em;
+    flex: 1 1 auto;
+    max-width: 100%;
+  }
 }
