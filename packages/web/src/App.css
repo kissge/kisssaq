@@ -1,9 +1,10 @@
 #center {
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 20px;
   place-items: center;
   flex-grow: 1;
+  padding: 28px 20px 104px;
 
   @media (max-width: 1024px) {
     gap: 18px;
@@ -11,18 +12,36 @@
 }
 
 .welcome-message {
-  font-size: 1.25em;
+  width: min(680px, 100%);
+  box-sizing: border-box;
+  font-size: 1.05em;
   margin: auto;
-  padding: 0.25em;
+  padding: clamp(1.5rem, 5vw, 3rem);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
   animation: fade-in 1s ease-in;
 
   h1 {
-    line-height: 2;
+    line-height: 1.08;
     text-align: center;
+
+    ruby {
+      display: block;
+      color: var(--accent);
+    }
+
+    rt {
+      color: var(--text);
+      font: 0.25em var(--sans);
+      letter-spacing: 0.15em;
+    }
   }
 
   ul {
-    line-height: 1.5;
+    line-height: 1.8;
+    padding-left: 1.5em;
   }
 }
 
@@ -45,44 +64,51 @@
 table {
   border-collapse: collapse;
   border-spacing: 0.25em;
-  width: 100%;
+  width: min(960px, 100%);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
   vertical-align: top;
 
   tr {
     cursor: pointer;
 
-    &:nth-last-child(odd) {
-      background-color: light-dark(#eee, #333);
+    &:nth-child(even) {
+      background-color: color-mix(in srgb, var(--accent-bg) 35%, transparent);
     }
 
     &:hover {
-      background-color: light-dark(#ddd, #444);
+      background-color: var(--accent-bg);
     }
   }
 
   th {
-    width: 2em;
+    width: 3em;
+    padding: 0 0.5em;
   }
 
   td {
     text-align: left;
-    padding-right: 6px;
+    padding: 1em 1.25em 1em 0;
     word-break: break-word;
     width: 70%;
     user-select: none;
 
     & + td {
-      border-left: 1px solid #aaa;
-      padding-left: 6px;
+      border-left: 1px solid var(--border);
+      padding-left: 1.25em;
     }
 
     .genre-label {
       display: inline-block;
       margin-right: 0.25em;
-      padding: 0.5em;
+      padding: 0.35em 0.65em;
       font-size: 0.5em;
-      background-color: light-dark(#eee, #333);
-      border: 1px solid #aaa;
+      color: var(--accent);
+      background-color: var(--accent-bg);
+      border: 1px solid var(--accent-border);
       border-radius: 5em;
       line-height: 1;
     }
@@ -100,10 +126,15 @@ table {
 .search-toolbar,
 .bulk-toolbar {
   position: fixed;
-  bottom: 3em;
-  padding: 0.5em 1em;
-  width: calc(100% - 1em * 2);
-  background-color: var(--bg);
+  bottom: 5.2em;
+  z-index: 2;
+  box-sizing: border-box;
+  padding: 0.7em 1em;
+  width: min(560px, calc(100% - 2em));
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background-color: color-mix(in srgb, var(--surface) 92%, transparent);
+  backdrop-filter: blur(14px);
   box-shadow: var(--shadow);
 
   input[type="text"] {
@@ -115,6 +146,8 @@ table {
 .bulk-toolbar {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  gap: 0.5em;
 
   & > div {
     display: flex;
@@ -123,38 +156,43 @@ table {
 
   select,
   button {
-    font-size: 0.6em;
-    padding: 0.5em 0.25em;
+    font-size: 0.8em;
+    padding: 0.45em 0.6em;
   }
 }
 
 .global-toolbar {
   position: fixed;
-  height: 3em;
+  height: auto;
+  min-height: 4.4em;
   bottom: 0;
   width: 100%;
-  background-color: var(--bg);
+  background-color: color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border);
   box-shadow: var(--shadow);
   display: flex;
   justify-content: center;
 
   &.unlocked {
-    background-color: light-dark(#cce, #228);
+    background-color: color-mix(in srgb, var(--accent-bg) 60%, var(--surface));
   }
 
   & > div {
-    padding: 0.5em 1em;
+    padding: 0.6em 1em;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 0.25em;
+    gap: 0.45em;
     width: 100%;
     max-width: 1126px;
   }
 
   button {
     flex: 1 1 auto;
-    padding: 0.5em 0.25em;
+    padding: 0.6em 0.35em;
+    border-color: transparent;
+    background: transparent;
     cursor: pointer;
     white-space: nowrap;
     height: 3em;
@@ -199,9 +237,9 @@ table {
   height: 2em;
   place-items: center;
   border-radius: 50%;
-  background-color: light-dark(#fff, #333);
+  background-color: var(--surface);
   box-shadow: var(--shadow);
-  color: light-dark(#555, #ccc);
+  color: var(--text);
   font-size: 0.9em;
   pointer-events: none;
 
@@ -239,8 +277,10 @@ table {
   margin: 0;
   bottom: calc(anchor(top) + 0.5em);
   right: anchor(right);
-  border: 0;
-  box-shadow: 0 0 0.5em #0004;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
   width: 10.5em;
@@ -263,7 +303,7 @@ table {
   .credit {
     margin: 0 0.5em;
     font-size: 0.8em;
-    color: light-dark(#666, #aaa);
+    color: var(--text);
 
     div {
       display: flex;
@@ -277,6 +317,12 @@ dialog {
   max-width: 500px;
   max-height: calc(100dvh - 2em);
   margin: 1em auto;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow);
   overflow-y: auto;
 
   .toolbar {
@@ -284,15 +330,26 @@ dialog {
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 0.25em;
+
+    button {
+      padding: 0.35em 0.6em;
+      border: 0;
+      background: transparent;
+      font-size: 1.1em;
+    }
   }
 
   textarea {
     width: calc(100% - 6px);
+    box-sizing: border-box;
+    padding: 0.7em;
+    margin-bottom: 0.65em;
+    resize: vertical;
   }
 
   p.description {
     font-size: 0.9em;
-    color: light-dark(#666, #aaa);
+    color: var(--text);
     line-height: 1.25;
     margin: 0.5em 0;
 
@@ -365,8 +422,8 @@ dialog {
   details {
     margin-top: 1em;
     margin-left: 1em;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
     padding: 0.25em 1em;
 
     ul {

@@ -5,8 +5,9 @@
 
   select,
   button {
-    height: 2em;
+    min-height: 2.6em;
     flex: 1 1 auto;
     max-width: 100%;
+    padding: 0.35em 0.7em;
   }
 }
