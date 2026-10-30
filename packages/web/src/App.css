@@ -157,8 +157,26 @@ table {
     padding: 0.5em 0.25em;
     cursor: pointer;
     white-space: nowrap;
-    max-height: 3em;
+    height: 3em;
     overflow: hidden;
+
+    &:has(.long-folder-name) {
+      flex: 0 1 auto;
+      padding: 0.3em 0.5em;
+    }
+  }
+
+  .long-folder-name {
+    font-size: 0.95em;
+    line-height: 1.25;
+    max-width: 6em;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    white-space: wrap;
+    word-break: break-all;
+    text-align: left;
   }
 
   .more-btn {

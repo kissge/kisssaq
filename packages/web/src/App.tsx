@@ -13,6 +13,11 @@ import { useUnlocked } from "./hooks/useUnlocked";
 import type { CommentText, FolderID, GenreID, Row } from "./lib/types";
 import { authorURL, wishlistURL } from "kissunlocklib";
 
+function isLong(text: string, threshold: number = 10): boolean {
+  const length = text.length + [...text].filter((c) => c.charCodeAt(0) > 255).length;
+  return length > threshold;
+}
+
 function App() {
   const { unlocked } = useUnlocked();
   const {
@@ -294,8 +299,24 @@ function App() {
             >
               {order === "default" ? "登録順" : order === "genre" ? "ジャンル順" : "ランダム"}
             </button>
-            <button onClick={() => switchFolderDialogRef.current?.showModal()}>フォルダ</button>
-            <button onClick={() => switchGenreDialogRef.current?.showModal()}>ジャンル</button>
+            <button onClick={() => switchFolderDialogRef.current?.showModal()}>
+              {activeFolder === null ? (
+                "全フォルダ"
+              ) : (
+                <div className={isLong(folders[activeFolder]) ? "long-folder-name" : ""}>
+                  {folders[activeFolder]}
+                </div>
+              )}
+            </button>
+            <button onClick={() => switchGenreDialogRef.current?.showModal()}>
+              {activeGenre === null ? (
+                "全ジャンル"
+              ) : (
+                <div className={isLong(genres[activeGenre]) ? "long-folder-name" : ""}>
+                  {genres[activeGenre]}
+                </div>
+              )}
+            </button>
             <button
               disabled={questions.length === 0}
               onClick={() => {
