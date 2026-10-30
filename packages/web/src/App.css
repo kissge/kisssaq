@@ -217,6 +217,11 @@ table {
     text-align: left;
   }
 
+  .primary-btn {
+    background-color: var(--accent);
+    color: var(--surface);
+  }
+
   .more-btn {
     margin-left: 1em;
     font-weight: bold;
@@ -224,6 +229,10 @@ table {
     border: 0;
     background: none;
     anchor-name: --more-btn;
+
+    &:hover {
+      transform: none;
+    }
   }
 }
 

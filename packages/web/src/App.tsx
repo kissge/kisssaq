@@ -336,6 +336,7 @@ function App() {
               検索
             </button>
             <button
+              className="primary-btn"
               onClick={() => {
                 setQuestions([
                   ...questions,
