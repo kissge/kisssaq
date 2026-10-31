@@ -309,7 +309,8 @@ table {
     font-size: 1em;
 
     &:hover {
-      background-color: light-dark(#eee, #333);
+      transform: none;
+      background-color: rgba(from var(--accent-bg) r g b / 0.5);
     }
   }
 
