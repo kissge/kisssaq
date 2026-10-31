@@ -126,6 +126,12 @@ select {
 button {
   cursor: pointer;
   font-weight: 600;
+  transition: all 0.2s ease;
+
+  &.primary-btn {
+    background-color: var(--accent);
+    color: var(--surface);
+  }
 }
 
 button:hover:not(:disabled) {

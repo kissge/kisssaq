@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { forwardRef, useEffect } from "react";
 import type { Answer, FolderID, GenreID, Question, CommentText } from "../lib/types";
 import "./editDialog.css";
 
@@ -24,8 +24,25 @@ const EditDialog = forwardRef<
 >(({ currentEditTarget, folders, genres, onChange, onSave }, ref) => {
   function save() {
     onSave(currentEditTarget!);
+    onChange({ ...currentEditTarget!, modified: false });
     if (typeof ref !== "function") ref?.current?.close();
   }
+
+  useEffect(() => {
+    if (!currentEditTarget?.modified) {
+      return;
+    }
+
+    function confirmClose(event: BeforeUnloadEvent) {
+      event.preventDefault();
+      event.returnValue = true;
+    }
+
+    window.addEventListener("beforeunload", confirmClose);
+    return () => {
+      window.removeEventListener("beforeunload", confirmClose);
+    };
+  }, [currentEditTarget?.modified]);
 
   return (
     <dialog
@@ -46,7 +63,21 @@ const EditDialog = forwardRef<
               {currentEditTarget.q.length} (
               {currentEditTarget.q.replace(/(（.+?）|\(.+?\)|【.+?】|［.+?］)/g, "").length})
             </div>
-            <button onClick={() => typeof ref !== "function" && ref?.current?.close()}>✕</button>
+            <button
+              onClick={() => {
+                if (typeof ref !== "function") {
+                  if (
+                    !currentEditTarget.modified ||
+                    window.confirm("変更が保存されていません。本当に閉じますか？")
+                  ) {
+                    onChange({ ...currentEditTarget!, modified: false });
+                    ref?.current?.close();
+                  }
+                }
+              }}
+            >
+              ✕
+            </button>
           </div>
           <textarea
             value={currentEditTarget.q}
@@ -115,7 +146,9 @@ const EditDialog = forwardRef<
                   </option>
                 ))}
             </select>
-            <button onClick={save}>保存</button>
+            <button className={currentEditTarget?.modified ? "primary-btn" : ""} onClick={save}>
+              保存
+            </button>
           </div>
         </>
       )}

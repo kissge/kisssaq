@@ -192,11 +192,14 @@ table {
     flex: 1 1 auto;
     padding: 0.6em 0.35em;
     border-color: transparent;
-    background: transparent;
     cursor: pointer;
     white-space: nowrap;
     height: 3em;
     overflow: hidden;
+
+    &:not(.primary-btn) {
+      background: transparent;
+    }
 
     &:has(.long-folder-name) {
       flex: 0 1 auto;
@@ -215,11 +218,6 @@ table {
     white-space: wrap;
     word-break: break-all;
     text-align: left;
-  }
-
-  .primary-btn {
-    background-color: var(--accent);
-    color: var(--surface);
   }
 
   .more-btn {
