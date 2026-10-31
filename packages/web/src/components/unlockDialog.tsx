@@ -3,7 +3,10 @@ import { forwardRef, useState } from "react";
 import { toast } from "sonner";
 import { useUnlocked } from "../hooks/useUnlocked";
 
-const UnlockDialog = forwardRef<HTMLDialogElement>(function UnlockDialog(_, ref) {
+const UnlockDialog = forwardRef<HTMLDialogElement, { onUnlock: () => void }>(function UnlockDialog(
+  { onUnlock },
+  ref,
+) {
   const [passwordInput, setPasswordInput] = useState("");
   const { unlocked, loading, refresh } = useUnlocked();
 
@@ -50,8 +53,9 @@ const UnlockDialog = forwardRef<HTMLDialogElement>(function UnlockDialog(_, ref)
             try {
               await setPassword(passwordInput);
               if (await isUnlocked()) {
-                await refresh();
                 toast.success("アンロックされました。");
+                await refresh();
+                onUnlock();
                 if (typeof ref !== "function") ref?.current?.close();
               } else {
                 toast.error("パスワードが違います。");

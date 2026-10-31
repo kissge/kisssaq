@@ -19,7 +19,7 @@ function isLong(text: string, threshold: number = 10): boolean {
 }
 
 function App() {
-  const { unlocked } = useUnlocked();
+  const { unlocked, refresh } = useUnlocked();
   const {
     questions,
     folders,
@@ -445,7 +445,7 @@ function App() {
         genres={genres}
       />
 
-      <UnlockDialog ref={unlockDialogRef} />
+      <UnlockDialog ref={unlockDialogRef} onUnlock={refresh} />
 
       <SwitchViewDialog
         ref={switchFolderDialogRef}
