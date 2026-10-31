@@ -143,6 +143,7 @@ table {
   input[type="text"] {
     width: 100%;
     box-sizing: border-box;
+    padding: 0 0.75em;
   }
 }
 
@@ -357,11 +358,14 @@ dialog {
     }
   }
 
+  p {
+    margin: 0.5em 0;
+  }
+
   textarea {
     width: calc(100% - 6px);
     box-sizing: border-box;
     padding: 0.7em;
-    margin-bottom: 0.65em;
     resize: vertical;
   }
 
@@ -369,7 +373,6 @@ dialog {
     font-size: 0.9em;
     color: var(--text);
     line-height: 1.25;
-    margin: 0.5em 0;
 
     &.warning {
       color: light-dark(#c00, #f00);
@@ -473,4 +476,14 @@ dialog {
       margin: 0;
     }
   }
+}
+
+dialog .file-open-btn {
+  border: 1px solid rgb(from var(--border) calc(r / 2) calc(g / 2) calc(b / 2));
+  margin-right: 0.5em;
+  margin-bottom: 0.25em;
+}
+
+input[type="file"] {
+  display: none !important;
 }
