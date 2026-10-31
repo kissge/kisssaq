@@ -1,14 +1,9 @@
 #center {
   display: flex;
   flex-direction: column;
-  gap: 20px;
   place-items: center;
   flex-grow: 1;
-  padding: 28px 20px 104px;
-
-  @media (max-width: 1024px) {
-    gap: 18px;
-  }
+  padding: 12px 20px 6em;
 }
 
 .welcome-message {
@@ -59,6 +54,13 @@
 .empty-message {
   margin: auto;
   text-align: center;
+}
+
+.table-count {
+  font-size: 0.9em;
+  width: 100%;
+  text-align: right;
+  margin-bottom: 0.5em;
 }
 
 table {

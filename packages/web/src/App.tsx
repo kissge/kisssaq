@@ -135,7 +135,11 @@ function App() {
               {searchKeyword && `検索キーワード「${searchKeyword}」`}に該当する問題が存在しません。
             </p>
           </div>
-        ) : null}
+        ) : (
+          <p className="table-count">
+            {filteredQuestions.length}件表示（全{questions.length}件）
+          </p>
+        )}
 
         <table
           style={{
