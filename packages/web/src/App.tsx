@@ -139,7 +139,7 @@ function App() {
 
         <table
           style={{
-            marginBottom: showSearchBox || checked.length > 0 ? "6em" : "3em",
+            marginBottom: showSearchBox || checked.length > 0 ? "5em" : "3em",
           }}
         >
           <tbody>
@@ -182,8 +182,23 @@ function App() {
               placeholder="検索キーワードを入力"
               type="text"
               value={searchKeyword}
+              onKeyDown={(e) => {
+                if (e.key === "Escape") {
+                  setSearchKeyword("");
+                  setShowSearchBox(false);
+                }
+              }}
               onChange={(e) => setSearchKeyword(e.target.value)}
             />
+            <button
+              style={{ border: "none" }}
+              onClick={() => {
+                setSearchKeyword("");
+                setShowSearchBox(false);
+              }}
+            >
+              ✕
+            </button>
           </div>
         )}
 

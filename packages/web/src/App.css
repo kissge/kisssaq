@@ -136,6 +136,7 @@ table {
   background-color: color-mix(in srgb, var(--surface) 92%, transparent);
   backdrop-filter: blur(14px);
   box-shadow: var(--shadow);
+  display: flex;
 
   input[type="text"] {
     width: 100%;
@@ -143,8 +144,11 @@ table {
   }
 }
 
+.search-toolbar {
+  gap: 0.5em;
+}
+
 .bulk-toolbar {
-  display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 0.5em;
