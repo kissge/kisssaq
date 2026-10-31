@@ -342,6 +342,10 @@ dialog {
     align-items: flex-start;
     margin-bottom: 0.25em;
 
+    div {
+      padding: 0.35em 0;
+    }
+
     button {
       padding: 0.35em 0.6em;
       border: 0;

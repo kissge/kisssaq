@@ -29,11 +29,10 @@ const SwitchFolderDialog = forwardRef<HTMLDialogElement, SwitchDialogProps>(
           <button onClick={() => typeof ref !== "function" && ref?.current?.close()}>✕</button>
         </div>
         <div className="select">
-          <div onClick={() => onChange(null)}>
+          <div className={activeItem === null ? "active" : ""} onClick={() => onChange(null)}>
             <span>
               全ての{itemKind} ({filteredQuestions.length})
             </span>
-            {activeItem === null && <span>✅</span>}
           </div>
           {items
             .map((item, index) => ({ item, index }))
@@ -41,11 +40,12 @@ const SwitchFolderDialog = forwardRef<HTMLDialogElement, SwitchDialogProps>(
               a.index === 0 ? -1 : b.index === 0 ? 1 : b.item.localeCompare(a.item),
             )
             .map(({ item, index }) => (
-              <div key={item} onClick={() => onChange(index as FolderID | GenreID)}>
-                <span>
-                  {item} ({itemCount[index]})
-                </span>
-                {activeItem === index && <span>✅</span>}
+              <div
+                key={item}
+                className={activeItem === index ? "active" : ""}
+                onClick={() => onChange(index as FolderID | GenreID)}
+              >
+                {item} ({itemCount[index]})
               </div>
             ))}
         </div>

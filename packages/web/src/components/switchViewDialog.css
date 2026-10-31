@@ -5,15 +5,14 @@
   padding: 0.4em;
 
   & > div {
-    display: flex;
     border-radius: 8px;
     background-color: transparent;
     margin-bottom: 0.25em;
     padding: 0.25em;
     cursor: pointer;
 
-    & > span:first-child {
-      flex-grow: 1;
+    &.active {
+      background-color: var(--accent-bg);
     }
 
     &:hover {
