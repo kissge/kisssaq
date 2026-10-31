@@ -8,6 +8,7 @@ import ExportDialog from "./components/exportDialog";
 import SwitchViewDialog from "./components/switchViewDialog";
 import UnlockDialog from "./components/unlockDialog";
 import SyncDialog from "./components/syncDialog";
+import SettingsDialog from "./components/settingsDialog";
 import { useDatabase } from "./hooks/useDatabase";
 import { useUnlocked } from "./hooks/useUnlocked";
 import type { CommentText, FolderID, GenreID, Row } from "./lib/types";
@@ -41,6 +42,7 @@ function App() {
   const [order, setOrder] = useState<"default" | "genre" | number[]>("default");
   const [showSearchBox, setShowSearchBox] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [questionLengthLimit, setQuestionLengthLimit] = useLocalStorage("questionLengthLimit", 60);
   const editDialogRef = useRef<HTMLDialogElement>(null);
   const switchFolderDialogRef = useRef<HTMLDialogElement>(null);
   const switchGenreDialogRef = useRef<HTMLDialogElement>(null);
@@ -48,6 +50,7 @@ function App() {
   const syncDialogRef = useRef<HTMLDialogElement>(null);
   const exportDialogRef = useRef<HTMLDialogElement>(null);
   const importDialogRef = useRef<HTMLDialogElement>(null);
+  const settingsDialogRef = useRef<HTMLDialogElement>(null);
 
   if (loading) {
     return null;
@@ -82,7 +85,7 @@ function App() {
 
   function splitQuestion(
     q: string,
-    limit: number = 60,
+    limit: number = questionLengthLimit,
   ): { type: "normal" | "dimmed" | "over"; text: string }[] {
     const split = q.split(/(（.+?）|\(.+?\)|【.+?】|［.+?］)/);
     const result = [];
@@ -379,6 +382,7 @@ function App() {
       </section>
 
       <div id="moreMenu" popover="auto">
+        <button onClick={() => settingsDialogRef.current?.showModal()}>設定</button>
         <button onClick={() => unlockDialogRef.current?.showModal()}>機能アンロック</button>
         <button
           onClick={() => {
@@ -488,6 +492,12 @@ function App() {
       />
 
       <SyncDialog ref={syncDialogRef} userID={userID} onUserIDChange={changeUserID} />
+
+      <SettingsDialog
+        ref={settingsDialogRef}
+        questionLengthLimit={questionLengthLimit}
+        onChange={setQuestionLengthLimit}
+      />
 
       {unlocked && syncStatus !== "idle" && (
         <div

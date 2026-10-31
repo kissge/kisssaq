@@ -1,0 +1,40 @@
+.settings-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+  margin-top: 1em;
+
+  .settings-field-label {
+    display: flex;
+    flex-direction: column;
+
+    & > div:last-child {
+      font-size: 0.8em;
+      color: var(--text-color);
+    }
+  }
+}
+
+.settings-input {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  white-space: nowrap;
+}
+
+.settings-input input {
+  width: 5em;
+  box-sizing: border-box;
+  padding: 0.4em 0.5em;
+}
+
+.settings-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.5em;
+}
+
+.settings-actions button {
+  padding: 0.55em 1.2em;
+}
