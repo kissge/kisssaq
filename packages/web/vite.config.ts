@@ -12,7 +12,7 @@ export default defineConfig({
         name: "kissSaq",
         short_name: "kissSaq",
         description: "自作クイズ管理ツールkissSaq",
-        theme_color: "#f7f5f0",
+        theme_color: "#d66b55",
         icons: [
           {
             src: "kisssaq-pwa.png",

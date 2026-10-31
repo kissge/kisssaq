@@ -179,7 +179,7 @@ table {
   justify-content: center;
 
   &.unlocked {
-    background-color: color-mix(in srgb, var(--accent-bg) 60%, var(--surface));
+    background-color: rgba(from var(--accent-bg) r g b / 0.2);
   }
 
   & > div {
