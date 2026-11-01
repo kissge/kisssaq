@@ -183,127 +183,117 @@ function App() {
           </tbody>
         </table>
 
-        {showSearchBox && (
-          <div className="search-toolbar">
-            <input
-              placeholder="検索キーワードを入力"
-              type="text"
-              value={searchKeyword}
-              onKeyDown={(e) => {
-                if (e.key === "Escape") {
-                  setSearchKeyword("");
-                  setShowSearchBox(false);
-                }
-              }}
-              onChange={(e) => setSearchKeyword(e.target.value)}
-            />
-            <button
-              style={{ border: "none" }}
-              onClick={() => {
+        <div className={"search-toolbar" + (showSearchBox ? " shown" : "")}>
+          <input
+            placeholder="検索キーワードを入力"
+            type="text"
+            value={searchKeyword}
+            onKeyDown={(e) => {
+              if (e.key === "Escape") {
                 setSearchKeyword("");
                 setShowSearchBox(false);
-              }}
-            >
-              ✕
-            </button>
-          </div>
-        )}
+              }
+            }}
+            onChange={(e) => setSearchKeyword(e.target.value)}
+          />
+          <button
+            style={{ border: "none" }}
+            onClick={() => {
+              setSearchKeyword("");
+              setShowSearchBox(false);
+            }}
+          >
+            ✕
+          </button>
+        </div>
 
-        {checked.length > 0 && (
-          <div className="bulk-toolbar">
-            <input
-              type="checkbox"
-              checked={checked.length === filteredQuestions.length}
-              onChange={(e) => {
-                if (e.target.checked) {
-                  setChecked(filteredQuestions.map(({ i }) => i));
-                } else {
-                  setChecked([]);
-                }
-              }}
-            />
-            {checked.length}件を
-            <button
-              onClick={() => {
-                setQuestions(questions.filter((_, j) => !checked.includes(j)));
-
-                if (Array.isArray(order)) {
-                  setOrder(order.filter((i) => !checked.includes(i)));
-                }
-
+        <div className={"bulk-toolbar" + (checked.length > 0 ? " shown" : "")}>
+          <input
+            type="checkbox"
+            checked={checked.length === filteredQuestions.length}
+            onChange={(e) => {
+              if (e.target.checked) {
+                setChecked(filteredQuestions.map(({ i }) => i));
+              } else {
                 setChecked([]);
-              }}
-            >
-              削除
-            </button>
-            <div>
-              <select
-                value={moveFolderTarget}
-                onChange={(e) => setMoveFolderTarget(Number.parseInt(e.target.value) as FolderID)}
-              >
-                {folders
-                  .map((folder, index) => ({ folder, index }))
-                  .toSorted((a, b) =>
-                    a.index === 0 ? -1 : b.index === 0 ? 1 : b.folder.localeCompare(a.folder),
-                  )
-                  .map(({ folder, index }) => (
-                    <option key={folder} value={index}>
-                      {folder}
-                    </option>
-                  ))}
-              </select>
-              <button
-                onClick={() => {
-                  const newQuestions = questions.map((qa, i) => {
-                    if (checked.includes(i)) {
-                      qa[2] = moveFolderTarget as FolderID;
-                    }
+              }
+            }}
+          />
+          <div>{checked.length}件を</div>
+          <button
+            onClick={() => {
+              if (!confirm(`${checked.length}件の問題を削除します。よろしいですか？`)) {
+                return;
+              }
 
-                    return qa;
-                  });
-                  setQuestions(newQuestions);
-                  setChecked([]);
-                  setMoveFolderTarget(0 as FolderID);
-                }}
-              >
-                に移動
-              </button>
-            </div>
-            <div>
-              <select
-                value={moveGenreTarget}
-                onChange={(e) => setMoveGenreTarget(Number.parseInt(e.target.value) as GenreID)}
-              >
-                {genres
-                  .map((genre, index) => ({ genre, index }))
-                  .toSorted((a, b) =>
-                    a.index === 0 ? -1 : b.index === 0 ? 1 : b.genre.localeCompare(a.genre),
-                  )
-                  .map(({ genre, index }) => (
-                    <option key={genre} value={index}>
-                      {genre}
-                    </option>
-                  ))}
-              </select>
-              <button
-                onClick={() => {
-                  const newQuestions = questions.map((qa, i) => {
-                    if (checked.includes(i)) {
-                      qa[3] = moveGenreTarget as GenreID;
-                    }
+              setQuestions(questions.filter((_, j) => !checked.includes(j)));
 
-                    return qa;
-                  });
-                  setQuestions(newQuestions);
-                  setChecked([]);
-                  setMoveGenreTarget(0 as GenreID);
-                }}
-              >
-                に変更
-              </button>
-            </div>
-          </div>
-        )}
+              if (Array.isArray(order)) {
+                setOrder(order.filter((i) => !checked.includes(i)));
+              }
+
+              setChecked([]);
+            }}
+          >
+            削除
+          </button>
+          <select
+            value={-1}
+            onChange={(e) => {
+              const target = Number.parseInt(e.target.value) as FolderID;
+
+              const newQuestions = questions.map((qa, i) => {
+                if (checked.includes(i)) {
+                  qa[2] = target;
+                }
+
+                return qa;
+              });
+              setQuestions(newQuestions);
+              setChecked([]);
+            }}
+          >
+            <option value={-1}>フォルダ移動</option>
+            {folders
+              .map((folder, index) => ({ folder, index }))
+              .toSorted((a, b) =>
+                a.index === 0 ? -1 : b.index === 0 ? 1 : b.folder.localeCompare(a.folder),
+              )
+              .map(({ folder, index }) => (
+                <option key={folder} value={index}>
+                  {folder}
+                </option>
+              ))}
+          </select>
+          <select
+            value={-1}
+            onChange={(e) => {
+              const target = Number.parseInt(e.target.value) as GenreID;
+
+              const newQuestions = questions.map((qa, i) => {
+                if (checked.includes(i)) {
+                  qa[3] = target;
+                }
+
+                return qa;
+              });
+              setQuestions(newQuestions);
+              setChecked([]);
+            }}
+          >
+            <option value={-1}>ジャンル変更</option>
+            {genres
+              .map((genre, index) => ({ genre, index }))
+              .toSorted((a, b) =>
+                a.index === 0 ? -1 : b.index === 0 ? 1 : b.genre.localeCompare(a.genre),
+              )
+              .map(({ genre, index }) => (
+                <option key={genre} value={index}>
+                  {genre}
+                </option>
+              ))}
+          </select>
+        </div>
 
         <div className={"global-toolbar " + (unlocked ? "unlocked" : "")}>
           <div>

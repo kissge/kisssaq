@@ -139,11 +139,23 @@ table {
   backdrop-filter: blur(14px);
   box-shadow: var(--shadow);
   display: flex;
+  opacity: 0;
+  translate: 0 1em;
+  pointer-events: none;
+  transition:
+    opacity 0.3s ease-in,
+    translate 0.3s ease;
 
   input[type="text"] {
     width: 100%;
     box-sizing: border-box;
     padding: 0 0.75em;
+  }
+
+  &.shown {
+    opacity: 1;
+    translate: 0;
+    pointer-events: auto;
   }
 }
 
@@ -152,19 +164,57 @@ table {
 }
 
 .bulk-toolbar {
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   gap: 0.5em;
+  animation: appear 0.3s ease-in;
+
+  & > :is(div, select, button) {
+    min-width: 0;
+    height: 3em;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+  }
+
+  & > input[type="checkbox"] {
+    flex: 0 0 auto;
+  }
 
   & > div {
-    display: flex;
-    gap: 0.25em;
+    flex: 0 0 auto;
   }
 
   select,
   button {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    height: 3em;
     font-size: 0.8em;
     padding: 0.45em 0.6em;
+  }
+
+  & > select {
+    flex: 1 1 0;
+    width: 0;
+  }
+
+  & > button {
+    flex: 0 1 auto;
+    max-width: 7em;
+  }
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    translate: 0 1em;
+  }
+  to {
+    opacity: 1;
+    translate: 0;
   }
 }
 
