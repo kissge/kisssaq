@@ -391,7 +391,8 @@ dialog {
     align-items: flex-start;
     margin-bottom: 0.25em;
 
-    div {
+    div,
+    h3 {
       padding: 0.35em 0;
     }
 
