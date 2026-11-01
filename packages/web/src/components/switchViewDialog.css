@@ -12,6 +12,7 @@
     cursor: pointer;
 
     &.active {
+      font-weight: bold;
       background-color: var(--accent-bg);
     }
 

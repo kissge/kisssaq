@@ -408,6 +408,13 @@ dialog {
     }
   }
 
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.5em;
+  }
+
   p {
     margin: 0.5em 0;
   }

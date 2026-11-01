@@ -495,6 +495,28 @@ function App() {
           newFolders[index] = newName;
           setFolders(newFolders);
         }}
+        onItemRemove={(index) => {
+          const newFolders = [...folders];
+          newFolders.splice(index, 1);
+          setFolders(newFolders);
+
+          const newQuestions = questions.map((qa) => {
+            if ((qa[2] ?? 0) === index) {
+              qa[2] = 0 as FolderID;
+            } else if ((qa[2] ?? 0) > index) {
+              qa[2] = ((qa[2] ?? 0) - 1) as FolderID;
+            }
+
+            return qa;
+          });
+          setQuestions(newQuestions);
+
+          if (activeFolder === index) {
+            setActiveFolder(null);
+          } else if ((activeFolder ?? 0) > index) {
+            setActiveFolder(((activeFolder ?? 0) - 1) as FolderID);
+          }
+        }}
       />
 
       <SwitchViewDialog
@@ -512,6 +534,28 @@ function App() {
           const newGenres = [...genres];
           newGenres[index] = newName;
           setGenres(newGenres);
+        }}
+        onItemRemove={(index) => {
+          const newGenres = [...genres];
+          newGenres.splice(index, 1);
+          setGenres(newGenres);
+
+          const newQuestions = questions.map((qa) => {
+            if ((qa[3] ?? 0) === index) {
+              qa[3] = 0 as GenreID;
+            } else if ((qa[3] ?? 0) > index) {
+              qa[3] = ((qa[3] ?? 0) - 1) as GenreID;
+            }
+
+            return qa;
+          });
+          setQuestions(newQuestions);
+
+          if (activeGenre === index) {
+            setActiveGenre(null);
+          } else if ((activeGenre ?? 0) > index) {
+            setActiveGenre(((activeGenre ?? 0) - 1) as GenreID);
+          }
         }}
       />
 
