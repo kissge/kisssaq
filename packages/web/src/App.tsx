@@ -37,8 +37,6 @@ function App() {
   const [activeFolder, setActiveFolder] = useLocalStorage<FolderID | null>("activeFolder", null);
   const [activeGenre, setActiveGenre] = useLocalStorage<GenreID | null>("activeGenre", null);
   const [currentEditTarget, setCurrentEditTarget] = useState<EditTarget | null>(null);
-  const [moveFolderTarget, setMoveFolderTarget] = useState(0 as FolderID);
-  const [moveGenreTarget, setMoveGenreTarget] = useState(0 as GenreID);
   const [order, setOrder] = useState<"default" | "genre" | number[]>("default");
   const [showSearchBox, setShowSearchBox] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -240,7 +238,24 @@ function App() {
           <select
             value={-1}
             onChange={(e) => {
-              const target = Number.parseInt(e.target.value) as FolderID;
+              const target = (() => {
+                if (e.target.value === "new") {
+                  const newFolderName = prompt("新しいフォルダ名を入力してください。");
+                  if (!newFolderName) {
+                    return;
+                  }
+
+                  setFolders([...folders, newFolderName]);
+
+                  return folders.length as FolderID;
+                } else {
+                  return Number.parseInt(e.target.value) as FolderID;
+                }
+              })();
+
+              if (target === undefined) {
+                return;
+              }
 
               const newQuestions = questions.map((qa, i) => {
                 if (checked.includes(i)) {
@@ -264,11 +279,29 @@ function App() {
                   {folder}
                 </option>
               ))}
+            <option value="new">（新規フォルダ作成）</option>
           </select>
           <select
             value={-1}
             onChange={(e) => {
-              const target = Number.parseInt(e.target.value) as GenreID;
+              const target = (() => {
+                if (e.target.value === "new") {
+                  const newGenreName = prompt("新しいジャンル名を入力してください。");
+                  if (!newGenreName) {
+                    return;
+                  }
+
+                  setGenres([...genres, newGenreName]);
+
+                  return genres.length as GenreID;
+                } else {
+                  return Number.parseInt(e.target.value) as GenreID;
+                }
+              })();
+
+              if (target === undefined) {
+                return;
+              }
 
               const newQuestions = questions.map((qa, i) => {
                 if (checked.includes(i)) {
@@ -292,6 +325,7 @@ function App() {
                   {genre}
                 </option>
               ))}
+            <option value="new">（新規ジャンル作成）</option>
           </select>
         </div>
 
