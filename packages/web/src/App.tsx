@@ -54,13 +54,13 @@ function App() {
     return null;
   }
 
-  function startEdit(id: number) {
+  function startEdit(id: number, isNew: boolean = false) {
     const q = questions[id]?.[0] ?? "";
     const a = questions[id]?.[1] ?? "";
     const f = questions[id]?.[2] ?? activeFolder ?? (0 as FolderID);
     const g = questions[id]?.[3] ?? activeGenre ?? (0 as GenreID);
     const c = questions[id]?.[4] ?? ("" as CommentText);
-    setCurrentEditTarget({ q, a, f, g, c, id, modified: false });
+    setCurrentEditTarget({ q, a, f, g, c, id, modified: false, isNew });
     editDialogRef.current?.showModal();
     setTimeout(() => editDialogRef.current?.querySelector("textarea")?.focus(), 10);
   }
@@ -396,7 +396,7 @@ function App() {
                   setOrder([...order, questions.length]);
                 }
 
-                startEdit(questions.length);
+                startEdit(questions.length, true);
               }}
             >
               追加
@@ -459,6 +459,15 @@ function App() {
           newQuestions[value.id] = [value.q, value.a, value.f, value.g, value.c];
           setQuestions(newQuestions);
         }}
+        onCancelAdd={(id) => {
+          const newQuestions = [...questions];
+          newQuestions.splice(id, 1);
+          setQuestions(newQuestions);
+
+          if (Array.isArray(order)) {
+            setOrder(order.filter((i) => i !== id));
+          }
+        }}
       />
 
       <ImportDialog
@@ -519,6 +528,10 @@ function App() {
           } else if ((activeFolder ?? 0) > index) {
             setActiveFolder(((activeFolder ?? 0) - 1) as FolderID);
           }
+
+          if (Array.isArray(order)) {
+            setOrder(order.filter((i) => (questions[i]?.[2] ?? 0) !== index));
+          }
         }}
       />
 
@@ -558,6 +571,10 @@ function App() {
             setActiveGenre(null);
           } else if ((activeGenre ?? 0) > index) {
             setActiveGenre(((activeGenre ?? 0) - 1) as GenreID);
+          }
+
+          if (Array.isArray(order)) {
+            setOrder(order.filter((i) => (questions[i]?.[3] ?? 0) !== index));
           }
         }}
       />

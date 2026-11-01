@@ -10,6 +10,7 @@ export interface EditTarget {
   g: GenreID;
   c: CommentText;
   modified: boolean;
+  isNew: boolean;
 }
 
 const EditDialog = forwardRef<
@@ -20,8 +21,9 @@ const EditDialog = forwardRef<
     genres: string[];
     onChange: (value: EditTarget) => void;
     onSave: (value: EditTarget) => void;
+    onCancelAdd: (id: number) => void;
   }
->(({ currentEditTarget, folders, genres, onChange, onSave }, ref) => {
+>(({ currentEditTarget, folders, genres, onChange, onSave, onCancelAdd }, ref) => {
   function save() {
     onSave(currentEditTarget!);
     onChange({ ...currentEditTarget!, modified: false });
@@ -53,6 +55,15 @@ const EditDialog = forwardRef<
         if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
           event.preventDefault();
           save();
+        }
+      }}
+      onClose={() => {
+        if (currentEditTarget?.isNew) {
+          if (currentEditTarget.q || currentEditTarget.a || currentEditTarget.c) {
+            return;
+          }
+
+          onCancelAdd(currentEditTarget.id);
         }
       }}
     >
