@@ -114,7 +114,10 @@ function App() {
         {activeFolder === null && activeGenre === null && questions.length === 0 ? (
           <div className="welcome-message">
             <h1>
-              自作問題管理アプリ
+              <span>自作</span>
+              <span>問題</span>
+              <span>管理</span>
+              <span>アプリ</span>
               <ruby>
                 kissSaq
                 <rt>きすさく</rt>

@@ -19,12 +19,21 @@
   animation: fade-in 1s ease-in;
 
   h1 {
-    line-height: 2;
+    font-size: 2.5em;
+    line-height: 1.4;
+    text-wrap: pretty;
+
+    span {
+      display: inline-block;
+    }
+
+    ruby {
+      color: var(--accent);
+    }
 
     rt {
       color: var(--text);
       font: 0.5em var(--sans);
-      letter-spacing: 0.15em;
     }
   }
 
