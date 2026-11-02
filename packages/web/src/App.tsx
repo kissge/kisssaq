@@ -75,8 +75,11 @@ function App() {
             .toReversed()
             .toSorted((a, b) => (a.qa[3] ?? 0) - (b.qa[3] ?? 0))
   ).filter(
-    ({ qa: [q, a, f, g] }) =>
-      (!searchKeyword || q.includes(searchKeyword) || a.includes(searchKeyword)) &&
+    ({ qa: [q, a, f, g, c] }) =>
+      (!searchKeyword ||
+        q.includes(searchKeyword) ||
+        a.includes(searchKeyword) ||
+        c?.includes(searchKeyword)) &&
       (activeFolder === null || (f ?? 0) === activeFolder) &&
       (activeGenre === null || (g ?? 0) === activeGenre),
   );
