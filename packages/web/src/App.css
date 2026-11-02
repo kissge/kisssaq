@@ -270,7 +270,7 @@ table {
   .long-folder-name {
     font-size: 0.95em;
     line-height: 1.25;
-    max-width: 6em;
+    max-width: 5.8em;
     overflow: hidden;
     -webkit-line-clamp: 2;
     line-clamp: 2;
