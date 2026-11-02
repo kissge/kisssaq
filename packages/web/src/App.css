@@ -385,7 +385,6 @@ dialog {
   width: calc(100% - 3em);
   max-width: 500px;
   max-height: calc(100dvh - 2em);
-  margin: 1em auto;
   padding: 1.25rem;
   border: 1px solid var(--border);
   border-radius: 18px;
@@ -393,6 +392,13 @@ dialog {
   color: var(--text);
   box-shadow: var(--shadow);
   overflow-y: auto;
+
+  position: fixed;
+  box-sizing: border-box;
+  margin: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, calc(-50% - env(keyboard-inset-height, 0px) / 2));
 
   .toolbar {
     display: flex;
@@ -488,18 +494,6 @@ dialog {
   input[type="radio"],
   input[type="checkbox"] {
     margin-right: 0.5em;
-  }
-}
-
-@media (hover: hover) and (pointer: fine) {
-  /* for PCs */
-  dialog {
-    position: fixed;
-    box-sizing: border-box;
-    margin: 0;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
   }
 }
 
