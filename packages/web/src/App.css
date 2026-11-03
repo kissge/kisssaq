@@ -131,7 +131,7 @@ table {
 .search-toolbar,
 .bulk-toolbar {
   position: fixed;
-  bottom: calc(5.2em + env(keyboard-inset-height, 0px));
+  bottom: calc(5.2em + env(keyboard-inset-height, 0px) / 2);
   z-index: 2;
   box-sizing: border-box;
   padding: 0.7em 1em;
