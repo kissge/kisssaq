@@ -7,6 +7,7 @@
     "web:build": "pnpm --filter @kisssaq/web build",
     "api:dev": "pnpm --filter @kisssaq/api dev",
     "api:typecheck": "pnpm --filter @kisssaq/api typecheck",
+    "dev": "pnpm --parallel dev",
     "lint": "oxlint",
     "format": "oxfmt --ignore-path .oxfmtignore",
     "format:check": "oxfmt --check --ignore-path .oxfmtignore",
