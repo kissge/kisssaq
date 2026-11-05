@@ -177,8 +177,8 @@ function App() {
                     <span className="genre-label">{genres[questions[i][3] ?? 0]}</span>
                   )}
                   {q
-                    ? splitQuestion(q).map(({ type, text }) => (
-                        <span key={text} className={type}>
+                    ? splitQuestion(q).map(({ type, text }, i) => (
+                        <span key={text + i} className={type}>
                           {text}
                         </span>
                       ))
