@@ -93,7 +93,7 @@ const SyncDialog = forwardRef<
 
       <hr />
 
-      <h3>この端末のユーザーIDを変更</h3>
+      <h3>このデバイスのユーザーIDを変更</h3>
       <p className="description">
         別のデバイスからコピーしてきたユーザーIDに変更すると、そのデバイスとクラウドデータを共有できます。一方のデバイスで問題を追加・編集すると、もう一方のデバイスにも同期されます。
       </p>
@@ -106,7 +106,7 @@ const SyncDialog = forwardRef<
           placeholder="ユーザーID (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)"
         />
         <button disabled={checking} onClick={changeUserID}>
-          {checking ? "確認中..." : "このユーザーIDに変更する"}
+          {checking ? "確認中..." : "変更する"}
         </button>
       </div>
     </dialog>

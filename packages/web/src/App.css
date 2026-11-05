@@ -447,19 +447,28 @@ dialog {
 
   .user-id {
     display: flex;
-    justify-content: center;
+    flex-wrap: wrap;
     gap: 0.5em;
     margin-top: 1em;
 
     input {
       font-family: monospace;
-      flex: 1;
+      flex: 10 1 auto;
       min-width: 0;
     }
 
     code {
+      flex: 10 1 auto;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       overflow-wrap: anywhere;
       user-select: all;
+    }
+
+    button {
+      flex: 1 1 auto;
     }
   }
 
