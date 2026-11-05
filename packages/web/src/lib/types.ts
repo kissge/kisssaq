@@ -11,3 +11,9 @@ export type Row = [
   GenreID | null | undefined,
   CommentText | null | undefined,
 ];
+
+export interface Config {
+  questionLengthThreshold: number;
+  showGenre: boolean;
+  showComment: boolean;
+}

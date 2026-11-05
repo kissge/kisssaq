@@ -125,6 +125,18 @@ table {
     .over {
       background-color: light-dark(#ccc, #555);
     }
+
+    .comment {
+      margin-top: 0.5em;
+      font-size: 0.8em;
+      line-height: 1.2;
+
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      line-clamp: 3;
+      -webkit-line-clamp: 3;
+      overflow: hidden;
+    }
   }
 }
 

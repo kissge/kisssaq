@@ -1,20 +1,17 @@
 import { forwardRef, useEffect, useState } from "react";
 import "./settingsDialog.css";
+import type { Config } from "../lib/types";
 
 const SettingsDialog = forwardRef<
   HTMLDialogElement,
-  { questionLengthLimit: number; onChange: (value: number) => void }
->(function SettingsDialog({ questionLengthLimit, onChange }, ref) {
-  const [draftQuestionLengthLimit, setDraftQuestionLengthLimit] = useState(
-    String(questionLengthLimit),
-  );
+  { config: Config; onChange: (value: Config) => void }
+>(function SettingsDialog({ config, onChange }, ref) {
+  const [draft, setDraft] = useState<Config>({ ...config });
 
-  useEffect(() => {
-    setDraftQuestionLengthLimit(String(questionLengthLimit));
-  }, [questionLengthLimit]);
+  useEffect(() => setDraft({ ...config }), [config]);
 
-  const parsedQuestionLengthLimit = Number.parseInt(draftQuestionLengthLimit, 10);
-  const canSave = Number.isInteger(parsedQuestionLengthLimit) && parsedQuestionLengthLimit > 0;
+  const canSave =
+    Number.isInteger(draft.questionLengthThreshold) && draft.questionLengthThreshold > 0;
 
   return (
     <dialog
@@ -22,12 +19,13 @@ const SettingsDialog = forwardRef<
       id="settingsDialog"
       closedby="any"
       onClick={(event) => event.stopPropagation()}
-      onClose={() => setDraftQuestionLengthLimit(String(questionLengthLimit))}
+      onClose={() => setDraft({ ...config })}
     >
       <div className="toolbar">
         <h3>設定</h3>
         <button onClick={() => typeof ref !== "function" && ref?.current?.close()}>✕</button>
       </div>
+
       <label className="settings-field">
         <div className="settings-field-label">
           <div>問題文長すぎアラート</div>
@@ -38,18 +36,74 @@ const SettingsDialog = forwardRef<
             type="number"
             min="1"
             step="1"
-            value={draftQuestionLengthLimit}
-            onChange={(event) => setDraftQuestionLengthLimit(event.target.value)}
+            value={draft.questionLengthThreshold}
+            onChange={(event) =>
+              setDraft({
+                ...draft,
+                questionLengthThreshold: Number.parseInt(event.target.value, 10),
+              })
+            }
           />
           文字
         </span>
       </label>
+      <div className="settings-field">
+        <div className="settings-field-label">
+          <div>ジャンル</div>
+        </div>
+        <div className="settings-input">
+          <label>
+            <input
+              type="radio"
+              name="showGenre"
+              checked={draft.showGenre}
+              onChange={() => setDraft({ ...draft, showGenre: true })}
+            />
+            常に表示
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="showGenre"
+              checked={!draft.showGenre}
+              onChange={() => setDraft({ ...draft, showGenre: false })}
+            />
+            ジャンル順の時のみ
+          </label>
+        </div>
+      </div>
+      <div className="settings-field">
+        <div className="settings-field-label">
+          <div>コメント</div>
+        </div>
+        <div className="settings-input">
+          <label>
+            <input
+              type="radio"
+              name="showComment"
+              checked={draft.showComment}
+              onChange={() => setDraft({ ...draft, showComment: true })}
+            />
+            表示
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="showComment"
+              checked={!draft.showComment}
+              onChange={() => setDraft({ ...draft, showComment: false })}
+            />
+            非表示
+          </label>
+        </div>
+      </div>
+
       <div className="settings-actions">
         <button
           className="primary-btn"
           disabled={!canSave}
           onClick={() => {
-            onChange(parsedQuestionLengthLimit);
+            onChange(draft);
             if (typeof ref !== "function") ref?.current?.close();
           }}
         >

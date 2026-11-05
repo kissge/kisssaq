@@ -11,7 +11,7 @@ import SyncDialog from "./components/syncDialog";
 import SettingsDialog from "./components/settingsDialog";
 import { useDatabase } from "./hooks/useDatabase";
 import { useUnlocked } from "./hooks/useUnlocked";
-import type { CommentText, FolderID, GenreID, Row } from "./lib/types";
+import type { CommentText, Config, FolderID, GenreID, Row } from "./lib/types";
 import { authorURL, wishlistURL } from "kissunlocklib";
 
 function isLong(text: string, threshold: number = 10): boolean {
@@ -40,7 +40,11 @@ function App() {
   const [order, setOrder] = useState<"default" | "genre" | number[]>("default");
   const [showSearchBox, setShowSearchBox] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [questionLengthLimit, setQuestionLengthLimit] = useLocalStorage("questionLengthLimit", 60);
+  const [config, setConfig] = useLocalStorage<Config>("kissSaqConfig", {
+    questionLengthThreshold: 60,
+    showGenre: false,
+    showComment: true,
+  });
   const editDialogRef = useRef<HTMLDialogElement>(null);
   const switchFolderDialogRef = useRef<HTMLDialogElement>(null);
   const switchGenreDialogRef = useRef<HTMLDialogElement>(null);
@@ -86,7 +90,7 @@ function App() {
 
   function splitQuestion(
     q: string,
-    limit: number = questionLengthLimit,
+    limit: number = config.questionLengthThreshold,
   ): { type: "normal" | "dimmed" | "over"; text: string }[] {
     const split = q.split(/(（.+?）|\(.+?\)|【.+?】|［.+?］)/);
     const result = [];
@@ -157,7 +161,7 @@ function App() {
           }}
         >
           <tbody>
-            {filteredQuestions.map(({ i, qa: [q, a] }) => (
+            {filteredQuestions.map(({ i, qa: [q, a, , , c] }) => (
               <tr key={i + q}>
                 <th>
                   <input
@@ -173,7 +177,7 @@ function App() {
                   />
                 </th>
                 <td onClick={() => startEdit(i)}>
-                  {order === "genre" && (
+                  {(order === "genre" || config.showGenre) && (
                     <span className="genre-label">{genres[questions[i][3] ?? 0]}</span>
                   )}
                   {q
@@ -183,6 +187,7 @@ function App() {
                         </span>
                       ))
                     : "ここをクリックして編集"}
+                  {config.showComment && c && <div className="comment">📝 {c}</div>}
                 </td>
                 <td onClick={() => startEdit(i)}>{a}</td>
               </tr>
@@ -589,8 +594,8 @@ function App() {
 
       <SettingsDialog
         ref={settingsDialogRef}
-        questionLengthLimit={questionLengthLimit}
-        onChange={setQuestionLengthLimit}
+        config={config}
+        onChange={(config) => setConfig({ ...config })}
       />
 
       {unlocked && syncStatus !== "idle" && (
