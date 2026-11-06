@@ -3,3 +3,4 @@ packages:
 allowBuilds:
   esbuild: true
   workerd: true
+  kissunlocklib@https://codeload.github.com/kissge/kissqlib/tar.gz/80678a1e6e87ede3e3635d1812382cb7b5a5635a#path:packages/kissunlocklib: true

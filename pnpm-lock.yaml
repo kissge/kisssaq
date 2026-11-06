@@ -46,8 +46,8 @@ importers:
         specifier: ^5.5.11
         version: 5.5.11
       kissunlocklib:
-        specifier: github:kissge/kissunlocklib
-        version: https://codeload.github.com/kissge/kissunlocklib/tar.gz/fef87d485e14481d27aa9482033d170e61e9ae20
+        specifier: github:kissge/kissqlib#path:packages/kissunlocklib
+        version: https://codeload.github.com/kissge/kissqlib/tar.gz/80678a1e6e87ede3e3635d1812382cb7b5a5635a#path:packages/kissunlocklib
       react:
         specifier: ^19.2.6
         version: 19.2.7
@@ -2446,9 +2446,9 @@ packages:
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
 
-  kissunlocklib@https://codeload.github.com/kissge/kissunlocklib/tar.gz/fef87d485e14481d27aa9482033d170e61e9ae20:
-    resolution: {gitHosted: true, integrity: sha512-+iogNiiX3bF56LzrrWZKV5Tq6Z8qxTCHsutvSCgfKs/QtG7P3oR2lJg6nuHnVL+XAtXOLmAZyruZYsUlfINdRQ==, tarball: https://codeload.github.com/kissge/kissunlocklib/tar.gz/fef87d485e14481d27aa9482033d170e61e9ae20}
-    version: 0.1.0
+  kissunlocklib@https://codeload.github.com/kissge/kissqlib/tar.gz/80678a1e6e87ede3e3635d1812382cb7b5a5635a#path:packages/kissunlocklib:
+    resolution: {gitHosted: true, integrity: sha512-Cuw86urzzCCab8hLOAsFB3nDY2N8+DIZaBRzdtNdMN4Vx9NAnHwVAyvvBS6b+dThn2yPEhmif9nMSiYaV2L6Zg==, path: packages/kissunlocklib, tarball: https://codeload.github.com/kissge/kissqlib/tar.gz/80678a1e6e87ede3e3635d1812382cb7b5a5635a}
+    version: 0.0.0
 
   kleur@4.1.5:
     resolution: {integrity: sha512-o+NO+8WrRiQEE4/7nwRJhN1HWpVmJm511pBHUxPLtp0BUISzlBplORYSmTclCnJvQq2tKu/sgl3xVpkc7ZWuQQ==}
@@ -5644,7 +5644,7 @@ snapshots:
     dependencies:
       json-buffer: 3.0.1
 
-  kissunlocklib@https://codeload.github.com/kissge/kissunlocklib/tar.gz/fef87d485e14481d27aa9482033d170e61e9ae20: {}
+  kissunlocklib@https://codeload.github.com/kissge/kissqlib/tar.gz/80678a1e6e87ede3e3635d1812382cb7b5a5635a#path:packages/kissunlocklib: {}
 
   kleur@4.1.5: {}
 
