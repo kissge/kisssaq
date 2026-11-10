@@ -71,7 +71,6 @@ function App() {
     const c = questions[id]?.[4] ?? ("" as CommentText);
     setCurrentEditTarget({ q, a, f, g, c, id, modified: false, isNew });
     editDialogRef.current?.showModal();
-    setTimeout(() => editDialogRef.current?.querySelector("textarea")?.focus(), 10);
   }
 
   const filteredQuestions = (

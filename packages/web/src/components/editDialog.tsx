@@ -92,6 +92,7 @@ const EditDialog = forwardRef<
           </div>
           <textarea
             value={currentEditTarget.q}
+            autoFocus
             onChange={(e) =>
               onChange({ ...currentEditTarget, modified: true, q: e.target.value as Question })
             }
