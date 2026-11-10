@@ -81,6 +81,8 @@ function App() {
     editDialogRef.current?.showModal();
   }
 
+  const searchRegExp = new RegExp(RegExp.escape(searchKeyword), "i");
+
   const filteredQuestions = (() => {
     if (Array.isArray(order)) {
       return order.map((i) => ({ i, qa: questions[i] }));
@@ -108,9 +110,9 @@ function App() {
   })().filter(
     ({ qa: [q, a, f, g, c] }) =>
       (!searchKeyword ||
-        q.includes(searchKeyword) ||
-        a.includes(searchKeyword) ||
-        c?.includes(searchKeyword)) &&
+        searchRegExp.test(q) ||
+        searchRegExp.test(a) ||
+        (c && searchRegExp.test(c))) &&
       (activeFolder === null || (f ?? 0) === activeFolder) &&
       (activeGenre === null || (g ?? 0) === activeGenre),
   );
