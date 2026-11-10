@@ -11,10 +11,10 @@ const databaseSchema = z.object({
     z.tuple([
       z.string(),
       z.string(),
-      z.number().nullable(),
-      z.number().nullable(),
-      z.string().nullable(),
-      z.number().nullable(),
+      z.number().nullable().optional(),
+      z.number().nullable().optional(),
+      z.string().nullable().optional(),
+      z.number().nullable().optional(),
     ]),
   ),
   /** folder names */
