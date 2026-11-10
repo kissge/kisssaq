@@ -47,7 +47,7 @@ importers:
         version: 5.5.11
       kisscsvimport:
         specifier: github:kissge/kissqlib#path:packages/kisscsvimport
-        version: https://codeload.github.com/kissge/kissqlib/tar.gz/15414baad4d44c2ac0f22d8b51fc1250a81af9ec#path:packages/kisscsvimport
+        version: https://codeload.github.com/kissge/kissqlib/tar.gz/02b0a470e9e5f34dce49664417f81f577a2dd48e#path:packages/kisscsvimport
       kissunlocklib:
         specifier: github:kissge/kissqlib#path:packages/kissunlocklib
         version: https://codeload.github.com/kissge/kissqlib/tar.gz/80678a1e6e87ede3e3635d1812382cb7b5a5635a#path:packages/kissunlocklib
@@ -2459,8 +2459,8 @@ packages:
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
 
-  kisscsvimport@https://codeload.github.com/kissge/kissqlib/tar.gz/15414baad4d44c2ac0f22d8b51fc1250a81af9ec#path:packages/kisscsvimport:
-    resolution: {gitHosted: true, integrity: sha512-Kl1CD5odBHDereDYXNA+UDLRi0O9jEx2jh+hhToucEkAW/YtwBnJCgkIUGMcjHD00WQTIzaJ9LUrlUwmCvKFBA==, path: packages/kisscsvimport, tarball: https://codeload.github.com/kissge/kissqlib/tar.gz/15414baad4d44c2ac0f22d8b51fc1250a81af9ec}
+  kisscsvimport@https://codeload.github.com/kissge/kissqlib/tar.gz/02b0a470e9e5f34dce49664417f81f577a2dd48e#path:packages/kisscsvimport:
+    resolution: {gitHosted: true, integrity: sha512-GhSUOY8BQio3N78WVD25z+L7qzeAJ5nLaswkDaz9B0AD/MsP01115gRTapTHxbTvFHzY++Xkxf9EyszfTy4DSA==, path: packages/kisscsvimport, tarball: https://codeload.github.com/kissge/kissqlib/tar.gz/02b0a470e9e5f34dce49664417f81f577a2dd48e}
     version: 0.0.0
 
   kissunlocklib@https://codeload.github.com/kissge/kissqlib/tar.gz/80678a1e6e87ede3e3635d1812382cb7b5a5635a#path:packages/kissunlocklib:
@@ -5681,7 +5681,7 @@ snapshots:
     dependencies:
       json-buffer: 3.0.1
 
-  kisscsvimport@https://codeload.github.com/kissge/kissqlib/tar.gz/15414baad4d44c2ac0f22d8b51fc1250a81af9ec#path:packages/kisscsvimport:
+  kisscsvimport@https://codeload.github.com/kissge/kissqlib/tar.gz/02b0a470e9e5f34dce49664417f81f577a2dd48e#path:packages/kisscsvimport:
     dependencies:
       json-2-csv: 5.6.0
       lit: 3.3.3
