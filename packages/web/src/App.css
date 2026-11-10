@@ -79,6 +79,15 @@ table {
 
   tr {
     cursor: pointer;
+    --hue: 0;
+
+    &.flagged {
+      background-image: linear-gradient(
+        90deg,
+        hsla(var(--hue), 57%, 50%, 0.3) 10%,
+        hsla(var(--hue), 57%, 50%, 0) 30%
+      );
+    }
 
     &:nth-child(even) {
       background-color: color-mix(in srgb, var(--accent-bg) 35%, transparent);

@@ -6,7 +6,7 @@ import { z } from "zod";
 import "../worker-configuration.d.ts";
 
 const databaseSchema = z.object({
-  /** [question, answer, folderID, genreID, comment] */
+  /** [question, answer, folderID, genreID, comment, flag] */
   q: z.array(
     z.tuple([
       z.string(),
@@ -14,6 +14,7 @@ const databaseSchema = z.object({
       z.number().nullable(),
       z.number().nullable(),
       z.string().nullable(),
+      z.number().nullable(),
     ]),
   ),
   /** folder names */

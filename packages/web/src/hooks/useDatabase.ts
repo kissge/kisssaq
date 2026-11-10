@@ -96,12 +96,13 @@ async function writeRemoteDatabase(database: StoredDatabase): Promise<boolean> {
       param: { id: database.userID },
       json: {
         db: {
-          q: database.questions.map(([q, a, f, g, comment]) => [
+          q: database.questions.map(([q, a, f, g, comment, flag]) => [
             q,
             a,
             f ?? null,
             g ?? null,
             comment ?? null,
+            flag ?? null,
           ]),
           f: database.folders,
           g: database.genres,

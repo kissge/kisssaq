@@ -1,5 +1,13 @@
 import { forwardRef, useEffect } from "react";
-import type { Answer, FolderID, GenreID, Question, CommentText } from "../lib/types";
+import {
+  type Answer,
+  Flag,
+  type FolderID,
+  type GenreID,
+  type Question,
+  type CommentText,
+  FlagCount,
+} from "../lib/types";
 import "./editDialog.css";
 
 export interface EditTarget {
@@ -9,6 +17,7 @@ export interface EditTarget {
   f: FolderID;
   g: GenreID;
   c: CommentText;
+  flag: Flag | null;
   modified: boolean;
   isNew: boolean;
 }
@@ -115,6 +124,31 @@ const EditDialog = forwardRef<
             }
             placeholder="自由記入欄"
           />
+          <div className="flex flags-wrapper">
+            フラグ
+            {Array.from({ length: FlagCount }, (_, i) => Flag(i + 1)).map((flag) => (
+              <label
+                key={flag}
+                className={currentEditTarget.flag === flag ? "flagged" : ""}
+                style={{ "--hue": ((flag + 2) * (360 / FlagCount)) % 360 } as React.CSSProperties}
+              >
+                ★
+                <input
+                  type="radio"
+                  name="flag"
+                  defaultChecked={currentEditTarget.flag === flag}
+                  onClick={(e) => {
+                    if (currentEditTarget.flag === flag) {
+                      (e.target as HTMLInputElement).checked = false;
+                      onChange({ ...currentEditTarget, modified: true, flag: null });
+                    } else {
+                      onChange({ ...currentEditTarget, modified: true, flag });
+                    }
+                  }}
+                />
+              </label>
+            ))}
+          </div>
           <div className="flex">
             <select
               value={currentEditTarget.f}

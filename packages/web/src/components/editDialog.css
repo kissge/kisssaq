@@ -11,3 +11,32 @@
     padding: 0.35em 0.7em;
   }
 }
+
+.flags-wrapper {
+  align-items: center;
+  min-height: 3em;
+  box-sizing: border-box;
+  padding: 0.6em 0.8em;
+  margin-bottom: 0.4em;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text-h);
+  outline: none;
+  user-select: none;
+
+  --hue: 0;
+
+  label {
+    color: #ccc;
+    font-size: 2em;
+
+    &.flagged {
+      color: hsl(var(--hue), 90%, 40%);
+    }
+
+    input[type="radio"] {
+      display: none;
+    }
+  }
+}

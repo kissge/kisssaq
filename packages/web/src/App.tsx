@@ -11,7 +11,14 @@ import SyncDialog from "./components/syncDialog";
 import SettingsDialog from "./components/settingsDialog";
 import { useDatabase } from "./hooks/useDatabase";
 import { useUnlocked } from "./hooks/useUnlocked";
-import type { CommentText, Config, FolderID, GenreID, Row } from "./lib/types";
+import {
+  FlagCount,
+  type CommentText,
+  type Config,
+  type FolderID,
+  type GenreID,
+  type Row,
+} from "./lib/types";
 
 function isLong(text: string, threshold: number = 10): boolean {
   const length = text.length + [...text].filter((c) => c.charCodeAt(0) > 255).length;
@@ -36,7 +43,7 @@ function App() {
   const [activeFolder, setActiveFolder] = useLocalStorage<FolderID | null>("activeFolder", null);
   const [activeGenre, setActiveGenre] = useLocalStorage<GenreID | null>("activeGenre", null);
   const [currentEditTarget, setCurrentEditTarget] = useState<EditTarget | null>(null);
-  const [order, setOrder] = useState<"default" | "genre" | number[]>("default");
+  const [order, setOrder] = useState<"default" | "genre" | "flag" | number[]>("default");
   const [showSearchBox, setShowSearchBox] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [config, setConfig] = useLocalStorage<Config>("kissSaqConfig", {
@@ -69,20 +76,36 @@ function App() {
     const f = questions[id]?.[2] ?? activeFolder ?? (0 as FolderID);
     const g = questions[id]?.[3] ?? activeGenre ?? (0 as GenreID);
     const c = questions[id]?.[4] ?? ("" as CommentText);
-    setCurrentEditTarget({ q, a, f, g, c, id, modified: false, isNew });
+    const flag = questions[id]?.[5] ?? null;
+    setCurrentEditTarget({ q, a, f, g, c, flag, id, modified: false, isNew });
     editDialogRef.current?.showModal();
   }
 
-  const filteredQuestions = (
-    Array.isArray(order)
-      ? order.map((i) => ({ i, qa: questions[i] }))
-      : order === "default"
-        ? questions.map((qa, i) => ({ i, qa })).toReversed()
-        : questions
+  const filteredQuestions = (() => {
+    if (Array.isArray(order)) {
+      return order.map((i) => ({ i, qa: questions[i] }));
+    } else {
+      switch (order) {
+        case "default":
+          return questions.map((qa, i) => ({ i, qa })).toReversed();
+
+        case "genre":
+          return questions
             .map((qa, i) => ({ i, qa }))
             .toReversed()
-            .toSorted((a, b) => (a.qa[3] ?? 0) - (b.qa[3] ?? 0))
-  ).filter(
+            .toSorted((a, b) => (a.qa[3] ?? 0) - (b.qa[3] ?? 0));
+
+        case "flag":
+          return questions
+            .map((qa, i) => ({ i, qa }))
+            .toReversed()
+            .toSorted((a, b) => (b.qa[5] ?? -1) - (a.qa[5] ?? -1));
+
+        default:
+          throw new Error(order satisfies never);
+      }
+    }
+  })().filter(
     ({ qa: [q, a, f, g, c] }) =>
       (!searchKeyword ||
         q.includes(searchKeyword) ||
@@ -165,8 +188,12 @@ function App() {
           }}
         >
           <tbody>
-            {filteredQuestions.map(({ i, qa: [q, a, , , c] }) => (
-              <tr key={i + q}>
+            {filteredQuestions.map(({ i, qa: [q, a, , , c, f] }) => (
+              <tr
+                key={i + q}
+                className={f != null ? "flagged" : ""}
+                style={{ "--hue": ((f ?? 0 + 2) * (360 / FlagCount)) % 360 } as React.CSSProperties}
+              >
                 <th>
                   <input
                     type="checkbox"
@@ -352,16 +379,25 @@ function App() {
             <button
               disabled={questions.length === 0}
               onClick={() => {
-                setOrder(
-                  order === "default"
-                    ? questions.map((_, i) => i).toSorted(() => Math.random() - 0.5)
-                    : order === "genre"
-                      ? "default"
-                      : "genre",
-                );
+                if (Array.isArray(order)) {
+                  return setOrder("default");
+                }
+
+                switch (order) {
+                  case "default":
+                    return setOrder("genre");
+                  case "genre":
+                    return setOrder("flag");
+                  case "flag":
+                    return setOrder(questions.map((_, i) => i).toSorted(() => Math.random() - 0.5));
+                  default:
+                    order satisfies never;
+                }
               }}
             >
-              {order === "default" ? "登録順" : order === "genre" ? "ジャンル順" : "ランダム"}
+              {Array.isArray(order)
+                ? "ランダム"
+                : { default: "登録順", genre: "ジャンル順", flag: "フラグ順" }[order]}
             </button>
             <button onClick={() => switchFolderDialogRef.current?.showModal()}>
               {activeFolder === null ? (
@@ -404,7 +440,7 @@ function App() {
               onClick={() => {
                 setQuestions([
                   ...questions,
-                  ["", "", activeFolder ?? 0, activeGenre ?? 0, ""] as Row,
+                  ["", "", activeFolder ?? 0, activeGenre ?? 0, "", null] as Row,
                 ]);
 
                 if (Array.isArray(order)) {
@@ -471,7 +507,7 @@ function App() {
         onChange={setCurrentEditTarget}
         onSave={(value) => {
           const newQuestions = [...questions];
-          newQuestions[value.id] = [value.q, value.a, value.f, value.g, value.c];
+          newQuestions[value.id] = [value.q, value.a, value.f, value.g, value.c, value.flag];
           setQuestions(newQuestions);
         }}
         onCancelAdd={(id) => {
@@ -601,7 +637,7 @@ function App() {
               ...questions,
               ...detail.map(
                 ({ question, answer, comment }) =>
-                  [question, answer, activeFolder ?? 0, activeGenre ?? 0, comment] as Row,
+                  [question, answer, activeFolder ?? 0, activeGenre ?? 0, comment, null] as Row,
               ),
             ]);
             setIsCSVImportDialogOpen(false);
