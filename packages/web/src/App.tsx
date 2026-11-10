@@ -1,9 +1,9 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import { authorURL, wishlistURL } from "kissunlocklib";
 import "./App.css";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import EditDialog, { type EditTarget } from "./components/editDialog";
-import ImportDialog from "./components/importDialog";
 import ExportDialog from "./components/exportDialog";
 import SwitchViewDialog from "./components/switchViewDialog";
 import UnlockDialog from "./components/unlockDialog";
@@ -12,7 +12,6 @@ import SettingsDialog from "./components/settingsDialog";
 import { useDatabase } from "./hooks/useDatabase";
 import { useUnlocked } from "./hooks/useUnlocked";
 import type { CommentText, Config, FolderID, GenreID, Row } from "./lib/types";
-import { authorURL, wishlistURL } from "kissunlocklib";
 
 function isLong(text: string, threshold: number = 10): boolean {
   const length = text.length + [...text].filter((c) => c.charCodeAt(0) > 255).length;
@@ -45,14 +44,20 @@ function App() {
     showGenre: false,
     showComment: true,
   });
+  const [isClient, setIsClient] = useState(false);
+  const [isCSVImportDialogOpen, setIsCSVImportDialogOpen] = useState(false);
   const editDialogRef = useRef<HTMLDialogElement>(null);
   const switchFolderDialogRef = useRef<HTMLDialogElement>(null);
   const switchGenreDialogRef = useRef<HTMLDialogElement>(null);
   const unlockDialogRef = useRef<HTMLDialogElement>(null);
   const syncDialogRef = useRef<HTMLDialogElement>(null);
   const exportDialogRef = useRef<HTMLDialogElement>(null);
-  const importDialogRef = useRef<HTMLDialogElement>(null);
   const settingsDialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    setIsClient(true);
+    import("kisscsvimport");
+  }, []);
 
   if (loading) {
     return null;
@@ -441,7 +446,7 @@ function App() {
         >
           CSV出力
         </button>
-        <button onClick={() => importDialogRef.current?.showModal()}>CSV取り込み</button>
+        <button onClick={() => setIsCSVImportDialogOpen(true)}>CSV取り込み</button>
         <div className="credit">
           kissSaq<small>（きすさく）</small>
           <br />© 2026 _kidochan
@@ -478,16 +483,6 @@ function App() {
           if (Array.isArray(order)) {
             setOrder(order.filter((i) => i !== id));
           }
-        }}
-      />
-
-      <ImportDialog
-        ref={importDialogRef}
-        activeFolder={activeFolder}
-        activeGenre={activeGenre}
-        onImport={(parsed) => {
-          setOrder("default");
-          setQuestions([...questions, ...parsed] as Row[]);
         }}
       />
 
@@ -597,6 +592,24 @@ function App() {
         config={config}
         onChange={(config) => setConfig({ ...config })}
       />
+
+      {isClient && (
+        <csv-import-dialog
+          open={isCSVImportDialogOpen}
+          onimport={({ detail }) => {
+            setOrder("default");
+            setQuestions([
+              ...questions,
+              ...detail.map(
+                ({ question, answer, comment }) =>
+                  [question, answer, activeFolder ?? 0, activeGenre ?? 0, comment] as Row,
+              ),
+            ]);
+            setIsCSVImportDialogOpen(false);
+          }}
+          onclose={() => setIsCSVImportDialogOpen(false)}
+        />
+      )}
 
       {unlocked && syncStatus !== "idle" && (
         <div

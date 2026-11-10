@@ -3,4 +3,5 @@ packages:
 allowBuilds:
   esbuild: true
   workerd: true
+  kisscsvimport@https://codeload.github.com/kissge/kissqlib/tar.gz/ebc03bb45260aaccf9eb41723c41afbc2b2b4909#path:packages/kisscsvimport: true
   kissunlocklib@https://codeload.github.com/kissge/kissqlib/tar.gz/80678a1e6e87ede3e3635d1812382cb7b5a5635a#path:packages/kissunlocklib: true
