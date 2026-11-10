@@ -192,7 +192,9 @@ function App() {
               <tr
                 key={i + q}
                 className={f != null ? "flagged" : ""}
-                style={{ "--hue": ((f ?? 0 + 2) * (360 / FlagCount)) % 360 } as React.CSSProperties}
+                style={
+                  { "--hue": (((f ?? 0) + 2) * (360 / FlagCount)) % 360 } as React.CSSProperties
+                }
               >
                 <th>
                   <input
