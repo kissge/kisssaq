@@ -91,6 +91,7 @@ const EditDialog = forwardRef<
             </button>
           </div>
           <textarea
+            lang="ja"
             value={currentEditTarget.q}
             autoFocus
             onChange={(e) =>
@@ -100,6 +101,7 @@ const EditDialog = forwardRef<
             placeholder="日本の首都は？"
           />
           <textarea
+            lang="ja"
             value={currentEditTarget.a}
             onChange={(e) =>
               onChange({ ...currentEditTarget, modified: true, a: e.target.value as Answer })
@@ -108,6 +110,7 @@ const EditDialog = forwardRef<
             placeholder="東京（とうきょう）"
           />
           <textarea
+            lang="ja"
             value={currentEditTarget.c}
             onChange={(e) =>
               onChange({ ...currentEditTarget, modified: true, c: e.target.value as CommentText })
