@@ -1,9 +1,10 @@
+import "../worker-configuration.d.ts";
+
+import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { HTTPException } from "hono/http-exception";
-import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
-import "../worker-configuration.d.ts";
 
 const databaseSchema = z.object({
   /** [question, answer, folderID, genreID, comment, flag] */

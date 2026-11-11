@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      '@himynameisdave/oxfmt-config':
+        specifier: ^1.1.0
+        version: 1.1.0(oxfmt@0.74.0)
       oxfmt:
         specifier: ^0.74.0
         version: 0.74.0
@@ -873,6 +876,11 @@ packages:
   '@eslint/plugin-kit@0.7.2':
     resolution: {integrity: sha512-+CNAzxglkrpNf/kKywqQfk74QjtceuOE7Qm+AF8miRvPF/wmmK5+OJOgVh3AVTT3RP2mH3+FOaxlE5v72owk0A==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
+
+  '@himynameisdave/oxfmt-config@1.1.0':
+    resolution: {integrity: sha512-RlT2gTZQtHt+5A3Yk0ogoIDfWo9/VtttIzhGyZRDscJAmzTMPyzpZCDA6xxThldYF7j8tUdCNGru5kK3vfjhjg==}
+    peerDependencies:
+      oxfmt: '>=0.74.0 <1'
 
   '@hono/zod-validator@0.9.1':
     resolution: {integrity: sha512-iiv6w0qrIc0arfvCtUqBWsvl4fXjzaTcQcCJTTtCnkawF9HHGE+KjEl0ox3gQJ6rKZEgE3mLExlQCF72M+mNuw==}
@@ -4263,6 +4271,10 @@ snapshots:
     dependencies:
       '@eslint/core': 1.2.1
       levn: 0.4.1
+
+  '@himynameisdave/oxfmt-config@1.1.0(oxfmt@0.74.0)':
+    dependencies:
+      oxfmt: 0.74.0
 
   '@hono/zod-validator@0.9.1(hono@4.13.14)(zod@4.6.7)':
     dependencies:

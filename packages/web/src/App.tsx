@@ -1,15 +1,17 @@
+import "./App.css";
+
+import { authorURL, wishlistURL } from "kissunlocklib";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { authorURL, wishlistURL } from "kissunlocklib";
-import "./App.css";
-import { useLocalStorage } from "./hooks/useLocalStorage";
+
 import EditDialog, { type EditTarget } from "./components/editDialog";
 import ExportDialog from "./components/exportDialog";
-import SwitchViewDialog from "./components/switchViewDialog";
-import UnlockDialog from "./components/unlockDialog";
-import SyncDialog from "./components/syncDialog";
 import SettingsDialog from "./components/settingsDialog";
+import SwitchViewDialog from "./components/switchViewDialog";
+import SyncDialog from "./components/syncDialog";
+import UnlockDialog from "./components/unlockDialog";
 import { useDatabase } from "./hooks/useDatabase";
+import { useLocalStorage } from "./hooks/useLocalStorage";
 import { useUnlocked } from "./hooks/useUnlocked";
 import {
   Flag,

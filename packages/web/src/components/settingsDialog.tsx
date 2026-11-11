@@ -1,5 +1,7 @@
-import { forwardRef, useEffect, useState } from "react";
 import "./settingsDialog.css";
+
+import { forwardRef, useEffect, useState } from "react";
+
 import type { Config } from "../lib/types";
 
 const SettingsDialog = forwardRef<

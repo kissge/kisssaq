@@ -1,6 +1,7 @@
 import { isUnlocked, setPassword, wishlistURL, authorURL } from "kissunlocklib";
 import { forwardRef, useState } from "react";
 import { toast } from "sonner";
+
 import { useUnlocked } from "../hooks/useUnlocked";
 
 const UnlockDialog = forwardRef<HTMLDialogElement, { onUnlock: () => void }>(function UnlockDialog(

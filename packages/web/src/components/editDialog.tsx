@@ -1,4 +1,7 @@
+import "./editDialog.css";
+
 import { forwardRef, useEffect } from "react";
+
 import {
   type Answer,
   Flag,
@@ -8,7 +11,6 @@ import {
   type CommentText,
   FlagCount,
 } from "../lib/types";
-import "./editDialog.css";
 
 export interface EditTarget {
   id: number;

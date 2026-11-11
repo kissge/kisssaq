@@ -1,6 +1,8 @@
-import { forwardRef } from "react";
-import type { FolderID, GenreID } from "../lib/types";
 import "./switchViewDialog.css";
+
+import { forwardRef } from "react";
+
+import type { FolderID, GenreID } from "../lib/types";
 
 type SwitchDialogProps = {
   id: string;
