@@ -191,6 +191,7 @@ table {
   justify-content: flex-start;
   align-items: center;
   gap: 0.5em;
+  font-size: 0.9em;
 
   & > :is(div, select, button) {
     min-width: 0;
@@ -201,10 +202,12 @@ table {
   }
 
   & > input[type="checkbox"] {
+    /** 全選択トグル */
     flex: 0 0 auto;
   }
 
   & > div {
+    /** 件数表示 */
     flex: 0 0 auto;
   }
 
@@ -222,11 +225,25 @@ table {
   & > select {
     flex: 1 1 0;
     width: 0;
+    appearance: none;
+    text-align: center;
   }
 
   & > button {
     flex: 0 1 auto;
     max-width: 7em;
+  }
+
+  .flag-label {
+    color: hsl(var(--hue), 90%, 40%);
+
+    &.null {
+      color: #ddd;
+    }
+
+    input {
+      display: none;
+    }
   }
 }
 

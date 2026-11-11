@@ -12,6 +12,7 @@ import SettingsDialog from "./components/settingsDialog";
 import { useDatabase } from "./hooks/useDatabase";
 import { useUnlocked } from "./hooks/useUnlocked";
 import {
+  Flag,
   FlagCount,
   type CommentText,
   type Config,
@@ -376,6 +377,34 @@ function App() {
               ))}
             <option value="new">（新規ジャンル作成）</option>
           </select>
+          {Array.from({ length: FlagCount + 1 }, (_, i) => (i === 0 ? null : Flag(i))).map(
+            (flag) => (
+              <label
+                key={flag}
+                className={flag === null ? "flag-label null" : "flag-label"}
+                style={
+                  { "--hue": (((flag ?? 0) + 2) * (360 / FlagCount)) % 360 } as React.CSSProperties
+                }
+              >
+                ★
+                <input
+                  type="radio"
+                  name="flag"
+                  onChange={() => {
+                    const newQuestions = questions.map((qa, i) => {
+                      if (checked.includes(i)) {
+                        qa[5] = flag;
+                      }
+
+                      return qa;
+                    });
+                    setQuestions(newQuestions);
+                    setChecked([]);
+                  }}
+                />
+              </label>
+            ),
+          )}
         </div>
 
         <div className={"global-toolbar " + (unlocked ? "unlocked" : "")}>
