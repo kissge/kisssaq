@@ -61,6 +61,7 @@ function App() {
   const syncDialogRef = useRef<HTMLDialogElement>(null);
   const exportDialogRef = useRef<HTMLDialogElement>(null);
   const settingsDialogRef = useRef<HTMLDialogElement>(null);
+  const searchBoxRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
     setIsClient(true);
@@ -143,6 +144,16 @@ function App() {
     }
 
     return result;
+  }
+
+  function toggleSearchBox(show: boolean) {
+    setShowSearchBox(show);
+    if (show) {
+      searchBoxRef.current?.show();
+    } else {
+      setSearchKeyword("");
+      searchBoxRef.current?.close();
+    }
   }
 
   return (
@@ -231,29 +242,27 @@ function App() {
           </tbody>
         </table>
 
-        <div className={"search-toolbar" + (showSearchBox ? " shown" : "")}>
+        <dialog
+          ref={searchBoxRef}
+          closedby="closerequest"
+          className="search-toolbar"
+          onClose={() => toggleSearchBox(false)}
+        >
           <input
             placeholder="検索キーワードを入力"
             type="text"
             value={searchKeyword}
-            onKeyDown={(e) => {
-              if (e.key === "Escape") {
-                setSearchKeyword("");
-                setShowSearchBox(false);
-              }
-            }}
             onChange={(e) => setSearchKeyword(e.target.value)}
           />
           <button
-            style={{ border: "none" }}
             onClick={() => {
               setSearchKeyword("");
-              setShowSearchBox(false);
+              toggleSearchBox(false);
             }}
           >
             ✕
           </button>
-        </div>
+        </dialog>
 
         <div className={"bulk-toolbar" + (checked.length > 0 ? " shown" : "")}>
           <input
@@ -463,7 +472,7 @@ function App() {
                   );
                 }
 
-                setShowSearchBox(!showSearchBox);
+                toggleSearchBox(!showSearchBox);
               }}
             >
               検索

@@ -149,7 +149,7 @@ table {
   }
 }
 
-.search-toolbar,
+.search-toolbar[open],
 .bulk-toolbar {
   position: fixed;
   bottom: 5.2em;
@@ -163,9 +163,6 @@ table {
   backdrop-filter: blur(14px);
   box-shadow: var(--shadow);
   display: flex;
-  opacity: 0;
-  translate: 0 1em;
-  pointer-events: none;
   transition:
     opacity 0.3s ease-in,
     translate 0.3s ease;
@@ -175,19 +172,26 @@ table {
     box-sizing: border-box;
     padding: 0 0.75em;
   }
+}
 
-  &.shown {
-    opacity: 1;
-    translate: 0;
-    pointer-events: auto;
+.search-toolbar[open] {
+  top: unset;
+  bottom: 2.4em;
+  transform: -50% 0;
+  gap: 0.5em;
+  opacity: 1;
+  translate: 0;
+  pointer-events: auto;
+
+  button {
+    border: none;
   }
 }
 
-.search-toolbar {
-  gap: 0.5em;
-}
-
 .bulk-toolbar {
+  opacity: 0;
+  translate: 0 1em;
+  pointer-events: none;
   justify-content: flex-start;
   align-items: center;
   gap: 0.5em;
