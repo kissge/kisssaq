@@ -23,4 +23,12 @@ export interface Config {
   showComment: boolean;
 }
 
+export type Order = "default" | "genre" | "flag" | "comment";
+export const Orders: Record<Order, string> = {
+  default: "登録順",
+  genre: "ジャンル順",
+  flag: "フラグ順",
+  comment: "コメント順",
+};
+
 export const FlagCount = 3;

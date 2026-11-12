@@ -21,6 +21,8 @@ import {
   type FolderID,
   type GenreID,
   type Row,
+  type Order,
+  Orders,
 } from "./lib/types";
 
 function isLong(text: string, threshold: number = 10): boolean {
@@ -46,7 +48,7 @@ function App() {
   const [activeFolder, setActiveFolder] = useLocalStorage<FolderID | null>("activeFolder", null);
   const [activeGenre, setActiveGenre] = useLocalStorage<GenreID | null>("activeGenre", null);
   const [currentEditTarget, setCurrentEditTarget] = useState<EditTarget | null>(null);
-  const [order, setOrder] = useState<"default" | "genre" | "flag" | number[]>("default");
+  const [order, setOrder] = useState<Order | number[]>("default");
   const [showSearchBox, setShowSearchBox] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [config, setConfig] = useLocalStorage<Config>("kissSaqConfig", {
@@ -106,6 +108,12 @@ function App() {
             .map((qa, i) => ({ i, qa }))
             .toReversed()
             .toSorted((a, b) => (b.qa[5] ?? -1) - (a.qa[5] ?? -1));
+
+        case "comment":
+          return questions
+            .map((qa, i) => ({ i, qa }))
+            .toReversed()
+            .toSorted((a, b) => (a.qa[4] ?? "").localeCompare(b.qa[4] ?? ""));
 
         default:
           throw new Error(order satisfies never);
@@ -433,15 +441,15 @@ function App() {
                   case "genre":
                     return setOrder("flag");
                   case "flag":
+                    return setOrder("comment");
+                  case "comment":
                     return setOrder(questions.map((_, i) => i).toSorted(() => Math.random() - 0.5));
                   default:
                     order satisfies never;
                 }
               }}
             >
-              {Array.isArray(order)
-                ? "ランダム"
-                : { default: "登録順", genre: "ジャンル順", flag: "フラグ順" }[order]}
+              {Array.isArray(order) ? "ランダム" : Orders[order]}
             </button>
             <button onClick={() => switchFolderDialogRef.current?.showModal()}>
               {activeFolder === null ? (
