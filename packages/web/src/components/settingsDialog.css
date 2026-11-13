@@ -1,9 +1,9 @@
 .settings-field {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
   flex-wrap: wrap;
   gap: 1em;
+  align-items: center;
+  justify-content: space-between;
   margin-top: 1em;
 
   .settings-field-label {
@@ -19,15 +19,15 @@
 
 .settings-input {
   display: flex;
-  align-items: center;
   flex-wrap: wrap;
   gap: 0.4em;
+  align-items: center;
   white-space: nowrap;
 }
 
 .settings-input input[type="number"] {
-  width: 4em;
   box-sizing: border-box;
+  width: 4em;
   padding: 0.4em 0.5em;
   text-align: right;
 }

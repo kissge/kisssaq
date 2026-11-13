@@ -9,14 +9,17 @@
     "api:dev": "pnpm --filter @kisssaq/api dev",
     "api:typecheck": "pnpm --filter @kisssaq/api typecheck",
     "dev": "pnpm --parallel dev",
-    "lint": "oxlint",
-    "format": "oxfmt --ignore-path .oxfmtignore",
+    "lint": "oxlint && stylelint **/*.css",
+    "format": "oxfmt --ignore-path .oxfmtignore && stylelint --fix **/*.css",
     "format:check": "oxfmt --check --ignore-path .oxfmtignore",
     "preview": "pnpm --filter @kisssaq/web preview"
   },
   "devDependencies": {
     "@himynameisdave/oxfmt-config": "^1.1.0",
     "oxfmt": "^0.74.0",
-    "oxlint": "^1.89.0"
+    "oxlint": "^1.89.0",
+    "stylelint": "^18.0.0",
+    "stylelint-config-recess-order": "^7.10.0",
+    "stylelint-order": "^8.1.3"
   }
 }

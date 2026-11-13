@@ -5,31 +5,31 @@
 
   select,
   button {
-    min-height: 2.6em;
     flex: 1 1 auto;
     max-width: 100%;
+    min-height: 2.6em;
     padding: 0.35em 0.7em;
   }
 }
 
 .flags-wrapper {
+  box-sizing: border-box;
   align-items: center;
   min-height: 3em;
-  box-sizing: border-box;
   padding: 0.6em 0.8em;
   margin-bottom: 0.4em;
+  color: var(--text-h);
+  user-select: none;
+  outline: none;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 10px;
-  background: var(--surface);
-  color: var(--text-h);
-  outline: none;
-  user-select: none;
 
   --hue: 0;
 
   label {
-    color: #ccc;
     font-size: 2em;
+    color: #ccc;
 
     &.flagged {
       color: hsl(var(--hue), 90%, 40%);
