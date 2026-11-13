@@ -108,7 +108,7 @@ const EditDialog = forwardRef<
             onChange={(e) =>
               onChange({ ...currentEditTarget, modified: true, q: e.target.value as Question })
             }
-            rows={5}
+            rows={4}
             placeholder="日本の首都は？"
           />
           <textarea
@@ -117,7 +117,7 @@ const EditDialog = forwardRef<
             onChange={(e) =>
               onChange({ ...currentEditTarget, modified: true, a: e.target.value as Answer })
             }
-            rows={3}
+            style={{ fieldSizing: "content" }}
             placeholder="東京（とうきょう）"
           />
           <textarea
@@ -126,7 +126,7 @@ const EditDialog = forwardRef<
             onChange={(e) =>
               onChange({ ...currentEditTarget, modified: true, c: e.target.value as CommentText })
             }
-            rows={3}
+            style={{ fieldSizing: "content" }}
             placeholder="自由記入欄"
           />
           <div className="flex flags-wrapper">
