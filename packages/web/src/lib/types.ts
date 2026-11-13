@@ -17,11 +17,13 @@ export type Row = [
   Flag | null | undefined,
 ];
 
-export interface Config {
-  questionLengthThreshold: number;
-  showGenre: boolean;
-  showComment: boolean;
-}
+export const defaultConfig = {
+  questionLengthThreshold: 60,
+  showGenre: false,
+  showComment: true,
+  suspiciousSymbols: [] as [string, string][],
+};
+export type Config = typeof defaultConfig;
 
 export type Order = "default" | "genre" | "flag" | "comment";
 export const Orders: Record<Order, string> = {

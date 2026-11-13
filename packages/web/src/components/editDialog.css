@@ -12,6 +12,47 @@
   }
 }
 
+.textarea-wrapper {
+  position: relative;
+  margin-bottom: 0.5em;
+
+  /* textarea と overlay のボックス・文字組みを完全に一致させる */
+  textarea,
+  .overlay {
+    box-sizing: border-box;
+    width: calc(100% - 6px);
+    padding: 0.7em;
+    margin: 0;
+    scrollbar-gutter: stable;
+    font: inherit;
+    line-height: 1.5;
+    letter-spacing: normal;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    border-width: 1px;
+  }
+
+  textarea {
+    display: block; /* inline だと下に余白ができて overlay と高さがずれる */
+  }
+
+  .overlay {
+    position: absolute;
+    inset: 0 auto auto 0;
+    height: 100%;
+    overflow: hidden;
+
+    color: transparent;
+    pointer-events: none;
+    border-color: transparent;
+    border-style: solid;
+
+    .sus {
+      background-color: rgba(230 93 93 / 0.2);
+    }
+  }
+}
+
 .flags-wrapper {
   box-sizing: border-box;
   align-items: center;

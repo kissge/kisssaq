@@ -1,7 +1,8 @@
 import "./editDialog.css";
 
-import { forwardRef, useEffect } from "react";
+import { forwardRef, useEffect, useRef } from "react";
 
+import { replaceSuspiciousSymbols, splitSuspiciousSymbols } from "../lib/suspiciousSymbols";
 import {
   type Answer,
   Flag,
@@ -10,6 +11,7 @@ import {
   type Question,
   type CommentText,
   FlagCount,
+  type Config,
 } from "../lib/types";
 
 export interface EditTarget {
@@ -30,14 +32,25 @@ const EditDialog = forwardRef<
     currentEditTarget: EditTarget | null;
     folders: string[];
     genres: string[];
+    config: Config;
     onChange: (value: EditTarget) => void;
     onSave: (value: EditTarget) => void;
     onCancelAdd: (id: number) => void;
   }
->(({ currentEditTarget, folders, genres, onChange, onSave, onCancelAdd }, ref) => {
+>(({ currentEditTarget, folders, genres, config, onChange, onSave, onCancelAdd }, ref) => {
+  const overlayRefQ = useRef<HTMLDivElement>(null);
+  const overlayRefA = useRef<HTMLDivElement>(null);
+  const overlayRefC = useRef<HTMLDivElement>(null);
+
   function save() {
-    onSave(currentEditTarget!);
-    onChange({ ...currentEditTarget!, modified: false });
+    const value = {
+      ...currentEditTarget!,
+      q: replaceSuspiciousSymbols(currentEditTarget!.q, config.suspiciousSymbols),
+      a: replaceSuspiciousSymbols(currentEditTarget!.a, config.suspiciousSymbols),
+      c: replaceSuspiciousSymbols(currentEditTarget!.c, config.suspiciousSymbols),
+    };
+    onSave(value);
+    onChange({ ...value, modified: false });
     if (typeof ref !== "function") ref?.current?.close();
   }
 
@@ -101,34 +114,73 @@ const EditDialog = forwardRef<
               ✕
             </button>
           </div>
-          <textarea
-            lang="ja"
-            value={currentEditTarget.q}
-            autoFocus
-            onChange={(e) =>
-              onChange({ ...currentEditTarget, modified: true, q: e.target.value as Question })
-            }
-            rows={4}
-            placeholder="日本の首都は？"
-          />
-          <textarea
-            lang="ja"
-            value={currentEditTarget.a}
-            onChange={(e) =>
-              onChange({ ...currentEditTarget, modified: true, a: e.target.value as Answer })
-            }
-            style={{ fieldSizing: "content" }}
-            placeholder="東京（とうきょう）"
-          />
-          <textarea
-            lang="ja"
-            value={currentEditTarget.c}
-            onChange={(e) =>
-              onChange({ ...currentEditTarget, modified: true, c: e.target.value as CommentText })
-            }
-            style={{ fieldSizing: "content" }}
-            placeholder="自由記入欄"
-          />
+          <div className="textarea-wrapper">
+            <textarea
+              lang="ja"
+              value={currentEditTarget.q}
+              autoFocus
+              onChange={(e) =>
+                onChange({ ...currentEditTarget, modified: true, q: e.target.value as Question })
+              }
+              onScroll={(e) => {
+                if (overlayRefQ.current) {
+                  overlayRefQ.current.scrollTop = e.currentTarget.scrollTop;
+                }
+              }}
+              rows={4}
+              placeholder="日本の首都は？"
+            />
+            <div className="overlay" ref={overlayRefQ}>
+              {splitSuspiciousSymbols(currentEditTarget.q, config.suspiciousSymbols)}
+              {/* 末尾の改行を描画させるためのダミー文字 */}
+              {"​"}
+            </div>
+          </div>
+
+          <div className="textarea-wrapper">
+            <textarea
+              lang="ja"
+              value={currentEditTarget.a}
+              onChange={(e) =>
+                onChange({ ...currentEditTarget, modified: true, a: e.target.value as Answer })
+              }
+              onScroll={(e) => {
+                if (overlayRefA.current) {
+                  overlayRefA.current.scrollTop = e.currentTarget.scrollTop;
+                }
+              }}
+              style={{ fieldSizing: "content" }}
+              placeholder="東京（とうきょう）"
+            />
+            <div className="overlay" ref={overlayRefA}>
+              {splitSuspiciousSymbols(currentEditTarget.a, config.suspiciousSymbols)}
+              {/* 末尾の改行を描画させるためのダミー文字 */}
+              {"​"}
+            </div>
+          </div>
+
+          <div className="textarea-wrapper">
+            <textarea
+              lang="ja"
+              value={currentEditTarget.c}
+              onChange={(e) =>
+                onChange({ ...currentEditTarget, modified: true, c: e.target.value as CommentText })
+              }
+              onScroll={(e) => {
+                if (overlayRefC.current) {
+                  overlayRefC.current.scrollTop = e.currentTarget.scrollTop;
+                }
+              }}
+              style={{ fieldSizing: "content" }}
+              placeholder="自由記入欄"
+            />
+            <div className="overlay" ref={overlayRefC}>
+              {splitSuspiciousSymbols(currentEditTarget.c, config.suspiciousSymbols)}
+              {/* 末尾の改行を描画させるためのダミー文字 */}
+              {"​"}
+            </div>
+          </div>
+
           <div className="flex flags-wrapper">
             フラグ
             {Array.from({ length: FlagCount }, (_, i) => Flag(i + 1)).map((flag) => (

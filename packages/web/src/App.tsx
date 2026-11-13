@@ -13,6 +13,7 @@ import UnlockDialog from "./components/unlockDialog";
 import { useDatabase } from "./hooks/useDatabase";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { useUnlocked } from "./hooks/useUnlocked";
+import { splitSuspiciousSymbols } from "./lib/suspiciousSymbols";
 import {
   Flag,
   FlagCount,
@@ -23,6 +24,7 @@ import {
   type Row,
   type Order,
   Orders,
+  defaultConfig,
 } from "./lib/types";
 
 function isLong(text: string, threshold: number = 10): boolean {
@@ -51,11 +53,7 @@ function App() {
   const [order, setOrder] = useState<Order | number[]>("default");
   const [showSearchBox, setShowSearchBox] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [config, setConfig] = useLocalStorage<Config>("kissSaqConfig", {
-    questionLengthThreshold: 60,
-    showGenre: false,
-    showComment: true,
-  });
+  const [config, setConfig] = useLocalStorage<Config>("kissSaqConfig", defaultConfig, true);
   const [isClient, setIsClient] = useState(false);
   const [isCSVImportDialogOpen, setIsCSVImportDialogOpen] = useState(false);
   const editDialogRef = useRef<HTMLDialogElement>(null);
@@ -240,13 +238,19 @@ function App() {
                   {q
                     ? splitQuestion(q).map(({ type, text }, i) => (
                         <span key={text + i} className={type}>
-                          {text}
+                          {splitSuspiciousSymbols(text, config.suspiciousSymbols)}
                         </span>
                       ))
                     : "ここをクリックして編集"}
-                  {config.showComment && c && <div className="comment">📝 {c}</div>}
+                  {config.showComment && c && (
+                    <div className="comment">
+                      📝 {splitSuspiciousSymbols(c, config.suspiciousSymbols)}
+                    </div>
+                  )}
                 </td>
-                <td onClick={() => startEdit(i)}>{a}</td>
+                <td onClick={() => startEdit(i)}>
+                  {splitSuspiciousSymbols(a, config.suspiciousSymbols)}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -556,6 +560,7 @@ function App() {
         currentEditTarget={currentEditTarget}
         folders={folders}
         genres={genres}
+        config={config}
         onChange={setCurrentEditTarget}
         onSave={(value) => {
           const newQuestions = [...questions];

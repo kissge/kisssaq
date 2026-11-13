@@ -1,17 +1,27 @@
+fieldset > div {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+legend {
+  padding: 0 0.5em;
+}
+
 .settings-field {
   display: flex;
-  flex-wrap: wrap;
   gap: 1em;
-  align-items: center;
+  align-items: top;
   justify-content: space-between;
-  margin-top: 1em;
 
   .settings-field-label {
     display: flex;
+    flex: 1 0 9em;
     flex-direction: column;
 
     & > div:last-child:not(:first-child) {
       font-size: 0.8em;
+      line-height: 1.2;
       color: var(--text-color);
     }
   }
@@ -22,6 +32,7 @@
   flex-wrap: wrap;
   gap: 0.4em;
   align-items: center;
+  justify-content: flex-end;
   white-space: nowrap;
 }
 

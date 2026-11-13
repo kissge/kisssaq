@@ -13,12 +13,17 @@ function readStoredValue<T>(key: string, initialValue: T): T {
   }
 }
 
-export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T) => void] {
+export function useLocalStorage<T>(
+  key: string,
+  initialValue: T,
+  fallback: boolean = false,
+): [T, (value: T) => void] {
   const [storedValue, setStoredValue] = useState<T>(initialValue);
   const initialValueRef = useRef(initialValue);
 
   useEffect(() => {
-    setStoredValue(readStoredValue(key, initialValueRef.current));
+    const value = readStoredValue(key, initialValueRef.current);
+    setStoredValue(fallback ? { ...initialValueRef.current, ...value } : value);
   }, [key]);
 
   const setValue = (value: T) => {

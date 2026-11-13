@@ -135,8 +135,12 @@ table {
       background-color: light-dark(#ccc, #555);
     }
 
-    .comment {
+    .sus {
+      color: white;
+      background-color: rgb(230 93 93);
+    }
 
+    .comment {
       display: -webkit-box;
       margin-top: 0.5em;
       overflow: hidden;
@@ -418,7 +422,6 @@ table {
 }
 
 dialog {
-
   position: fixed;
   top: 50%;
   left: 50%;
