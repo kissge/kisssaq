@@ -1,5 +1,6 @@
 import { json2csv } from "json-2-csv";
 import { forwardRef, useState } from "react";
+import { toast } from "sonner";
 
 import type { Row } from "../lib/types";
 
@@ -28,7 +29,7 @@ const ExportDialog = forwardRef<
     setColumns((current) => ({ ...current, [column]: !current[column] }));
   }
 
-  function exportCSV() {
+  function exportCSV(mode: "copy" | "file") {
     const rows =
       range === "all" ? questions : range === "visible" ? visibleQuestions : checkedQuestions;
     const records = rows.map(([q, a, f, g, comment]) => ({
@@ -39,13 +40,21 @@ const ExportDialog = forwardRef<
       ...(columns.comment ? { コメント: comment ?? "" } : {}),
     }));
     const csv = json2csv(records);
-    const data = new Blob([includeHeader ? csv : csv.replace(/.+\n/, "")], { type: "text/csv" });
-    const url = URL.createObjectURL(data);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "kissSaq.csv";
-    link.click();
-    URL.revokeObjectURL(url);
+    const final = includeHeader ? csv : csv.replace(/.+\n/, "");
+
+    if (mode === "copy") {
+      navigator.clipboard.writeText(final);
+      toast.success("クリップボードにコピーしました");
+    } else {
+      const data = new Blob([final], { type: "text/csv" });
+      const url = URL.createObjectURL(data);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "kissSaq.csv";
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
     if (typeof ref !== "function") ref?.current?.close();
   }
 
@@ -139,8 +148,14 @@ const ExportDialog = forwardRef<
       </fieldset>
 
       <div style={{ textAlign: "right" }}>
-        <button onClick={exportCSV} style={{ padding: "0 1em" }}>
-          出力
+        <button
+          onClick={() => exportCSV("copy")}
+          style={{ padding: "0.25em 1em", marginRight: "0.5em" }}
+        >
+          クリップボードにコピー
+        </button>
+        <button onClick={() => exportCSV("file")} style={{ padding: "0.25em 1em" }}>
+          ファイルとして保存
         </button>
       </div>
     </dialog>
