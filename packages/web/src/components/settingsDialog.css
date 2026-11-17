@@ -16,7 +16,6 @@ legend {
 
   .settings-field-label {
     display: flex;
-    flex: 1 0 9em;
     flex-direction: column;
 
     & > div:last-child:not(:first-child) {

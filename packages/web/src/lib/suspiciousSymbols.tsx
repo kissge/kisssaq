@@ -12,7 +12,25 @@ export const SuspiciousSymbols = {
     search: /○/,
     replace: "◯",
   },
-};
+  youso: {
+    label: "→ （アラビア数字）要素",
+    search: /[一二三四五六七八九](?=要素)/,
+    replace: (sub) => String("一二三四五六七八九".indexOf(sub) + 1),
+  },
+  bun: {
+    label: "→ （アラビア数字）文",
+    search: /[一二三四五六七八九](?=文)(?!文字)/,
+    replace: (sub) => String("一二三四五六七八九".indexOf(sub) + 1),
+  },
+  moji: {
+    label: "→ （漢数字）文字",
+    search: /\d(?=文字)/,
+    replace: (sub) => "一二三四五六七八九".charAt(Number(sub) - 1) || sub,
+  },
+} satisfies Record<
+  string,
+  { label: string; search: RegExp; replace: string | Parameters<string["replace"]>[1] }
+>;
 export type SuspiciousSymbolsKey = keyof typeof SuspiciousSymbols;
 
 export function splitSuspiciousSymbols(text: string, targetSymbols: Config["suspiciousSymbols"]) {
