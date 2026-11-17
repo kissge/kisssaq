@@ -34,6 +34,7 @@
 
   textarea {
     display: block; /* inline だと下に余白ができて overlay と高さがずれる */
+    max-height: 8em;
   }
 
   .overlay {
