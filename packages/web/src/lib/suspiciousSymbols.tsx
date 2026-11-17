@@ -1,8 +1,22 @@
-export const SuspiciousSymbols: [string, string][] = [["×", "✕"]];
+import type { Config } from "./types";
 
-export function splitSuspiciousSymbols(text: string, targetSymbols: [string, string][]) {
+// `?:` なしで `()` を使わないこと！
+export const SuspiciousSymbols = {
+  x: {
+    label: "× → ✕",
+    search: /×/,
+    replace: "✕",
+  },
+};
+export type SuspiciousSymbolsKey = keyof typeof SuspiciousSymbols;
+
+export function splitSuspiciousSymbols(text: string, targetSymbols: Config["suspiciousSymbols"]) {
   const suspiciousRegExp = new RegExp(
-    "(" + targetSymbols.map(([sus]) => RegExp.escape(sus)).join("|") + ")",
+    "(" +
+      [...targetSymbols.fix, ...targetSymbols.warn]
+        .map((label) => "(?:" + String(SuspiciousSymbols[label].search).slice(1, -1) + ")")
+        .join("|") +
+      ")",
     "g",
   );
 
@@ -15,11 +29,14 @@ export function splitSuspiciousSymbols(text: string, targetSymbols: [string, str
 
 export function replaceSuspiciousSymbols<T extends string>(
   text: T,
-  targetSymbols: [string, string][],
+  targetSymbols: SuspiciousSymbolsKey[],
 ): T {
   let replacedText = text;
-  for (const [sus, correct] of targetSymbols) {
-    replacedText = replacedText.replaceAll(sus, correct) as T;
+  for (const label of targetSymbols) {
+    replacedText = replacedText.replaceAll(
+      new RegExp(SuspiciousSymbols[label].search, "g"),
+      SuspiciousSymbols[label].replace,
+    ) as T;
   }
   return replacedText;
 }

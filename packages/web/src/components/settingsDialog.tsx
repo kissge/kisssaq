@@ -2,7 +2,7 @@ import "./settingsDialog.css";
 
 import { forwardRef, useEffect, useState } from "react";
 
-import { SuspiciousSymbols } from "../lib/suspiciousSymbols";
+import { SuspiciousSymbols, type SuspiciousSymbolsKey } from "../lib/suspiciousSymbols";
 
 import type { Config } from "../lib/types";
 
@@ -16,23 +16,6 @@ const SettingsDialog = forwardRef<
 
   const canSave =
     Number.isInteger(draft.questionLengthThreshold) && draft.questionLengthThreshold > 0;
-
-  function toggleSuspiciousSymbol(sus: string, correct: string, setOrUnset: boolean) {
-    setDraft((prev) => {
-      const newSymbols = [...prev.suspiciousSymbols];
-      const index = newSymbols.findIndex(([s, r]) => s === sus && r === correct);
-
-      if (setOrUnset) {
-        if (index === -1) {
-          newSymbols.push([sus, correct]);
-        }
-      } else if (index !== -1) {
-        newSymbols.splice(index, 1);
-      }
-
-      return { ...prev, suspiciousSymbols: newSymbols };
-    });
-  }
 
   return (
     <dialog
@@ -134,15 +117,35 @@ const SettingsDialog = forwardRef<
               <div>警告を表示し、保存時に自動で書き換え</div>
             </div>
             <div className="settings-input" style={{ flex: "0 1 5em" }}>
-              {SuspiciousSymbols.map(([sus, correct]) => (
-                <label key={sus + correct}>
-                  <input
-                    type="checkbox"
-                    name="suspiciousSymbols"
-                    checked={!!draft.suspiciousSymbols.find(([s, r]) => s === sus && r === correct)}
-                    onChange={(e) => toggleSuspiciousSymbol(sus, correct, e.target.checked)}
-                  />
-                  {sus} → {correct}
+              {Object.entries(SuspiciousSymbols).map(([key, { label }]) => (
+                <label key={key}>
+                  {label}
+                  <select
+                    defaultValue={
+                      draft.suspiciousSymbols.warn.includes(key as SuspiciousSymbolsKey)
+                        ? "warn"
+                        : draft.suspiciousSymbols.fix.includes(key as SuspiciousSymbolsKey)
+                          ? "fix"
+                          : ""
+                    }
+                    onChange={(e) => {
+                      function _(kind: "warn" | "fix") {
+                        if (e.target.value === kind) {
+                          return [...draft.suspiciousSymbols[kind], key as SuspiciousSymbolsKey];
+                        } else {
+                          return [...draft.suspiciousSymbols[kind]].filter(
+                            ([s]) => s !== (key as SuspiciousSymbolsKey),
+                          );
+                        }
+                      }
+
+                      setDraft({ ...draft, suspiciousSymbols: { warn: _("warn"), fix: _("fix") } });
+                    }}
+                  >
+                    <option value="">－</option>
+                    <option value="warn">警告</option>
+                    <option value="fix">自動修正</option>
+                  </select>
                 </label>
               ))}
             </div>

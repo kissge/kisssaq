@@ -45,9 +45,9 @@ const EditDialog = forwardRef<
   function save() {
     const value = {
       ...currentEditTarget!,
-      q: replaceSuspiciousSymbols(currentEditTarget!.q, config.suspiciousSymbols),
-      a: replaceSuspiciousSymbols(currentEditTarget!.a, config.suspiciousSymbols),
-      c: replaceSuspiciousSymbols(currentEditTarget!.c, config.suspiciousSymbols),
+      q: replaceSuspiciousSymbols(currentEditTarget!.q, config.suspiciousSymbols.fix),
+      a: replaceSuspiciousSymbols(currentEditTarget!.a, config.suspiciousSymbols.fix),
+      c: replaceSuspiciousSymbols(currentEditTarget!.c, config.suspiciousSymbols.fix),
     };
     onSave(value);
     onChange({ ...value, modified: false });

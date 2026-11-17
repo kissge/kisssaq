@@ -1,3 +1,5 @@
+import type { SuspiciousSymbolsKey } from "./suspiciousSymbols";
+
 export type Question = string & { __qBrand: never };
 export type Answer = string & { __aBrand: never };
 export type FolderID = number & { __fBrand: never };
@@ -21,7 +23,10 @@ export const defaultConfig = {
   questionLengthThreshold: 60,
   showGenre: false,
   showComment: true,
-  suspiciousSymbols: [] as [string, string][],
+  suspiciousSymbols: {
+    warn: [] as SuspiciousSymbolsKey[],
+    fix: [] as SuspiciousSymbolsKey[],
+  },
 };
 export type Config = typeof defaultConfig;
 

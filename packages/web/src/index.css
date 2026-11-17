@@ -164,6 +164,11 @@ select:focus {
   box-shadow: 0 0 0 3px var(--accent-bg);
 }
 
+select {
+  padding: 0.35em 0.6em;
+  cursor: pointer;
+}
+
 input[type="checkbox"] {
   width: 1.2em;
   height: 1.2em;

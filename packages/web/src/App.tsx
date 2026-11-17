@@ -164,6 +164,11 @@ function App() {
     }
   }
 
+  if (Array.isArray(config.suspiciousSymbols)) {
+    // backward compatibility
+    setConfig({ ...config, suspiciousSymbols: { warn: [], fix: ["x"] } });
+  }
+
   return (
     <>
       <section id="center">
