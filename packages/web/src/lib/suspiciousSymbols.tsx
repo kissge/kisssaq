@@ -7,6 +7,11 @@ export const SuspiciousSymbols = {
     search: /×/,
     replace: "✕",
   },
+  o: {
+    label: "○ → ◯", // 漢数字のゼロは必要かもしれないので入れないことにした
+    search: /○/,
+    replace: "◯",
+  },
 };
 export type SuspiciousSymbolsKey = keyof typeof SuspiciousSymbols;
 
