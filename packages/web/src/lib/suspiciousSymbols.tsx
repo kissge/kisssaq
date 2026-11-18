@@ -29,7 +29,7 @@ export const SuspiciousSymbols = {
   },
 } satisfies Record<
   string,
-  { label: string; search: RegExp; replace: string | Parameters<string["replace"]>[1] }
+  { label: string; search: RegExp; replace: string | Parameters<string["replaceAll"]>[1] }
 >;
 export type SuspiciousSymbolsKey = keyof typeof SuspiciousSymbols;
 
@@ -58,7 +58,9 @@ export function replaceSuspiciousSymbols<T extends string>(
   for (const label of targetSymbols) {
     replacedText = replacedText.replaceAll(
       new RegExp(SuspiciousSymbols[label].search, "g"),
-      SuspiciousSymbols[label].replace,
+      // String.prototype.replaceAllには2番目の引数にstringを渡せるoverloadと関数を渡せるoverloadがあるが
+      // TypeScriptの仕様ではstring | 関数を渡すのはエラーになるためanyにせざるを得ない
+      SuspiciousSymbols[label].replace as any,
     ) as T;
   }
   return replacedText;
