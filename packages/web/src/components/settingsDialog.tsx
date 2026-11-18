@@ -134,7 +134,7 @@ const SettingsDialog = forwardRef<
                           return [...draft.suspiciousSymbols[kind], key as SuspiciousSymbolsKey];
                         } else {
                           return [...draft.suspiciousSymbols[kind]].filter(
-                            ([s]) => s !== (key as SuspiciousSymbolsKey),
+                            (s) => s !== (key as SuspiciousSymbolsKey),
                           );
                         }
                       }
