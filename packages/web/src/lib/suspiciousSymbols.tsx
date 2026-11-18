@@ -24,7 +24,7 @@ export const SuspiciousSymbols = {
   },
   moji: {
     label: "→ （漢数字）文字",
-    search: /\d(?=文字)/,
+    search: /(?<!\d)\d(?=文字)/,
     replace: (sub) => "一二三四五六七八九".charAt(Number(sub) - 1) || sub,
   },
 } satisfies Record<
